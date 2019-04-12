@@ -1,0 +1,22 @@
+python3 -m venv venv
+source venv/bin/activate
+
+pip install flask-migrate
+pip install flask-SQLAlchemy
+pip install flask-WTF
+pip install pylint-flask
+pip install flask-login
+pip install flask-restful
+
+obsługa bd sqlite:
+
+export FLASK_APP=models.py
+flask db init
+flask db migrate -m "initialize"
+flask db upgrade
+
+
+
+
+umieścić w kodzie :
+db.create_all() 

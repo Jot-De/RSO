@@ -10,7 +10,7 @@ pip install flask-restful
 
 obsługa bd sqlite:
 
-export FLASK_APP=models.py
+export FLASK_APP=pubs.py
 flask db init
 flask db migrate -m "initialize"
 flask db upgrade

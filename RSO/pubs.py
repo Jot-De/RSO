@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 # app.config['SECRET_KEY'] = 'mysecretkey
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:1234@localhost:5432/postgres'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:1234@localhost:5432/pubiksy'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -20,7 +20,7 @@ def index():
     return render_template('home.html')
 
 
-class Pubs(db.Model):
+class Pubsy(db.Model):
 
     pub_id = db.Column(db.Integer,primary_key=True, autoincrement=True) 
     name = db.Column(db.String(80))
@@ -50,27 +50,27 @@ class Pubs(db.Model):
 class PubData(Resource):
 
     def get(self,name):
-        pub = Pubs.query.filter_by(name=name).first()
+        pub = Pubsy.query.filter_by(name=name).first()
         if pub:
             return pub.json_f()
         else:
             return {'name':'not found'}, 404
 
     def post(self,name):
-        pub = Pubs(name=name)
+        pub = Pubsy(name=name)
         db.session.add(pub)
         db.session.commit()
         return pub.json_f()
 
     def delete(self,name):
-        pub = Pubs.query.filter_by(name=name).first()
+        pub = Pubsy.query.filter_by(name=name).first()
         db.session.delete(pub)
         db.session.commit()
 
 class CityPubGet(Resource):
     
     def get(self,name):
-        pub = Pubs.query.filter_by(name=name).first()
+        pub = Pubsy.query.filter_by(name=name).first()
         if pub:
             return pub.city_json()
         else:
@@ -80,14 +80,14 @@ class CityPubGet(Resource):
 class CityPubPut(Resource):
 
     def put(self,name, city):
-        pub = Pubs.query.filter_by(name=name).update(dict(city=city))
+        pub = Pubsy.query.filter_by(name=name).update(dict(city=city))
         db.session.commit()
 
 
 class InfoPubGet(Resource):
     
     def get(self,name):
-        pub = Pubs.query.filter_by(name=name).first()
+        pub = Pubsy.query.filter_by(name=name).first()
         if pub:
             return pub.info_json()
         else:
@@ -104,7 +104,7 @@ class InfoPubPut(Resource):
 class AllPubs(Resource):
 
     def get(self):
-        pubs = Pubs.query.all()
+        pubs = Pubsy.query.all()
         return [pub.pub_list_json() for pub in pubs]
 
 

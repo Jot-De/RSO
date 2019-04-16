@@ -7,6 +7,7 @@ pip install flask-WTF
 pip install pylint-flask
 pip install flask-login
 pip install flask-restful
+pip install Psycopg2
 
 obsługa bd sqlite:
 

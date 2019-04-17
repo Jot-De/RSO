@@ -189,26 +189,26 @@ m2=0..*</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>506</x>
+      <x>539</x>
       <y>55</y>
-      <w>407</w>
+      <w>374</w>
       <h>165</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=0..n
 m2=0..n</panel_attributes>
-    <additional_attributes>350.0;10.0;10.0;130.0</additional_attributes>
+    <additional_attributes>320.0;10.0;10.0;130.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>616</x>
       <y>77</y>
-      <w>99</w>
+      <w>121</w>
       <h>77</h>
     </coordinates>
     <panel_attributes>lt=..</panel_attributes>
-    <additional_attributes>70.0;50.0;10.0;10.0</additional_attributes>
+    <additional_attributes>90.0;50.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -251,5 +251,32 @@ m1=0..n
 m2=0..n
 </panel_attributes>
     <additional_attributes>140.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>132</x>
+      <y>11</y>
+      <w>154</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>Rola
+--
++ nazwa roli
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>198</x>
+      <y>77</y>
+      <w>275</w>
+      <h>143</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..n
+m2=0..n</panel_attributes>
+    <additional_attributes>10.0;10.0;230.0;110.0</additional_attributes>
   </element>
 </diagram>

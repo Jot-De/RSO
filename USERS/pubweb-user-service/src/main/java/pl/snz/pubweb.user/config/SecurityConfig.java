@@ -67,7 +67,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(HttpMethod.POST,"/users") // Allow registration
                 .permitAll()
-                .antMatchers("/v2/api-docs", "swagger-ui.html")
+                .antMatchers("/v2/api-docs/**",
+                        "swagger-ui.html/**",
+                        "/swagger-resources/**",
+                        "/webjars/springfox-swagger-ui/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated();

@@ -1,13 +1,13 @@
 from flask import Flask, request, jsonify, render_template
 import os
-from flask_restful import Api, Resource
+from flask_restful import Api, Resource, reqparse
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 # app.config['SECRET_KEY'] = 'mysecretkey
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:1234@localhost:5432/pubiksy'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:1234@localhost:5432/pubs'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -18,6 +18,11 @@ api = Api(app)
 @app.route('/')
 def index():
     return render_template('home.html')
+
+parser = reqparse.RequestParser()
+parser.add_argument('name', type=str)
+parser.add_argument('city', type=str)
+parser.add_argument('info', type=str)
 
 
 class Pubsy(db.Model):
@@ -38,6 +43,9 @@ class Pubsy(db.Model):
     def info_json(self):
         return {'description' : self.info}
     
+    def name_json(self):
+        return {'name' : self.name}
+
     def city_json(self):
         return {'city' : self.city}
 
@@ -47,7 +55,7 @@ class Pubsy(db.Model):
     def __str__(self):
         return "{} and {} and {} and {}".format(self.pub_id, self.name, self.info, self.city)
 
-class PubData(Resource):
+class PubData(Resource): # get pubs specific info, also to delete pub '/pubs/<string:name>'
 
     def get(self,name):
         pub = Pubsy.query.filter_by(name=name).first()
@@ -56,18 +64,20 @@ class PubData(Resource):
         else:
             return {'name':'not found'}, 404
 
-    def post(self,name):
-        pub = Pubsy(name=name)
-        db.session.add(pub)
-        db.session.commit()
-        return pub.json_f()
-
     def delete(self,name):
         pub = Pubsy.query.filter_by(name=name).first()
         db.session.delete(pub)
         db.session.commit()
 
-class CityPubGet(Resource):
+class AddPubs(Resource): # you can add pub by giving it's name '/pubs'
+    def post(self):
+        args = parser.parse_args() #add parsing regquest functionality , shown line below
+        pub = Pubsy(name=args['name']) 
+        db.session.add(pub)
+        db.session.commit()
+        return pub.name_json()
+
+class CityPubGet(Resource): #get info about city in which pub exists '/pubs/<string:name>/city'
     
     def get(self,name):
         pub = Pubsy.query.filter_by(name=name).first()
@@ -76,15 +86,16 @@ class CityPubGet(Resource):
         else:
             return {'name':'not found'}, 404            
 
+class CityPubPut(Resource): # put info about pub's city'/pubs/<string:name>/city'
 
-class CityPubPut(Resource):
-
-    def put(self,name, city):
-        pub = Pubsy.query.filter_by(name=name).update(dict(city=city))
+    def put(self,name):
+        args = parser.parse_args() #add parsing regquest functionality , shown line below
+        pub = Pubsy.query.filter_by(name=name).update(dict(city=args['city']))
         db.session.commit()
+        pub = Pubsy.query.filter_by(name=name).first()
+        return pub.city_json()
 
-
-class InfoPubGet(Resource):
+class InfoPubGet(Resource): # get some info about pub '/pubs/<string:name>/info'
     
     def get(self,name):
         pub = Pubsy.query.filter_by(name=name).first()
@@ -93,27 +104,31 @@ class InfoPubGet(Resource):
         else:
             return {'name':'not found'}, 404            
 
+class InfoPubPut(Resource): #insert short info about pub '/pubs/<string:name>/info'
 
-class InfoPubPut(Resource):
-
-    def put(self,name, info):
-        pub = Pubs.query.filter_by(name=name).update(dict(info=info))
+    def put(self,name):
+        args = parser.parse_args()
+        pub = Pubsy.query.filter_by(name=name).update(dict(info=args['info']))
         db.session.commit()
+        pub = Pubsy.query.filter_by(name=name).first()
+        return pub.info_json()
 
-
-class AllPubs(Resource):
-
+class AllPubs(Resource): #show all pubs '/pubs'
     def get(self):
         pubs = Pubsy.query.all()
         return [pub.pub_list_json() for pub in pubs]
 
 
-api.add_resource(PubData, '/pubs/<string:name>')
 api.add_resource(AllPubs,'/pubs')
-api.add_resource(InfoPubPut, '/pubs/<string:name>/info/<string:info>')
-api.add_resource(InfoPubGet, '/pubs/<string:name>/info')
-api.add_resource(CityPubPut, '/pubs/<string:name>/city/<string:city>')
+api.add_resource(AddPubs,'/pubs')
+api.add_resource(PubData, '/pubs/<string:name>')
+
+api.add_resource(CityPubPut, '/pubs/<string:name>/city')
 api.add_resource(CityPubGet, '/pubs/<string:name>/city')
+
+
+api.add_resource(InfoPubPut, '/pubs/<string:name>/info')
+api.add_resource(InfoPubGet, '/pubs/<string:name>/info')
 
 
 if __name__ == '__main__':
@@ -121,4 +136,15 @@ if __name__ == '__main__':
     app.run(host = '0.0.0.0' ,port = 5001,debug=True)
 
 
+#TODO: rozbic na model, dodac komentarze w sumie chyba tyle
 
+
+##### ************************************** ########
+
+# krótki opis uzycia:
+# z poziomu terminala:
+# curl http://{adres}/pubs/amplitron/city -d "city=bydgoszcz" -X PUT -v   // dodanie miasta
+# curl http://{adres}/pubs -d "name=kofeina2" -X POST -v             // dodanie pubu
+# curl http://{adres}/pubs/amplitron/info -d "info=informacja" -X PUT -v //dodanie info
+
+##### ************************************** ########

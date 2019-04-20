@@ -4,8 +4,9 @@ from flask_restful import Api, Resource, reqparse
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
+
 app = Flask(__name__)
-# app.config['SECRET_KEY'] = 'mysecretkey
+# app.config['SECRET_KEY'] = 'mysecretkey'
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:1234@localhost:5432/pubs'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -14,6 +15,7 @@ db = SQLAlchemy(app)
 Migrate(app,db)
 api = Api(app)
 
+from models import * #don't know how but only that way it works
 
 @app.route('/')
 def index():
@@ -23,37 +25,6 @@ parser = reqparse.RequestParser()
 parser.add_argument('name', type=str)
 parser.add_argument('city', type=str)
 parser.add_argument('info', type=str)
-
-
-class Pubsy(db.Model):
-
-    pub_id = db.Column(db.Integer,primary_key=True, autoincrement=True) 
-    name = db.Column(db.String(80))
-    info = db.Column(db.String(800))
-    city = db.Column(db.String(50))
-
-    def __init__(self,name):
-        self.name=name
-        self.info = "jeszcz nie dodano informacji o pubie"
-        self.city = "brak informacji o miescie"
-
-    def pub_list_json(self):
-        return {'name': self.name, 'ID' : self.pub_id}
-
-    def info_json(self):
-        return {'description' : self.info}
-    
-    def name_json(self):
-        return {'name' : self.name}
-
-    def city_json(self):
-        return {'city' : self.city}
-
-    def json_f(self):
-        return {'city':self.city, 'info': self.info, 'name': self.name, 'ID' : self.pub_id}
-
-    def __str__(self):
-        return "{} and {} and {} and {}".format(self.pub_id, self.name, self.info, self.city)
 
 class PubData(Resource): # get pubs specific info, also to delete pub '/pubs/<string:name>'
 
@@ -119,6 +90,8 @@ class AllPubs(Resource): #show all pubs '/pubs'
         return [pub.pub_list_json() for pub in pubs]
 
 
+
+
 api.add_resource(AllPubs,'/pubs')
 api.add_resource(AddPubs,'/pubs')
 api.add_resource(PubData, '/pubs/<string:name>')
@@ -133,18 +106,5 @@ api.add_resource(InfoPubGet, '/pubs/<string:name>/info')
 
 if __name__ == '__main__':
     db.create_all()
-    app.run(host = '0.0.0.0' ,port = 5001,debug=True)
+    app.run(host = '127.0.0.1' ,port = 5003,debug=True)  # ssl_context='adhoc' -> https
 
-
-#TODO: rozbic na model, dodac komentarze w sumie chyba tyle
-
-
-##### ************************************** ########
-
-# krótki opis uzycia:
-# z poziomu terminala:
-# curl http://{adres}/pubs/amplitron/city -d "city=bydgoszcz" -X PUT -v   // dodanie miasta
-# curl http://{adres}/pubs -d "name=kofeina2" -X POST -v             // dodanie pubu
-# curl http://{adres}/pubs/amplitron/info -d "info=informacja" -X PUT -v //dodanie info
-
-##### ************************************** ########

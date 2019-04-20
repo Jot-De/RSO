@@ -4,6 +4,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -26,6 +27,7 @@ public class JpaConfig {
     Environment env;
 
     @Bean
+    @Profile("!docker")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
         emf.setDataSource(appDataSource());
@@ -39,6 +41,7 @@ public class JpaConfig {
     }
 
     @Bean
+    @Profile("!docker")
     public DataSource appDataSource() {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDefaultQueryTimeout(5);

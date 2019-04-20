@@ -1,6 +1,5 @@
 package pl.snz.pubweb.user.model;
 
-import com.sun.javafx.beans.IDProperty;
 import lombok.Data;
 
 import javax.persistence.*;

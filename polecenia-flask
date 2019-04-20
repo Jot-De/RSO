@@ -16,8 +16,16 @@ flask db init
 flask db migrate -m "initialize"
 flask db upgrade
 
+obsługa put, post z poziomu terminala :
+ curl http://{adres}/pubs/amplitron/city -d "city=bydgoszcz" -X PUT -v    // dodanie miasta
+ curl http://{adres}/pubs -d "name=kofeina2" -X POST -v                   // dodanie pubu
+ curl http://{adres}/pubs/amplitron/info -d "info=informacja" -X PUT -v   //dodanie info
+
+obługa get poprzez adresy :
+
+'/pubs'
+'/pubs/{nazwa}
+'/pubs/{nazwa}/city'
+'/pubs/{nazwa}/info'
 
 
-
-umieścić w kodzie :
-db.create_all() 

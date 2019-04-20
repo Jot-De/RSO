@@ -1,6 +1,5 @@
 package pl.snz.pubweb.user.dto.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +14,6 @@ public class GetUserResponse {
     private String email;
     private String displayName;
     private String aboutMe;
-    private UserDisplaySettingsDto displaySettings;
+    private UDisplaySettings displaySettings;
     private UserPersonalInfoDto personalInformation;
 }

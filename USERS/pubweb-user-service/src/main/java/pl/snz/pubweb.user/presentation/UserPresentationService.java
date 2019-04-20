@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.snz.pubweb.user.dto.user.GetUserResponse;
 import pl.snz.pubweb.user.dto.user.RegistrationResponse;
-import pl.snz.pubweb.user.dto.user.UserDisplaySettingsDto;
+import pl.snz.pubweb.user.dto.user.UDisplaySettings;
 import pl.snz.pubweb.user.dto.user.UserPersonalInfoDto;
 import pl.snz.pubweb.user.model.User;
 import pl.snz.pubweb.user.model.UserPersonalInformation;
@@ -64,8 +64,8 @@ public class UserPresentationService {
             return DisplayLevel.ALL;
     }
 
-    private UserDisplaySettingsDto userDisplaySettingsDto(UserDisplaySettings settings) {
-        return UserDisplaySettingsDto.builder()
+    private UDisplaySettings userDisplaySettingsDto(UserDisplaySettings settings) {
+        return UDisplaySettings.builder()
                 .cityDisplayLevel(settings.getCityDisplayLevel())
                 .nameDisplayLevel(settings.getNameDisplayLevel())
                 .surnameDisplayLevel(settings.getSurnameDisplayLevel())

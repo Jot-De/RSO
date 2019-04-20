@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data @NoArgsConstructor @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ErrorDto {
+public class ApiError {
     private List<FieldError> fieldErrors;
     private ErrorType errorType;
     private String message;
 
-    public static ErrorDto applicationError(String message) {return new ErrorDto(null, ErrorType.APPLICATION, message);}
-    public static ErrorDto validationError(String message, List<FieldError> errors) {return new ErrorDto(errors, ErrorType.VALDIATION, message);}
+    public static ApiError applicationError(String message) {return new ApiError(null, ErrorType.APPLICATION, message);}
+    public static ApiError validationError(String message, List<FieldError> errors) {return new ApiError(errors, ErrorType.VALDIATION, message);}
 
 
 }

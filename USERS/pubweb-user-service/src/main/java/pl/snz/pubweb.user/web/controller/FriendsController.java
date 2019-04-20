@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.snz.pubweb.user.dto.user.friend.FriendshipRequestDto;
+import pl.snz.pubweb.user.dto.user.friend.FriendshipRequestInfo;
 import pl.snz.pubweb.user.dto.user.friend.SendFriendshipRequest;
 import pl.snz.pubweb.user.exception.AuthorizationException;
 import pl.snz.pubweb.user.model.friend.FriendshipRequest;
@@ -27,28 +27,28 @@ public class FriendsController {
    private final FriendRequestService friendRequestService;
 
     @GetMapping("/requests")
-    public List<FriendshipRequestDto> getAllRequests(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = "20") int size) {
+    public List<FriendshipRequestInfo> getAllRequests(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = "20") int size) {
         return friendRequestService.getAllPendingRequests(requestSecurityContextProvider.principalId(), PageRequest.of(page, size)).stream()
                 .map(friendshipPresentationService::requestDto)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/requests/sent")
-    public List<FriendshipRequestDto> getSentRequests(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = "20") int size) {
+    public List<FriendshipRequestInfo> getSentRequests(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = "20") int size) {
         return friendRequestService.getAllSentRequests(requestSecurityContextProvider.principalId(), PageRequest.of(page, size)).stream()
                 .map(friendshipPresentationService::requestDto)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/requests/received")
-    public List<FriendshipRequestDto> getReceivedRequests(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = "20") int size) {
+    public List<FriendshipRequestInfo> getReceivedRequests(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = "20") int size) {
         return friendRequestService.getAllReceivedRequests(requestSecurityContextProvider.principalId(), PageRequest.of(page, size)).stream()
                 .map(friendshipPresentationService::requestDto)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/requests/{id}")
-    public FriendshipRequestDto getOneRequest(@PathVariable long id) {
+    public FriendshipRequestInfo getOneRequest(@PathVariable long id) {
         final FriendshipRequest request = friendRequestService.getOne(id);
         final long principalId = requestSecurityContextProvider.principalId();
         if(principalId != request.getTarget().getId().longValue() && principalId != request.getRequester().getId().longValue())
@@ -57,7 +57,7 @@ public class FriendsController {
     }
 
     @PostMapping("/requests")
-    public FriendshipRequestDto sendRequest(@Valid @RequestBody SendFriendshipRequest sendFriendshipRequest) {
+    public FriendshipRequestInfo sendRequest(@Valid @RequestBody SendFriendshipRequest sendFriendshipRequest) {
         return friendshipPresentationService.requestDto(
                 friendRequestService.sendRequest(
                         requestSecurityContextProvider.principalId(),
@@ -67,14 +67,14 @@ public class FriendsController {
     }
 
     @PostMapping("/requests/{id}/confirm")
-    public FriendshipRequestDto confirmRequest(@PathVariable long id) {
+    public FriendshipRequestInfo confirmRequest(@PathVariable long id) {
         final FriendshipRequest request = friendRequestService.getOne(id);
         ensureUserIsRequestTarget(request);
         return friendshipPresentationService.requestDto(friendRequestService.confirm(request));
     }
 
     @PostMapping("/requests/{id}/cancel")
-    public FriendshipRequestDto denyRequest(@PathVariable long id) {
+    public FriendshipRequestInfo denyRequest(@PathVariable long id) {
         final FriendshipRequest request = friendRequestService.getOne(id);
         ensureUserIsRequestTarget(request);
         return friendshipPresentationService.requestDto(friendRequestService.cancel(request));

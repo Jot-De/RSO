@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
-public class UserFriendshipDto {
+public class FriendshipInfo {
     private Long user;
     private Long friend;
     private LocalDate since;

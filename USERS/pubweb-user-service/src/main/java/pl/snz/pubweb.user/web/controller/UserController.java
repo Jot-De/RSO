@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.snz.pubweb.user.dto.user.*;
-import pl.snz.pubweb.user.dto.user.friend.UserFriendshipDto;
+import pl.snz.pubweb.user.dto.user.friend.FriendshipInfo;
 import pl.snz.pubweb.user.exception.BadRequestException;
 import pl.snz.pubweb.user.exception.NotFoundException;
 import pl.snz.pubweb.user.mapper.UserMapper;
@@ -90,17 +90,17 @@ public class UserController {
     }
 
     @PutMapping("{id}/displaySettings")
-    public GetUserResponse updateDisplaySettings(@PathVariable Long id, @RequestBody @Valid UserDisplaySettingsDto userDisplaySettingsDto) {
+    public GetUserResponse updateDisplaySettings(@PathVariable Long id, @RequestBody @Valid UDisplaySettings uDisplaySettings) {
         securityService.requireSelf(id);
         final User user = userRepository.findById(id).orElseThrow(NotFoundException.userById(id));
-        user.getUserDisplaySettings().setNameDisplayLevel(userDisplaySettingsDto.getNameDisplayLevel());
-        user.getUserDisplaySettings().setSurnameDisplayLevel(userDisplaySettingsDto.getSurnameDisplayLevel());
-        user.getUserDisplaySettings().setCityDisplayLevel(userDisplaySettingsDto.getCityDisplayLevel());
+        user.getUserDisplaySettings().setNameDisplayLevel(uDisplaySettings.getNameDisplayLevel());
+        user.getUserDisplaySettings().setSurnameDisplayLevel(uDisplaySettings.getSurnameDisplayLevel());
+        user.getUserDisplaySettings().setCityDisplayLevel(uDisplaySettings.getCityDisplayLevel());
         return userPresentationService.toGetUserResponse(userRepository.save(user));
     }
 
     @GetMapping("{id}/friends")
-    public List<UserFriendshipDto> getUserFriends(@PathVariable Long id, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = "20") int size) {
+    public List<FriendshipInfo> getUserFriends(@PathVariable Long id, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = "20") int size) {
         return friendshipService.getForUser(id).stream().map(f -> friendshipPresentationService.friendshipDto(f, id)).collect(Collectors.toList());
     }
 

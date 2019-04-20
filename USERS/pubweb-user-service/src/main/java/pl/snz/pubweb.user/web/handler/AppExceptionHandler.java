@@ -12,7 +12,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import pl.snz.pubweb.user.dto.error.ErrorDto;
+import pl.snz.pubweb.user.dto.error.ApiError;
 import pl.snz.pubweb.user.dto.error.FieldError;
 import pl.snz.pubweb.user.exception.AuthorizationException;
 import pl.snz.pubweb.user.exception.BadRequestException;
@@ -22,7 +22,6 @@ import pl.snz.pubweb.user.exception.NotFoundException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,22 +33,22 @@ public class AppExceptionHandler {
     private final Environment env;
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorDto> handle( HttpMessageNotReadableException exception) {
-        return ResponseEntity.badRequest().body(ErrorDto.applicationError(exception.getMessage()));
+    public ResponseEntity<ApiError> handle(HttpMessageNotReadableException exception) {
+        return ResponseEntity.badRequest().body(ApiError.applicationError(exception.getMessage()));
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorDto> handleNotFound(NotFoundException exception) {
-        return new ResponseEntity<>(ErrorDto.applicationError(exception.getMessage()), HttpStatus.NOT_FOUND);
+    public ResponseEntity<ApiError> handleNotFound(NotFoundException exception) {
+        return new ResponseEntity<>(ApiError.applicationError(exception.getMessage()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ErrorDto> handle(ConstraintViolationException constraintValidationException) {
-        return ResponseEntity.badRequest().body(ErrorDto.validationError(constraintValidationException.getMessage(), mapToErrors(constraintValidationException)));
+    public ResponseEntity<ApiError> handle(ConstraintViolationException constraintValidationException) {
+        return ResponseEntity.badRequest().body(ApiError.validationError(constraintValidationException.getMessage(), mapToErrors(constraintValidationException)));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorDto> handle(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ApiError> handle(MethodArgumentNotValidException ex) {
         List<FieldError> errors = new ArrayList<>();
         for (org.springframework.validation.FieldError error : ex.getBindingResult().getFieldErrors()) {
             errors.add(new FieldError(error.getField(), getMessage(error)));
@@ -57,30 +56,30 @@ public class AppExceptionHandler {
         for (ObjectError error : ex.getBindingResult().getGlobalErrors()) {
             errors.add(new FieldError(error.getObjectName(), getMessage(error)));
         }
-        return ResponseEntity.badRequest().body(ErrorDto.validationError(ex.getLocalizedMessage(), errors));
+        return ResponseEntity.badRequest().body(ApiError.validationError(ex.getLocalizedMessage(), errors));
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorDto> handleBadRequest(BadRequestException ex) {
+    public ResponseEntity<ApiError> handleBadRequest(BadRequestException ex) {
         List<FieldError> errors = ex.getErrors().stream().map(this::toFieldError).collect(Collectors.toList());
-        return ResponseEntity.badRequest().body(ErrorDto.validationError(translateExceptionMessage(ex.getMessageKey()), errors));
+        return ResponseEntity.badRequest().body(ApiError.validationError(translateExceptionMessage(ex.getMessageKey()), errors));
     }
 
 
     @ExceptionHandler
-    public ResponseEntity<ErrorDto> handleServerError(InternalServerErrorException ex) {
-        return new ResponseEntity<>(ErrorDto.applicationError(ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<ApiError> handleServerError(InternalServerErrorException ex) {
+        return new ResponseEntity<>(ApiError.applicationError(ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorDto> handleAuthorizationException(AuthorizationException ex) {
-        return new ResponseEntity<>(ErrorDto.applicationError(translateExceptionMessage(ex.getMessageKey())), HttpStatus.FORBIDDEN);
+    public ResponseEntity<ApiError> handleAuthorizationException(AuthorizationException ex) {
+        return new ResponseEntity<>(ApiError.applicationError(translateExceptionMessage(ex.getMessageKey())), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(BindException.class)
-    public ResponseEntity<ErrorDto> handleBindException(BindException ex) {
+    public ResponseEntity<ApiError> handleBindException(BindException ex) {
         final List<FieldError> errors = ex.getAllErrors().stream().map(error -> new FieldError(error.getObjectName(), getMessage(error))).collect(Collectors.toList());
-        return new ResponseEntity<>(ErrorDto.validationError(ex.getLocalizedMessage(), errors), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ApiError.validationError(ex.getLocalizedMessage(), errors), HttpStatus.BAD_REQUEST);
     }
 
     private String translateExceptionMessage(String messageKey) {

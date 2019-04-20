@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @Data
 @NoArgsConstructor @AllArgsConstructor
-public class UserDisplaySettingsDto {
+public class UDisplaySettings {
     @NotNull
     private DisplayLevel nameDisplayLevel;
     @NotNull

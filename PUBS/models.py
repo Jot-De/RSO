@@ -20,6 +20,9 @@ class Pubsy(db.Model):
     
     def name_json(self):
         return {'name' : self.name}
+    
+    def delete_json(self):
+        return {'delete' : self.name}
 
     def city_json(self):
         return {'city' : self.city}

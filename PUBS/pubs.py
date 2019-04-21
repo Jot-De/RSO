@@ -37,9 +37,14 @@ class PubData(Resource): # get pubs specific info, also to delete pub '/pubs/<in
 
     def delete(self,pub_id):
         pub = Pubsy.query.filter_by(pub_id=pub_id).first()
-        db.session.delete(pub)
-        db.session.commit()
+        if pub:
+            db.session.delete(pub)
+            db.session.commit()
+            return pub.delete_json()
+        else:
+            return {'id':'not found'}, 404   
 
+            
 class AddPubs(Resource): # you can add pub by giving it's name '/pubs'
     def post(self):
         args = parser.parse_args() #add parsing regquest functionality , shown line below

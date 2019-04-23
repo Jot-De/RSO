@@ -9,4 +9,4 @@ ADD . /app
 
 WORKDIR /app
 
-CMD ["python", "pubs.py"]
+CMD ["python", "reviews.py"]

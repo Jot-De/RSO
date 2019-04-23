@@ -30,14 +30,17 @@ parser.add_argument('info', type=str)
 class PubData(Resource): # get pubs specific info, also to delete pub '/pubs/<int:pub_id>'
 
     def get(self,pub_id):
-        pub = Pubsy.query.filter_by(pub_id=pub_id).first()
+        args = parser.parse_args()
+        pub = pub_table.query.filter_by(pub_id=pub_id).first()
+        tags = PubMapTag.query.filter_by(pub_id=pub_id).all()
         if pub:
-            return pub.json_f()
+            # return pub.json_f()
+            return {'name':pub.name, 'tags':[tag.json_f() for tag in tags],'city':pub.city,'pub_id':pub.pub_id,'info':pub.info}
         else:
             return {'id':'not found'}, 404
 
     def delete(self,pub_id):
-        pub = Pubsy.query.filter_by(pub_id=pub_id).first()
+        pub = pub_table.query.filter_by(pub_id=pub_id).first()
         if pub:
             db.session.delete(pub)
             db.session.commit()
@@ -50,7 +53,7 @@ class AddPubs(Resource): # you can add pub by giving it's name '/pubs'
     
     def post(self):
         args = parser.parse_args() #add parsing regquest functionality , shown line below
-        pub = Pubsy(name=args['name']) 
+        pub = pub_table(name=args['name']) 
         db.session.add(pub)
         db.session.commit()
         return pub.name_json()
@@ -58,7 +61,7 @@ class AddPubs(Resource): # you can add pub by giving it's name '/pubs'
 class CityPubGet(Resource): #get info about city in which pub exists '/pubs/<int:pub_id>/city'
     
     def get(self,pub_id):
-        pub = Pubsy.query.filter_by(pub_id=pub_id).first()
+        pub = pub_table.query.filter_by(pub_id=pub_id).first()
         if pub:
             return pub.city_json()
         else:
@@ -67,12 +70,12 @@ class CityPubGet(Resource): #get info about city in which pub exists '/pubs/<int
 class CityPubPut(Resource): # put info about pub's city'/pubs/<d>/city'
 
     def patch(self,pub_id):
-        pub = Pubsy.query.filter_by(pub_id=pub_id).first()
+        pub = pub_table.query.filter_by(pub_id=pub_id).first()
         if pub:
             args = parser.parse_args() #add parsing regquest functionality , shown line below
-            pub = Pubsy.query.filter_by(pub_id=pub_id).update(dict(city=args['city']))
+            pub = pub_table.query.filter_by(pub_id=pub_id).update(dict(city=args['city']))
             db.session.commit()
-            pub = Pubsy.query.filter_by(pub_id=pub_id).first()
+            pub = pub_table.query.filter_by(pub_id=pub_id).first()
             return pub.city_json()
         else:
             return {'id':'not found'}, 404  
@@ -80,7 +83,7 @@ class CityPubPut(Resource): # put info about pub's city'/pubs/<d>/city'
 class InfoPubGet(Resource): # get some info about pub '/pubs/<int:pub_id>/info'
     
     def get(self,pub_id):
-        pub = Pubsy.query.filter_by(pub_id=pub_id).first()
+        pub = pub_table.query.filter_by(pub_id=pub_id).first()
         if pub:
             return pub.info_json()
         else:
@@ -89,12 +92,12 @@ class InfoPubGet(Resource): # get some info about pub '/pubs/<int:pub_id>/info'
 class InfoPubPut(Resource): #insert short info about pub '/pubs/<int:pub_id>/info'
 
     def patch(self,pub_id):
-        pub = Pubsy.query.filter_by(pub_id=pub_id).first()
+        pub = pub_table.query.filter_by(pub_id=pub_id).first()
         if pub:
             args = parser.parse_args() #add parsing regquest functionality , shown line below
-            pub = Pubsy.query.filter_by(pub_id=pub_id).update(dict(info=args['info']))
+            pub = pub_table.query.filter_by(pub_id=pub_id).update(dict(info=args['info']))
             db.session.commit()
-            pub = Pubsy.query.filter_by(pub_id=pub_id).first()
+            pub = pub_table.query.filter_by(pub_id=pub_id).first()
             return pub.info_json()
         else:
             return {'id':'not found'}, 404  
@@ -104,12 +107,12 @@ class InfoPubPut(Resource): #insert short info about pub '/pubs/<int:pub_id>/inf
 class AllPubs(Resource): #show all pubs '/pubs'
    
     def get(self):
-        pubs = Pubsy.query.all()
+        pubs = pub_table.query.all()
         return [pub.pub_list_json() for pub in pubs]
 
 class TagPubPut(Resource):
     def post(self,pub_id):
-        pub = Pubsy.query.filter_by(pub_id=pub_id).first()
+        pub = pub_table.query.filter_by(pub_id=pub_id).first()
         if pub:
             args = parser.parse_args()
             tag = PubMapTag(pub_id=pub_id, tag_desc=args['tag_desc'])
@@ -123,8 +126,9 @@ class TagPubPut(Resource):
 class TagGet(Resource): # get some info about pub '/pubs/<int:pub_id>/info'
     
     def get(self,pub_id):
+        pub = pub_table.query.filter_by(pub_id=pub_id).first()
         tags = PubMapTag.query.filter_by(pub_id=pub_id).all()
-        if tags:
+        if pub:
             return [tag.json_f() for tag in tags]
         else:
             return {'id':'not found'}, 404     

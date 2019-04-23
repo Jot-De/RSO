@@ -1,6 +1,6 @@
 from pubs import db
 
-class Pubsy(db.Model):
+class pub_table(db.Model):
 
     pub_id = db.Column(db.Integer,primary_key=True, autoincrement=True) 
     name = db.Column(db.String(80))
@@ -37,12 +37,13 @@ class Pubsy(db.Model):
 
 class PubMapTag(db.Model):
     map_id = db.Column(db.Integer,primary_key=True, autoincrement=True)
-    pub_id = db.Column(db.Integer,db.ForeignKey("pubsy.pub_id")) 
+    pub_id = db.Column(db.Integer,db.ForeignKey("pub_table.pub_id")) 
     tag_desc = db.Column(db.String(30))
-
+ 
     def __init__(self,pub_id,tag_desc):
         self.pub_id   = pub_id
         self.tag_desc = tag_desc
 
     def json_f(self):
         return {'pub_id':self.pub_id, 'tag_desc':self.tag_desc}
+

@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 # app.config['SECRET_KEY'] = 'mysecretkey'
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:1234@localhost:5432/pubs'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:1234@localhost:5432/postgres'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -22,6 +22,7 @@ def index():
     return render_template('home.html')
 
 parser = reqparse.RequestParser()
+parser.add_argument('tag_desc', type=str)
 parser.add_argument('name', type=str)
 parser.add_argument('city', type=str)
 parser.add_argument('info', type=str)
@@ -46,6 +47,7 @@ class PubData(Resource): # get pubs specific info, also to delete pub '/pubs/<in
 
             
 class AddPubs(Resource): # you can add pub by giving it's name '/pubs'
+    
     def post(self):
         args = parser.parse_args() #add parsing regquest functionality , shown line below
         pub = Pubsy(name=args['name']) 
@@ -97,14 +99,38 @@ class InfoPubPut(Resource): #insert short info about pub '/pubs/<int:pub_id>/inf
         else:
             return {'id':'not found'}, 404  
 
+
+
 class AllPubs(Resource): #show all pubs '/pubs'
+   
     def get(self):
         pubs = Pubsy.query.all()
         return [pub.pub_list_json() for pub in pubs]
 
+class TagPubPut(Resource):
+    def post(self,pub_id):
+        pub = Pubsy.query.filter_by(pub_id=pub_id).first()
+        if pub:
+            args = parser.parse_args()
+            tag = PubMapTag(pub_id=pub_id, tag_desc=args['tag_desc'])
+            db.session.add(tag)
+            db.session.commit()
+            tag = PubMapTag.query.filter_by(pub_id=pub_id).first()
+            return tag.json_f()
+        else:
+            return {'id':'not found'}, 404 
+
+class TagGet(Resource): # get some info about pub '/pubs/<int:pub_id>/info'
+    
+    def get(self,pub_id):
+        tag = PubMapTag.query.filter_by(pub_id=pub_id).all()
+        if tag:
+            return tag.json_f()
+        else:
+            return {'id':'not found'}, 404     
 
 
-
+  
 api.add_resource(AllPubs,'/pubs')
 api.add_resource(AddPubs,'/pubs')
 api.add_resource(PubData, '/pubs/<int:pub_id>')
@@ -115,6 +141,11 @@ api.add_resource(CityPubGet, '/pubs/<int:pub_id>/city')
 
 api.add_resource(InfoPubPut, '/pubs/<int:pub_id>/info')
 api.add_resource(InfoPubGet, '/pubs/<int:pub_id>/info')
+
+
+api.add_resource(TagPubPut, '/pubs/<int:pub_id>/tag')
+api.add_resource(TagGet, '/pubs/<int:pub_id>/tag')
+
 
 
 if __name__ == '__main__':

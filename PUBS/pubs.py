@@ -123,9 +123,9 @@ class TagPubPut(Resource):
 class TagGet(Resource): # get some info about pub '/pubs/<int:pub_id>/info'
     
     def get(self,pub_id):
-        tag = PubMapTag.query.filter_by(pub_id=pub_id).all()
-        if tag:
-            return tag.json_f()
+        tags = PubMapTag.query.filter_by(pub_id=pub_id).all()
+        if tags:
+            return [tag.json_f() for tag in tags]
         else:
             return {'id':'not found'}, 404     
 

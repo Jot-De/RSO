@@ -20,7 +20,7 @@ public class UserMapper {
                 .password(bCryptPasswordEncoder.encode(signUpRequest.getPassword()))
                 .displayName(signUpRequest.getDisplayName())
                 .email(signUpRequest.getEmail())
-                .userDisplaySettings(UserDisplaySettings.defaul())
+                .userDisplaySettings(UserDisplaySettings.allPrivate())
                 .userPersonalInformation(UserPersonalInformation.none())
                 .build();
     }

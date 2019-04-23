@@ -16,6 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import pl.snz.pubweb.user.security.CustomUserDetailsService;
 import pl.snz.pubweb.user.security.JwtAuthenticationEntryPoint;
 import pl.snz.pubweb.user.security.JwtAuthenticationFilter;
+import pl.snz.pubweb.user.web.handler.CustomAccessDeniedHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -39,6 +40,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return bCryptPasswordEncoder;
     }
 
+    @Autowired
+    private CustomAccessDeniedHandler customAccessDeniedHandler;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -48,6 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(customAccessDeniedHandler)
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -72,6 +77,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/swagger-resources/**",
                         "/webjars/springfox-swagger-ui/**")
                 .permitAll()
+                .antMatchers("/admin/**")
+                .hasAuthority("ADMIN")
                 .anyRequest()
                 .authenticated();
 

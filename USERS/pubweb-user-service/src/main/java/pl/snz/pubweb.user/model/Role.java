@@ -11,10 +11,13 @@ import javax.persistence.Table;
 @Table(name = "role")
 public class Role extends IdentifiableEntity<Long> {
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
     @Column(name = "updatable", updatable = false)
     private boolean updatable;
+
+    @Column(name = "assignable", updatable = false)
+    private boolean assignable;
 
 }

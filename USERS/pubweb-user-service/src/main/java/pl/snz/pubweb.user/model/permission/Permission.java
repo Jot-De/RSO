@@ -12,7 +12,10 @@ import javax.persistence.Table;
 @Entity
 public class Permission extends IdentifiableEntity<Long> {
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "permission_key", nullable = false, updatable = false)
+    private String permissionKey;
+
+    @Column(nullable = false, updatable = true)
     private String name;
 
     @Column(length = 4000, nullable = false)

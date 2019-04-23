@@ -104,6 +104,4 @@ public class UserController {
         return friendshipService.getForUser(id).stream().map(f -> friendshipPresentationService.friendshipDto(f, id)).collect(Collectors.toList());
     }
 
-
-
 }

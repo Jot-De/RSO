@@ -1,25 +1,26 @@
 package pl.snz.pubweb.user.model.permission;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import pl.snz.pubweb.user.model.IdentifiableEntity;
 import pl.snz.pubweb.user.model.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-@Data
+@Data @NoArgsConstructor @AllArgsConstructor
 @Table(name = "user_permission")
 @Entity
-public class UserPermission implements Serializable {
+public class UserPermissionAcceptance extends IdentifiableEntity<Long> implements Serializable {
 
-    @Id
     @JoinColumn(name = "user_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @Id
     @JoinColumn(name = "permission_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Permission permission;
 
     @Column(name = "valid_until")

@@ -3,7 +3,7 @@ package pl.snz.pubweb.user.model;
 import lombok.*;
 import pl.snz.pubweb.user.model.display.UserDisplaySettings;
 import pl.snz.pubweb.user.model.friend.FriendshipRequest;
-import pl.snz.pubweb.user.model.permission.UserPermission;
+import pl.snz.pubweb.user.model.permission.UserPermissionAcceptance;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -43,7 +43,7 @@ public class User extends IdentifiableEntity<Long> {
     private Set<Role> roles = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
-    private Set<UserPermission> acceptedPermissions = new HashSet<>();
+    private Set<UserPermissionAcceptance> acceptedPermissions = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "target", fetch = FetchType.LAZY)
     private Set<FriendshipRequest> receivedFriendshipRequests;

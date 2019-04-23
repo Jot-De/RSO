@@ -10,4 +10,8 @@ public class CheckAuthResponse {
     private boolean valid;
     private Long userId;
     private Set<String> roles;
+
+    public static CheckAuthResponse invalid(){
+        return new CheckAuthResponse(false, null, null);
+    }
 }

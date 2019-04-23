@@ -1,31 +1,27 @@
 package pl.snz.pubweb.user.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import pl.snz.pubweb.user.model.Role;
 import pl.snz.pubweb.user.model.User;
+import pl.snz.pubweb.user.model.permission.UserPermissionAcceptance;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor @AllArgsConstructor
 public class UserPrincipal implements UserDetails {
-    private Long id;
+    private  Long id;
     private String login;
     @JsonIgnore
     private String password;
 
     private Collection<? extends GrantedAuthority> authorities;
-
-    public UserPrincipal(Long id, String login, String password, Collection<? extends GrantedAuthority> authorities) {
-        this.id = id;
-        this.login = login;
-        this.password = password;
-        this.authorities = authorities;
-    }
+    private Set<UserPermissionAcceptance> permissions;
 
     public static UserPrincipal create(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream().map(Role::getName).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
@@ -34,12 +30,17 @@ public class UserPrincipal implements UserDetails {
                 user.getId(),
                 user.getLogin(),
                 user.getPassword(),
-                authorities
+                authorities,
+                Collections.unmodifiableSet(user.getAcceptedPermissions())
         );
     }
 
     public Long getId() {
         return id;
+    }
+
+    public Set<UserPermissionAcceptance> getAcceptedPermissions() {
+        return permissions;
     }
 
     @Override

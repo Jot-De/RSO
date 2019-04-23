@@ -19,4 +19,8 @@ public class AuthorizationException extends RuntimeException {
     public static AuthorizationException adminContextRequired() {
         return new AuthorizationException("auth.admin.context.required");
     }
+
+    public static AuthorizationException permissionRequired(String key) {
+        return new AuthorizationException("permission.required");
+    }
 }

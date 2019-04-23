@@ -22,7 +22,7 @@ public class Friendship extends IdentifiableEntity<Long> {
     @JoinColumn(name = "user2")
     private User user2;
 
-    @Column(name = "received")
+    @Column(name = "since", nullable = false)
     private LocalDate since;
 
 }

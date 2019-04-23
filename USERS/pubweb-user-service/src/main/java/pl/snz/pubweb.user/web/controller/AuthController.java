@@ -5,16 +5,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import pl.snz.pubweb.user.util.Mappers;
 import pl.snz.pubweb.user.dto.auth.JwtAuthenticationResponse;
 import pl.snz.pubweb.user.dto.auth.LoginRequest;
 import pl.snz.pubweb.user.dto.user.CheckAuthResponse;
+import pl.snz.pubweb.user.exception.NotFoundException;
+import pl.snz.pubweb.user.model.Role;
+import pl.snz.pubweb.user.model.User;
 import pl.snz.pubweb.user.repo.UserRepository;
 import pl.snz.pubweb.user.security.JwtTokenProvider;
 
 import javax.validation.Valid;
-import java.util.Collections;
 
 @RestController
 @RequestMapping("/auth")
@@ -22,9 +24,8 @@ import java.util.Collections;
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserRepository userRepository;
 
     @PostMapping("/signin")
     public JwtAuthenticationResponse jwtAuthenticationResponse(@Valid @RequestBody LoginRequest loginRequest) {
@@ -41,6 +42,12 @@ public class AuthController {
 
     @GetMapping("/check")
     public CheckAuthResponse checkAuth(@RequestHeader("Authorization") String authorization) {
-        return new CheckAuthResponse(true, 1l, Collections.singleton(authorization));
+        String jwt = authorization.substring("Bearer ".length());
+        if(!jwtTokenProvider.validateToken(jwt))
+            return CheckAuthResponse.invalid();
+        final Long userId = jwtTokenProvider.getUserIdFromJWT(jwt);
+        final User user = userRepository.findById(userId).orElseThrow(NotFoundException.userById(userId));
+
+        return new CheckAuthResponse(true, userId, Mappers.set(Role::getName, user.getRoles()));
     }
 }

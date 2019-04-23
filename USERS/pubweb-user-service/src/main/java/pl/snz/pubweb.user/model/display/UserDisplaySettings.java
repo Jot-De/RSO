@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import pl.snz.pubweb.user.model.IdentifiableEntity;
 
 import javax.persistence.*;
+import java.util.stream.Stream;
 
 
 @Entity
@@ -23,8 +24,19 @@ public class UserDisplaySettings extends IdentifiableEntity<Long> {
     @Enumerated(EnumType.STRING)
     private DisplayLevel cityDisplayLevel;
 
-    public static UserDisplaySettings defaul() {
+    public static UserDisplaySettings allPrivate() {
         return new UserDisplaySettings(DisplayLevel.ME_ONLY, DisplayLevel.ME_ONLY, DisplayLevel.ME_ONLY);
     }
+
+    /** Usefull when we have to determine whether user has access to any of properties */
+    public DisplayLevel getLowest() {
+        return Stream.of(nameDisplayLevel, surnameDisplayLevel, cityDisplayLevel)
+                .map(DisplayLevel::getConfidenceLevel)
+                .reduce(Math::min)
+                .map(DisplayLevel::ofConfidenceLevel)
+                .orElseThrow(RuntimeException::new);
+    }
+
+
 
 }

@@ -15,6 +15,6 @@ public class ApiError {
 
     public static ApiError applicationError(String message) {return new ApiError(null, ErrorType.APPLICATION, message);}
     public static ApiError validationError(String message, List<FieldError> errors) {return new ApiError(errors, ErrorType.VALDIATION, message);}
-
+    public static ApiError securityError(String message) {return new ApiError(null, ErrorType.SECURITY, message);}
 
 }

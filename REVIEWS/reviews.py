@@ -24,6 +24,7 @@ def index():
 
 parser = reqparse.RequestParser()
 parser.add_argument('pub_id', type=int)
+parser.add_argument('user_id', type=int)
 parser.add_argument('stars', type=str)
 parser.add_argument('opinion', type=str)
 
@@ -71,7 +72,26 @@ class PubIDReviewPut(Resource): # put pub_id for a review '/reviews/<d>/pub_id'
         review = Reviews.query.filter_by(review_id=review_id).update(dict(pub_id=args['pub_id']))
         db.session.commit()
         review = Reviews.query.filter_by(review_id=review_id).first()
-        return review.pub_ids_json()
+        return review.pub_id_json()
+
+
+class UserIDReviewGet(Resource): #get user_id  for a review '/reviews/<int:review_id>/pub_id'
+
+    def get(self,review_id):
+        review = Reviews.query.filter_by(review_id=review_id).first()
+        if review:
+            return review.user_id_json()
+        else:
+            return {'id':'not found'}, 404
+
+class UserIDReviewPut(Resource): # put user_id for a review '/reviews/<d>/pub_id'
+
+    def put(self,review_id):
+        args = parser.parse_args() #add parsing regquest functionality , shown line below
+        review = Reviews.query.filter_by(review_id=review_id).update(dict(user_id=args['user_id']))
+        db.session.commit()
+        review = Reviews.query.filter_by(review_id=review_id).first()
+        return review.user_id_json()
 
 ############################################################################################################
 
@@ -125,6 +145,9 @@ api.add_resource(ReviewData, '/reviews/<int:review_id>')
 
 api.add_resource(PubIDReviewPut, '/reviews/<int:review_id>/pub_id')
 api.add_resource(PubIDReviewGet, '/reviews/<int:review_id>/pub_id')
+
+api.add_resource(UserIDReviewPut, '/reviews/<int:review_id>/user_id')
+api.add_resource(UserIDReviewGet, '/reviews/<int:review_id>/user_id')
 
 api.add_resource(StarsReviewPut, '/reviews/<int:review_id>/stars')
 api.add_resource(StarsReviewGet, '/reviews/<int:review_id>/stars')

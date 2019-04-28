@@ -118,7 +118,7 @@ class TagPubPut(Resource):
             tag = PubMapTag(pub_id=pub_id, tag_desc=args['tag_desc'])
             db.session.add(tag)
             db.session.commit()
-            tag = PubMapTag.query.filter_by(pub_id=pub_id).first()
+            tag = PubMapTag.query.filter_by(pub_id=pub_id).order_by(db.desc('map_id')).first()
             return tag.json_f()
         else:
             return {'id':'not found'}, 404 

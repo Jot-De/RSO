@@ -45,4 +45,4 @@ class PubMapTag(db.Model):
         self.tag_desc = tag_desc
 
     def json_f(self):
-        return {'pub_id':self.pub_id, 'tag_desc':self.tag_desc}
+        return {'tag_id':self.map_id, 'tag_desc':self.tag_desc}

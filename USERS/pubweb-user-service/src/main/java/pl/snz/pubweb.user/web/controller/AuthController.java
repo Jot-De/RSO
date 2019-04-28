@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import pl.snz.pubweb.user.security.UserPrincipal;
 import pl.snz.pubweb.user.util.Mappers;
 import pl.snz.pubweb.user.dto.auth.JwtAuthenticationResponse;
 import pl.snz.pubweb.user.dto.auth.LoginRequest;
@@ -28,7 +29,7 @@ public class AuthController {
     private final UserRepository userRepository;
 
     @PostMapping("/signin")
-    public JwtAuthenticationResponse jwtAuthenticationResponse(@Valid @RequestBody LoginRequest loginRequest) {
+    public JwtAuthenticationResponse signIn(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getLoginOrEmail(),
@@ -36,7 +37,10 @@ public class AuthController {
                 )
         );
         String jwt = jwtTokenProvider.generateToken(authentication);
-        return new JwtAuthenticationResponse(jwt);
+        return JwtAuthenticationResponse.builder()
+                .accessToken(jwt)
+                .userId(((UserPrincipal)authentication.getPrincipal()).getId())
+                .build();
 
     }
 

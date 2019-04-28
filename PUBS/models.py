@@ -46,3 +46,4 @@ class PubMapTag(db.Model):
 
     def json_f(self):
         return {'tag_id':self.map_id, 'tag_desc':self.tag_desc}
+

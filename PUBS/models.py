@@ -47,3 +47,14 @@ class PubMapTag(db.Model):
     def json_f(self):
         return {'tag_id':self.map_id, 'tag_desc':self.tag_desc}
 
+class PubPhoto(db.Model):
+    photo_id = db.Column(db.Integer,primary_key=True, autoincrement=True)
+    pub_id = db.Column(db.Integer,db.ForeignKey("pub_table.pub_id")) 
+    pub_photo = db.Column(db.BLOB)
+ 
+    def __init__(self,pub_id,pub_photo):
+        self.pub_id   = pub_id
+        self.pub_photo = pub_photo
+
+    def json_f(self):
+        return {'pub_id':self.pub_id, 'id_photo':self.pub_photo}

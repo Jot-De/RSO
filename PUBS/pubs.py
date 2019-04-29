@@ -3,13 +3,14 @@ import werkzeug, os
 from flask_restful import Api, Resource, reqparse
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-
+import psycopg2
+import base64
 
 app = Flask(__name__)
 # app.config['SECRET_KEY'] = 'mysecretkey'
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:1234@localhost:5432/postgres'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:1234@localhost:5432/pubssql'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -18,7 +19,65 @@ UPLOAD_FOLDER = 'static/img'
 Migrate(app,db)
 api = Api(app)
 
-from models import * #don't know how but only that way it works
+
+class pub_table(db.Model):
+
+    pub_id = db.Column(db.Integer,primary_key=True, autoincrement=True) 
+    name = db.Column(db.String(80))
+    info = db.Column(db.String(800))
+    city = db.Column(db.String(50))
+
+
+    def __init__(self,name):
+        self.name=name
+        self.info = "jeszcz nie dodano informacji o pubie"
+        self.city = "brak informacji o miescie"
+
+    def pub_list_json(self):
+        return {'name': self.name, 'ID' : self.pub_id}
+
+    def info_json(self):
+        return {'description' : self.info}
+    
+    def name_json(self):
+        return {'name' : self.name}
+    
+    def delete_json(self):
+        return {'delete' : self.name}
+
+    def city_json(self):
+        return {'city' : self.city}
+
+    def json_f(self):
+        return {'city':self.city, 'info': self.info, 'name': self.name, 'ID' : self.pub_id}
+
+    def __str__(self):
+        return "{} and {} and {} and {}".format(self.pub_id, self.name, self.info, self.city)
+
+
+class PubMapTag(db.Model):
+    map_id = db.Column(db.Integer,primary_key=True, autoincrement=True)
+    pub_id = db.Column(db.Integer,db.ForeignKey("pub_table.pub_id")) 
+    tag_desc = db.Column(db.String(30))
+ 
+    def __init__(self,pub_id,tag_desc):
+        self.pub_id   = pub_id
+        self.tag_desc = tag_desc
+
+    def json_f(self):
+        return {'tag_id':self.map_id, 'tag_desc':self.tag_desc}
+
+class PubPhoto(db.Model):
+    photo_id = db.Column(db.Integer,primary_key=True, autoincrement=True)
+    pub_id = db.Column(db.Integer,db.ForeignKey("pub_table.pub_id")) 
+    pub_photo = db.Column(db.LargeBinary)
+ 
+    def __init__(self,pub_id,pub_photo):
+        self.pub_id   = pub_id
+        self.pub_photo = pub_photo
+
+    def json_f(self):
+        return {'pub_id':self.pub_id, 'id_photo':self.pub_photo}
 
 @app.route('/')
 def index():
@@ -148,9 +207,9 @@ class TagGet(Resource): # get some info about pub '/pubs/<int:pub_id>/info'
   
 
 class PhotoUpload(Resource):
-    decorators=[]
 
-    def post(self):
+    def post(self,pub_id):
+        pub = pub_table.query.filter_by(pub_id=pub_id).first()
         data = parser.parse_args()
         if data['file'] == "":
             return {
@@ -158,10 +217,16 @@ class PhotoUpload(Resource):
                     'status':'error'
                     }
         photo = data['file']
+        bin_photo = base64.b64encode(photo.read())
+        
 
         if photo:
             filename = 'your_image.png'
             photo.save(os.path.join(UPLOAD_FOLDER,filename))
+            new_photo = PubPhoto(pub_id = pub_id, pub_photo = bin_photo)
+            db.session.add(new_photo)
+            db.session.commit()
+
             return {
                     'message':'photo uploaded',
                     'status':'success'
@@ -172,7 +237,7 @@ class PhotoUpload(Resource):
                 'status':'error'
                 }
 
-api.add_resource(PhotoUpload,'/upload')
+api.add_resource(PhotoUpload,'/pubs/<int:pub_id>/upload')
 
 api.add_resource(AllPubs,'/pubs')
 api.add_resource(AddPubs,'/pubs')

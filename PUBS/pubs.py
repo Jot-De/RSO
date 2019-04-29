@@ -253,6 +253,16 @@ class GetPhoto(Resource):
         else:
             return {'id':'not found'}, 404  
 
+class Cities(Resource):
+    def get(self):
+        args = parser.parse_args()
+        pubs = pub_table.query.filter_by(city=args['city']).all()
+        if pubs:
+            return [pub.pub_list_json() for pub in pubs]
+        else:
+            return {'id':'not found'}, 404     
+  
+
 api.add_resource(GetPhoto,'/pubs/<int:photo_id>/photo')
 api.add_resource(PhotoUpload,'/pubs/<int:pub_id>/upload')
 
@@ -263,6 +273,8 @@ api.add_resource(PubData, '/pubs/<int:pub_id>')
 
 api.add_resource(CityPubPut, '/pubs/<int:pub_id>/city')
 api.add_resource(CityPubGet, '/pubs/<int:pub_id>/city')
+api.add_resource(Cities, '/pubs/city')
+
 
 api.add_resource(InfoPubPut, '/pubs/<int:pub_id>/info')
 api.add_resource(InfoPubGet, '/pubs/<int:pub_id>/info')

@@ -5,6 +5,7 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
 import base64
+import json 
 
 app = Flask(__name__)
 # app.config['SECRET_KEY'] = 'mysecretkey'
@@ -71,13 +72,16 @@ class PubPhoto(db.Model):
     photo_id = db.Column(db.Integer,primary_key=True, autoincrement=True)
     pub_id = db.Column(db.Integer,db.ForeignKey("pub_table.pub_id")) 
     pub_photo = db.Column(db.LargeBinary)
- 
+    
     def __init__(self,pub_id,pub_photo):
         self.pub_id   = pub_id
         self.pub_photo = pub_photo
 
     def json_f(self):
-        return {'pub_id':self.pub_id, 'id_photo':self.pub_photo}
+        self.napiss = str(self.pub_photo)
+        self.napisss = self.napiss[2:]
+        self.napissss = self.napisss[:-1]
+        return {'pub_id':self.pub_id, 'id_photo':self.photo_id, 'image':self.napissss}
 
 @app.route('/')
 def index():
@@ -218,7 +222,6 @@ class PhotoUpload(Resource):
                     }
         photo = data['file']
         bin_photo = base64.b64encode(photo.read())
-        
 
         if photo:
             filename = 'your_image.png'
@@ -237,6 +240,15 @@ class PhotoUpload(Resource):
                 'status':'error'
                 }
 
+class GetPhoto(Resource):
+    def get(self,photo_id):
+        photo = PubPhoto.query.filter_by(photo_id=photo_id).first()
+        if photo:
+            return photo.json_f()
+        else:
+            return {'id':'not found'}, 404  
+
+api.add_resource(GetPhoto,'/pubs/<int:photo_id>/photo')
 api.add_resource(PhotoUpload,'/pubs/<int:pub_id>/upload')
 
 api.add_resource(AllPubs,'/pubs')

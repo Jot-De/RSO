@@ -35,7 +35,7 @@ class pub_table(db.Model):
         self.city = "brak informacji o miescie"
 
     def pub_list_json(self):
-        return {'name': self.name, 'ID' : self.pub_id}
+        return {'name': self.name, 'id' : self.pub_id}
 
     def info_json(self):
         return {'description' : self.info}
@@ -50,7 +50,7 @@ class pub_table(db.Model):
         return {'city' : self.city}
 
     def json_f(self):
-        return {'city':self.city, 'info': self.info, 'name': self.name, 'ID' : self.pub_id}
+        return {'city':self.city, 'info': self.info, 'name': self.name, 'id' : self.pub_id}
 
     def __str__(self):
         return "{} and {} and {} and {}".format(self.pub_id, self.name, self.info, self.city)
@@ -260,7 +260,7 @@ class Cities(Resource):
         if pubs:
             return [pub.pub_list_json() for pub in pubs]
         else:
-            return {'id':'not found'}, 404     
+            return {'city':'not found'}, 404     
   
 
 api.add_resource(GetPhoto,'/pubs/<int:photo_id>/photo')

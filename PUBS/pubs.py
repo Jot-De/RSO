@@ -174,6 +174,7 @@ class InfoPubPut(Resource): #insert short info about pub '/pubs/<int:pub_id>/inf
             return pub.info_json()
         else:
             return {'id':'not found'}, 404  
+
 class AllPubs(Resource): #show all pubs '/pubs'
    
     def get(self):
@@ -222,9 +223,8 @@ class PhotoUpload(Resource):
         data = parser.parse_args()
         if data['file'] == "":
             return {
-                    'message':'No file found',
-                    'status':'error'
-                    }
+                    'error':'No file'
+                   }
         photo = data['file']
         bin_photo = base64.b64encode(photo.read())
 
@@ -236,13 +236,11 @@ class PhotoUpload(Resource):
             db.session.commit()
 
             return {
-                    'message':'photo uploaded',
-                    'status':'success'
+                    'message':'photo uploaded'
                     }
         return {
 
-                'message':'Something when wrong',
-                'status':'error'
+                'error':'bad upload'
                 }
 
 class GetPhoto(Resource):

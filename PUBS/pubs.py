@@ -20,74 +20,14 @@ UPLOAD_FOLDER = 'static/img'
 Migrate(app,db)
 api = Api(app)
 
-
-class pub_table(db.Model):
-
-    pub_id = db.Column(db.Integer,primary_key=True, autoincrement=True) 
-    name = db.Column(db.String(80))
-    info = db.Column(db.String(800))
-    city = db.Column(db.String(50))
-
-
-    def __init__(self,name):
-        self.name=name
-        self.info = "jeszcz nie dodano informacji o pubie"
-        self.city = "brak informacji o miescie"
-
-    def pub_list_json(self):
-        return {'name': self.name, 'id' : self.pub_id}
-
-    def info_json(self):
-        return {'description' : self.info}
-    
-    def name_json(self):
-        return {'name' : self.name}
-    
-    def delete_json(self):
-        return {'delete' : self.name}
-
-    def city_json(self):
-        return {'city' : self.city}
-
-    def json_f(self):
-        return {'city':self.city, 'info': self.info, 'name': self.name, 'id' : self.pub_id}
-
-    def __str__(self):
-        return "{} and {} and {} and {}".format(self.pub_id, self.name, self.info, self.city)
-
-
-class PubMapTag(db.Model):
-    map_id = db.Column(db.Integer,primary_key=True, autoincrement=True)
-    pub_id = db.Column(db.Integer,db.ForeignKey("pub_table.pub_id")) 
-    tag_desc = db.Column(db.String(30))
- 
-    def __init__(self,pub_id,tag_desc):
-        self.pub_id   = pub_id
-        self.tag_desc = tag_desc
-
-    def json_f(self):
-        return {'tag_id':self.map_id, 'tag_desc':self.tag_desc}
-
-class PubPhoto(db.Model):
-    photo_id = db.Column(db.Integer,primary_key=True, autoincrement=True)
-    pub_id = db.Column(db.Integer,db.ForeignKey("pub_table.pub_id")) 
-    pub_photo = db.Column(db.LargeBinary)
-    
-    def __init__(self,pub_id,pub_photo):
-        self.pub_id   = pub_id
-        self.pub_photo = pub_photo
-
-    def json_f(self):
-        self.napiss = str(self.pub_photo)
-        self.napisss = self.napiss[2:]
-        self.napissss = self.napisss[:-1]
-        return {'pub_id':self.pub_id, 'id_photo':self.photo_id, 'image':self.napissss}
+from models import *
 
 @app.route('/')
 def index():
+    
     return render_template('home.html')
 
-
+# Parsers to json
 parser = reqparse.RequestParser()
 parser.add_argument('tag_desc', type=str)
 parser.add_argument('name', type=str)
@@ -95,7 +35,8 @@ parser.add_argument('city', type=str)
 parser.add_argument('info', type=str)
 parser.add_argument('file',type=werkzeug.datastructures.FileStorage, location='files')
 
-class PubData(Resource): # get pubs specific info, also to delete pub '/pubs/<int:pub_id>'
+# get pubs specific info, also to delete pub '/pubs/<int:pub_id>'
+class PubData(Resource): 
 
     def get(self,pub_id):
 
@@ -104,8 +45,10 @@ class PubData(Resource): # get pubs specific info, also to delete pub '/pubs/<in
         tags = PubMapTag.query.filter_by(pub_id=pub_id).all()
         if pub:
             # return pub.json_f()
+            
             return {'name':pub.name, 'tags':[tag.json_f() for tag in tags],'city':pub.city,'pub_id':pub.pub_id,'info':pub.info}
         else:
+            
             return {'id':'not found'}, 404
 
     def delete(self,pub_id):
@@ -114,11 +57,15 @@ class PubData(Resource): # get pubs specific info, also to delete pub '/pubs/<in
         if pub:
             db.session.delete(pub)
             db.session.commit()
+           
             return pub.delete_json()
         else:
-            return {'id':'not found'}, 404   
-            
-class AddPubs(Resource): # you can add pub by giving it's name '/pubs'
+           
+            return {'id':'not found'}, 404  
+
+
+# you can add pub by giving it's name '/pubs'
+class AddPubs(Resource): 
     
     def post(self):
 
@@ -126,18 +73,24 @@ class AddPubs(Resource): # you can add pub by giving it's name '/pubs'
         pub = pub_table(name=args['name']) 
         db.session.add(pub)
         db.session.commit()
+
         return pub.name_json()
 
-class CityPubGet(Resource): #get info about city in which pub exists '/pubs/<int:pub_id>/city'
+#get info about city in which pub exists '/pubs/<int:pub_id>/city'
+class CityPubGet(Resource):
     
     def get(self,pub_id):
 
         pub = pub_table.query.filter_by(pub_id=pub_id).first()
         if pub:
+
             return pub.city_json()
         else:
+
             return {'id':'not found'}, 404            
-class CityPubPut(Resource): # put info about pub's city'/pubs/<d>/city'
+
+# put info about pub's city'/pubs/<d>/city'
+class CityPubPut(Resource): 
 
     def patch(self,pub_id):
 
@@ -147,21 +100,27 @@ class CityPubPut(Resource): # put info about pub's city'/pubs/<d>/city'
             pub = pub_table.query.filter_by(pub_id=pub_id).update(dict(city=args['city']))
             db.session.commit()
             pub = pub_table.query.filter_by(pub_id=pub_id).first()
+           
             return pub.city_json()
         else:
+           
             return {'id':'not found'}, 404  
-            
-class InfoPubGet(Resource): # get some info about pub '/pubs/<int:pub_id>/info'
+
+# get some info about pub '/pubs/<int:pub_id>/info'
+class InfoPubGet(Resource): 
     
     def get(self,pub_id):
 
         pub = pub_table.query.filter_by(pub_id=pub_id).first()
         if pub:
+      
             return pub.info_json()
         else:
+      
             return {'id':'not found'}, 404            
 
-class InfoPubPut(Resource): #insert short info about pub '/pubs/<int:pub_id>/info'
+#insert short info about pub '/pubs/<int:pub_id>/info'
+class InfoPubPut(Resource): 
     
     def patch(self,pub_id):
 
@@ -171,17 +130,21 @@ class InfoPubPut(Resource): #insert short info about pub '/pubs/<int:pub_id>/inf
             pub = pub_table.query.filter_by(pub_id=pub_id).update(dict(info=args['info']))
             db.session.commit()
             pub = pub_table.query.filter_by(pub_id=pub_id).first()
+           
             return pub.info_json()
         else:
+           
             return {'id':'not found'}, 404  
 
-class AllPubs(Resource): #show all pubs '/pubs'
+#show all pubs '/pubs'
+class AllPubs(Resource): 
    
     def get(self):
 
         pubs = pub_table.query.all()
         return [pub.pub_list_json() for pub in pubs]
 
+#add tag to the specified pub
 class TagPubPut(Resource):
 
     def post(self,pub_id):
@@ -196,32 +159,39 @@ class TagPubPut(Resource):
                 db.session.commit()
                 tag = PubMapTag.query.filter_by(pub_id=pub_id).first()
                 tag = PubMapTag.query.filter_by(pub_id=pub_id).order_by(db.desc('map_id')).first()
+            
                 return tag.json_f()
             else:
+            
                 return {'tag':'empty'}, 404 
 
         else:
+            
             return {'id':'not found'}, 404 
 
-
-class TagGet(Resource): # get some info about pub '/pubs/<int:pub_id>/info'
+# get some info about pub '/pubs/<int:pub_id>/info'
+class TagGet(Resource): 
     
     def get(self,pub_id):
 
         pub = pub_table.query.filter_by(pub_id=pub_id).first()
         tags = PubMapTag.query.filter_by(pub_id=pub_id).all()
         if pub:
+          
             return [tag.json_f() for tag in tags]
         else:
+           
             return {'id':'not found'}, 404     
   
-
+#upload photo to the pub
 class PhotoUpload(Resource):
 
     def post(self,pub_id):
+     
         pub = pub_table.query.filter_by(pub_id=pub_id).first()
         data = parser.parse_args()
         if data['file'] == "":
+           
             return {
                     'error':'No file'
                    }
@@ -238,26 +208,38 @@ class PhotoUpload(Resource):
             return {
                     'message':'photo uploaded'
                     }
+        
         return {
 
                 'error':'bad upload'
                 }
 
+#return photo from the pub
 class GetPhoto(Resource):
+    
     def get(self,photo_id):
+       
         photo = PubPhoto.query.filter_by(photo_id=photo_id).first()
         if photo:
+       
             return photo.json_f()
         else:
+         
             return {'id':'not found'}, 404  
 
+
+#return all pubs in the city
 class Cities(Resource):
+  
     def get(self):
+      
         args = parser.parse_args()
         pubs = pub_table.query.filter_by(city=args['city']).all()
         if pubs:
+         
             return [pub.pub_list_json() for pub in pubs]
         else:
+        
             return {'city':'not found'}, 404     
   
 

@@ -16,4 +16,6 @@ public class UserPersonalInfoDto {
     private String surname;
     @NotBlank
     private String city;
+    @NotBlank
+    private String aboutMe;
 }

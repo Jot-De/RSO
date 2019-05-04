@@ -41,8 +41,8 @@ public class AuthController {
                 .accessToken(jwt)
                 .userId(((UserPrincipal)authentication.getPrincipal()).getId())
                 .build();
-
     }
+
 
     @GetMapping("/check")
     public CheckAuthResponse checkAuth(@RequestHeader("Authorization") String authorization) {
@@ -54,4 +54,6 @@ public class AuthController {
 
         return new CheckAuthResponse(true, userId, Mappers.set(Role::getName, user.getRoles()));
     }
+
+
 }

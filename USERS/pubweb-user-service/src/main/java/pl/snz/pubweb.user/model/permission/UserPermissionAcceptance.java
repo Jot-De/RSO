@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Data @NoArgsConstructor @AllArgsConstructor
-@Table(name = "user_permission")
+@Table(name = "user_permission_acceptance")
 @Entity
 public class UserPermissionAcceptance extends IdentifiableEntity<Long> implements Serializable {
 

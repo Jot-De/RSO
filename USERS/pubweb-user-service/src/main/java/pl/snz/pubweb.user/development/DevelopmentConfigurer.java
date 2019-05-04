@@ -31,7 +31,6 @@ public class DevelopmentConfigurer {
         admin.setLogin("admin");
         admin.setPassword(bCryptPasswordEncoder.encode("admin"));
         admin.setDisplayName("Administrator systemu");
-        admin.setAboutMe("Jestem adminem, nie mam innych zainteresowań");
         admin.setEmail("admin@gmail.com");
         admin.setRoles(Collections.singleton(adminRole));
         admin.setUserPersonalInformation(UserPersonalInformation.none());

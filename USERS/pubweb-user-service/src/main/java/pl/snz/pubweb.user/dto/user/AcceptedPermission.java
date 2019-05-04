@@ -9,4 +9,5 @@ public class AcceptedPermission {
     Long userId;
     Long permissionId;
     String permissionName;
+    String permissionKey;
 }

@@ -59,6 +59,7 @@ public class UserPresentationService {
                 .set(userDisplaySettings.getNameDisplayLevel(), UserPersonalInformation::getFirstName, UserPersonalInfoDto::setFirstName)
                 .set(userDisplaySettings.getSurnameDisplayLevel(), UserPersonalInformation::getSurname, UserPersonalInfoDto::setSurname)
                 .set(userDisplaySettings.getCityDisplayLevel(), UserPersonalInformation::getCity, UserPersonalInfoDto::setCity)
+                .set(userDisplaySettings.getAboutMeDisplayLevel(), UserPersonalInformation::getAboutMe, UserPersonalInfoDto::setAboutMe)
                 .build();
     }
 
@@ -78,6 +79,7 @@ public class UserPresentationService {
                 .cityDisplayLevel(settings.getCityDisplayLevel())
                 .nameDisplayLevel(settings.getNameDisplayLevel())
                 .surnameDisplayLevel(settings.getSurnameDisplayLevel())
+                .aboutMeDisplayLevel(settings.getAboutMeDisplayLevel())
                 .build();
     }
 

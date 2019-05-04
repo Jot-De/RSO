@@ -17,7 +17,6 @@ public class GetUserResponse {
     private String login;
     private String email;
     private String displayName;
-    private String aboutMe;
     private UDisplaySettings displaySettings;
     private UserPersonalInfoDto personalInformation;
     private List<AcceptedPermission> acceptedPermissions;

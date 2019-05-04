@@ -45,6 +45,12 @@ public class PermissionController {
                 .orElseThrow(NotFoundException.ofMessage("permission.not.found", "id", id));
     }
 
+    @GetMapping("/accepted")
+    public List<AcceptedPermission> getAccepted() {
+        final Long userId = requestSecurityContextProvider.getPrincipal().getId();
+        return Mappers.list(permissionPresentationService::acceptedPermission).apply(permissionAcceptanceRepository.findByUser(userId));
+    }
+
     @PostMapping("/{id}/accept")
     public List<AcceptedPermission> confirmPermission(@PathVariable Long id) {
         final Long userId = requestSecurityContextProvider.getPrincipal().getId();

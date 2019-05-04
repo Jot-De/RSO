@@ -18,4 +18,6 @@ public class UDisplaySettings {
     private DisplayLevel surnameDisplayLevel;
     @NotNull
     private DisplayLevel cityDisplayLevel;
+    @NotNull
+    private DisplayLevel aboutMeDisplayLevel;
 }

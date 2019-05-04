@@ -18,6 +18,7 @@ public class PermissionService {
         requestSecurityContextProvider.getPrincipal().getAcceptedPermissions().stream()
                 .map(UserPermissionAcceptance::getPermission)
                 .map(Permission::getPermissionKey)
+                .filter(key -> key.equals(permissionKey))
                 .findFirst()
                 .orElseThrow(() -> AuthorizationException.permissionRequired(permissionKey));
     }

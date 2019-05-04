@@ -25,8 +25,6 @@ public class User extends IdentifiableEntity<Long> {
     @Column(nullable = false, length = 50)
     private String displayName;
 
-    @Column(nullable = true, length = 4000)
-    private String aboutMe;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "upi_id", nullable = false)

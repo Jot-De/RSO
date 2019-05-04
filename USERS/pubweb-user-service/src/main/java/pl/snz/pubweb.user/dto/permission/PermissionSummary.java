@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class PermissionSummary {
-    Long id;
-    String name;
-    String description;
+    private Long id;
+    private String name;
+    private String description;
+    private String permissionKey;
 }

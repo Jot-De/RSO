@@ -18,8 +18,10 @@ public class UserPersonalInformation extends IdentifiableEntity<Long> {
     private String surname;
     @Column(name = "city")
     private String city;
+    @Column(nullable = true, length = 4000)
+    private String aboutMe;
 
     public static UserPersonalInformation none() {
-        return new UserPersonalInformation(null, null, null);
+        return new UserPersonalInformation(null, null, null, null);
     }
 }

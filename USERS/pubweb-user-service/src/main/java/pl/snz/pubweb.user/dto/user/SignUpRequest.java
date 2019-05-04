@@ -18,6 +18,10 @@ public class SignUpRequest {
     @NotNull @Length(min = 4, max = 25) @Login
     private String login;
 
+
+   /* private boolean zgoda1Acceptance;
+    private boolean zgoda2Acceptance; TODO */
+
     @Email
     private String email;
 

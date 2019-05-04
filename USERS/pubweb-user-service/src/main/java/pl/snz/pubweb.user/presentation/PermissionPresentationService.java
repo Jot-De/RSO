@@ -14,11 +14,12 @@ public class PermissionPresentationService {
                 .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getText())
+                .permissionKey(entity.getPermissionKey())
                 .build();
     }
 
     public AcceptedPermission acceptedPermission(UserPermissionAcceptance upa) {
-        return new AcceptedPermission(upa.getUser().getId(), upa.getPermission().getId(), upa.getPermission().getName());
+        return new AcceptedPermission(upa.getUser().getId(), upa.getPermission().getId(), upa.getPermission().getName(), upa.getPermission().getPermissionKey());
     }
 
 

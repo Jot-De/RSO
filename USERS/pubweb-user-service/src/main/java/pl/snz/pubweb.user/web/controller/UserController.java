@@ -91,6 +91,7 @@ public class UserController implements AvatarManagement {
         user.getUserPersonalInformation().setFirstName(userPersonalInfoDto.getFirstName());
         user.getUserPersonalInformation().setSurname(userPersonalInfoDto.getSurname());
         user.getUserPersonalInformation().setCity(userPersonalInfoDto.getCity());
+        user.getUserPersonalInformation().setAboutMe(userPersonalInfoDto.getAboutMe());
         return userPresentationService.toGetUserResponse(userRepository.save(user));
     }
 
@@ -101,6 +102,7 @@ public class UserController implements AvatarManagement {
         user.getUserDisplaySettings().setNameDisplayLevel(uDisplaySettings.getNameDisplayLevel());
         user.getUserDisplaySettings().setSurnameDisplayLevel(uDisplaySettings.getSurnameDisplayLevel());
         user.getUserDisplaySettings().setCityDisplayLevel(uDisplaySettings.getCityDisplayLevel());
+        user.getUserDisplaySettings().setAboutMeDisplayLevel(uDisplaySettings.getAboutMeDisplayLevel());
         return userPresentationService.toGetUserResponse(userRepository.save(user));
     }
 

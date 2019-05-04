@@ -1,12 +1,15 @@
 package pl.snz.pubweb.user.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "avatar")
-@Data
+@Data @NoArgsConstructor @Builder @AllArgsConstructor
 public class Avatar extends IdentifiableEntity<Long> {
 
     @Lob @Basic(fetch = FetchType.LAZY)

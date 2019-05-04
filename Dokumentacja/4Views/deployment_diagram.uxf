@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="13.3">
-  <zoom_level>7</zoom_level>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>8</zoom_level>
   <element>
     <id>UMLDeployment</id>
     <coordinates>
-      <x>413</x>
-      <y>203</y>
-      <w>763</w>
-      <h>672</h>
+      <x>224</x>
+      <y>8</y>
+      <w>872</w>
+      <h>768</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Cloud&gt;&gt;
 layer=-3</panel_attributes>
@@ -15,10 +16,10 @@ layer=-3</panel_attributes>
   <element>
     <id>UMLDeployment</id>
     <coordinates>
-      <x>462</x>
-      <y>448</y>
-      <w>161</w>
-      <h>147</h>
+      <x>240</x>
+      <y>280</y>
+      <w>184</w>
+      <h>168</h>
     </coordinates>
     <panel_attributes>&lt;&lt;API Gateway&gt;&gt;
 Zuul</panel_attributes>
@@ -27,10 +28,10 @@ Zuul</panel_attributes>
   <element>
     <id>UMLDeployment</id>
     <coordinates>
-      <x>805</x>
-      <y>315</y>
-      <w>140</w>
-      <h>70</h>
+      <x>656</x>
+      <y>128</y>
+      <w>160</w>
+      <h>80</h>
     </coordinates>
     <panel_attributes>User service</panel_attributes>
     <additional_attributes/>
@@ -38,10 +39,10 @@ Zuul</panel_attributes>
   <element>
     <id>UMLDeployment</id>
     <coordinates>
-      <x>777</x>
-      <y>245</y>
-      <w>210</w>
-      <h>245</h>
+      <x>624</x>
+      <y>48</y>
+      <w>240</w>
+      <h>280</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Cloud&gt;&gt;
 Rodo</panel_attributes>
@@ -50,10 +51,10 @@ Rodo</panel_attributes>
   <element>
     <id>UMLDeployment</id>
     <coordinates>
-      <x>791</x>
-      <y>280</y>
-      <w>175</w>
-      <h>189</h>
+      <x>640</x>
+      <y>88</y>
+      <w>200</w>
+      <h>216</h>
     </coordinates>
     <panel_attributes>&lt;&lt;JVM, Java 1.8&gt;&gt;
 execution environment</panel_attributes>
@@ -62,10 +63,10 @@ execution environment</panel_attributes>
   <element>
     <id>UMLDeployment</id>
     <coordinates>
-      <x>819</x>
-      <y>399</y>
-      <w>119</w>
-      <h>56</h>
+      <x>672</x>
+      <y>224</y>
+      <w>136</w>
+      <h>64</h>
     </coordinates>
     <panel_attributes>Authentication service</panel_attributes>
     <additional_attributes/>
@@ -73,10 +74,10 @@ execution environment</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>861</x>
-      <y>378</y>
-      <w>21</w>
-      <h>35</h>
+      <x>720</x>
+      <y>200</y>
+      <w>24</w>
+      <h>40</h>
     </coordinates>
     <panel_attributes/>
     <additional_attributes>10.0;10.0;10.0;30.0</additional_attributes>
@@ -84,10 +85,10 @@ execution environment</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>588</x>
-      <y>343</y>
-      <w>231</w>
-      <h>189</h>
+      <x>408</x>
+      <y>160</y>
+      <w>264</w>
+      <h>216</h>
     </coordinates>
     <panel_attributes>lt=-
 </panel_attributes>
@@ -96,10 +97,10 @@ execution environment</panel_attributes>
   <element>
     <id>UMLDeployment</id>
     <coordinates>
-      <x>1036</x>
-      <y>259</y>
-      <w>119</w>
-      <h>238</h>
+      <x>920</x>
+      <y>64</y>
+      <w>136</w>
+      <h>272</h>
     </coordinates>
     <panel_attributes>&lt;&lt;DATABASE&gt;&gt;
 Postgres
@@ -109,10 +110,10 @@ RODO database</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>931</x>
-      <y>343</y>
-      <w>119</w>
-      <h>21</h>
+      <x>800</x>
+      <y>160</y>
+      <w>136</w>
+      <h>24</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
     <additional_attributes>150.0;10.0;10.0;10.0</additional_attributes>
@@ -120,10 +121,10 @@ RODO database</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>924</x>
-      <y>427</y>
-      <w>126</w>
-      <h>21</h>
+      <x>792</x>
+      <y>256</y>
+      <w>144</w>
+      <h>24</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
     <additional_attributes>160.0;10.0;10.0;10.0</additional_attributes>
@@ -131,10 +132,10 @@ RODO database</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>588</x>
-      <y>420</y>
-      <w>245</w>
-      <h>112</h>
+      <x>408</x>
+      <y>248</y>
+      <w>280</w>
+      <h>128</h>
     </coordinates>
     <panel_attributes>lt=-
 </panel_attributes>
@@ -143,10 +144,10 @@ RODO database</panel_attributes>
   <element>
     <id>UMLDeployment</id>
     <coordinates>
-      <x>245</x>
-      <y>273</y>
-      <w>133</w>
-      <h>126</h>
+      <x>16</x>
+      <y>80</y>
+      <w>152</w>
+      <h>144</h>
     </coordinates>
     <panel_attributes>JS client</panel_attributes>
     <additional_attributes/>
@@ -154,10 +155,10 @@ RODO database</panel_attributes>
   <element>
     <id>UMLDeployment</id>
     <coordinates>
-      <x>245</x>
-      <y>567</y>
-      <w>133</w>
-      <h>91</h>
+      <x>16</x>
+      <y>416</y>
+      <w>152</w>
+      <h>104</h>
     </coordinates>
     <panel_attributes>Mobile client</panel_attributes>
     <additional_attributes/>
@@ -165,10 +166,10 @@ RODO database</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>308</x>
-      <y>385</y>
-      <w>301</w>
-      <h>147</h>
+      <x>88</x>
+      <y>208</y>
+      <w>344</w>
+      <h>168</h>
     </coordinates>
     <panel_attributes>lt=-
 </panel_attributes>
@@ -177,59 +178,57 @@ RODO database</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>364</x>
-      <y>504</y>
-      <w>245</w>
-      <h>119</h>
+      <x>152</x>
+      <y>344</y>
+      <w>280</w>
+      <h>136</h>
     </coordinates>
     <panel_attributes>lt=-
-
 </panel_attributes>
     <additional_attributes>330.0;20.0;220.0;20.0;10.0;150.0</additional_attributes>
   </element>
   <element>
     <id>UMLDeployment</id>
     <coordinates>
-      <x>763</x>
-      <y>511</y>
-      <w>378</w>
-      <h>203</h>
+      <x>616</x>
+      <y>368</y>
+      <w>424</w>
+      <h>216</h>
     </coordinates>
-    <panel_attributes>&lt;&lt;cloud&gt;&gt;
-</panel_attributes>
+    <panel_attributes/>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLDeployment</id>
     <coordinates>
-      <x>770</x>
-      <y>735</y>
-      <w>371</w>
-      <h>49</h>
+      <x>616</x>
+      <y>608</y>
+      <w>424</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Database&gt;&gt;
-PostgreSQL</panel_attributes>
+Postgres</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLDeployment</id>
     <coordinates>
-      <x>777</x>
-      <y>546</y>
-      <w>343</w>
-      <h>154</h>
+      <x>624</x>
+      <y>392</y>
+      <w>392</w>
+      <h>176</h>
     </coordinates>
     <panel_attributes>&lt;&lt;execution environment&gt;&gt;
-Python 3.5+</panel_attributes>
+Python 3.7</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLDeployment</id>
     <coordinates>
-      <x>231</x>
-      <y>231</y>
-      <w>175</w>
-      <h>182</h>
+      <x>0</x>
+      <y>32</y>
+      <w>200</w>
+      <h>208</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Server&gt;&gt;
 Apache http server</panel_attributes>
@@ -238,10 +237,10 @@ Apache http server</panel_attributes>
   <element>
     <id>UMLDeployment</id>
     <coordinates>
-      <x>791</x>
-      <y>602</y>
-      <w>140</w>
-      <h>84</h>
+      <x>640</x>
+      <y>440</y>
+      <w>160</w>
+      <h>96</h>
     </coordinates>
     <panel_attributes>Pub service</panel_attributes>
     <additional_attributes/>
@@ -249,83 +248,133 @@ Apache http server</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>588</x>
-      <y>511</y>
-      <w>217</w>
-      <h>140</h>
+      <x>408</x>
+      <y>352</y>
+      <w>248</w>
+      <h>144</h>
     </coordinates>
     <panel_attributes>lt=-
 </panel_attributes>
-    <additional_attributes>290.0;180.0;10.0;10.0</additional_attributes>
+    <additional_attributes>290.0;160.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>847</x>
-      <y>679</y>
-      <w>21</w>
-      <h>77</h>
+      <x>704</x>
+      <y>528</y>
+      <w>24</w>
+      <h>104</h>
     </coordinates>
     <panel_attributes>lt=-
 </panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1001</x>
-      <y>644</y>
-      <w>21</w>
-      <h>105</h>
+      <x>880</x>
+      <y>528</y>
+      <w>24</w>
+      <h>96</h>
     </coordinates>
     <panel_attributes>lt=-
 </panel_attributes>
-    <additional_attributes>10.0;130.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLDeployment</id>
     <coordinates>
-      <x>973</x>
-      <y>595</y>
-      <w>91</w>
-      <h>56</h>
+      <x>816</x>
+      <y>440</y>
+      <w>136</w>
+      <h>96</h>
     </coordinates>
     <panel_attributes>Ratings service</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
-    <id>UMLGeneric</id>
-    <coordinates>
-      <x>1435</x>
-      <y>399</y>
-      <w>77</w>
-      <h>56</h>
-    </coordinates>
-    <panel_attributes>symbol=artifact
-Artifact</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
     <id>Relation</id>
     <coordinates>
-      <x>588</x>
-      <y>511</y>
-      <w>413</w>
-      <h>98</h>
+      <x>408</x>
+      <y>352</y>
+      <w>472</w>
+      <h>112</h>
     </coordinates>
     <panel_attributes>lt=-
 </panel_attributes>
     <additional_attributes>10.0;10.0;570.0;120.0</additional_attributes>
   </element>
   <element>
-    <id>UMLActor</id>
+    <id>UMLDeployment</id>
     <coordinates>
-      <x>14</x>
-      <y>14</y>
-      <w>42</w>
-      <h>70</h>
+      <x>240</x>
+      <y>504</y>
+      <w>200</w>
+      <h>152</h>
     </coordinates>
-    <panel_attributes>Actor</panel_attributes>
+    <panel_attributes>&lt;&lt;Service registry&gt;&gt;
+Eureka Server</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>328</x>
+      <y>440</y>
+      <w>48</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=-
+Uses
+</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>424</x>
+      <y>504</y>
+      <w>232</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=.
+Registers</panel_attributes>
+    <additional_attributes>270.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>424</x>
+      <y>472</y>
+      <w>408</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>lt=.
+Registers</panel_attributes>
+    <additional_attributes>490.0;10.0;10.0;170.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>432</x>
+      <y>152</y>
+      <w>240</w>
+      <h>376</h>
+    </coordinates>
+    <panel_attributes>lt=.
+Registers</panel_attributes>
+    <additional_attributes>280.0;10.0;10.0;450.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>432</x>
+      <y>224</y>
+      <w>256</w>
+      <h>328</h>
+    </coordinates>
+    <panel_attributes>lt=.
+Registers</panel_attributes>
+    <additional_attributes>300.0;10.0;10.0;390.0</additional_attributes>
   </element>
 </diagram>

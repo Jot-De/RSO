@@ -51,4 +51,8 @@ public class User extends IdentifiableEntity<Long> {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "requester", fetch = FetchType.LAZY)
     private Set<FriendshipRequest> sentFriendshipRequests;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    private Avatar avatar;
+
+
 }

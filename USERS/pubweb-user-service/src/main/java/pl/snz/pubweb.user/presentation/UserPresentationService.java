@@ -3,6 +3,7 @@ package pl.snz.pubweb.user.presentation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 import pl.snz.pubweb.user.util.Mappers;
 import pl.snz.pubweb.user.dto.user.*;
 import pl.snz.pubweb.user.model.Role;
@@ -13,7 +14,10 @@ import pl.snz.pubweb.user.model.display.UserDisplaySettings;
 import pl.snz.pubweb.user.presentation.builder.DisplayLevelAwareBuilder;
 import pl.snz.pubweb.user.security.RequestSecurityContextProvider;
 import pl.snz.pubweb.user.service.user.FriendService;
+import pl.snz.pubweb.user.util.Nulls;
+import pl.snz.pubweb.user.web.CurrentRequestUriProvider;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +28,7 @@ public class UserPresentationService {
     private final RequestSecurityContextProvider requestSecurityContextProvider;
     private final PermissionPresentationService permissionPresentationService;
     private final FriendService friendService;
+    private final CurrentRequestUriProvider currentRequestUriProvider;
 
     public RegistrationResponse toRegistrationResponse(User user) {
         return RegistrationResponse.builder()
@@ -35,6 +40,7 @@ public class UserPresentationService {
         DisplayLevel provided = getDisplayLevelForRequest(user);
 
         return DisplayLevelAwareBuilder.of(provided, user, GetUserResponse::new)
+                .set(DisplayLevel.ALL, User::getId, GetUserResponse::setId)
                 .set(DisplayLevel.ALL, User::getDisplayName, GetUserResponse::setDisplayName)
                 .set(DisplayLevel.ME_ONLY, User::getEmail, GetUserResponse::setEmail)
                 .set(DisplayLevel.ME_ONLY, User::getLogin, GetUserResponse::setLogin)
@@ -42,6 +48,7 @@ public class UserPresentationService {
                 .set(DisplayLevel.ME_ONLY, u -> userDisplaySettingsDto(user.getUserDisplaySettings()), GetUserResponse::setDisplaySettings)
                 .set(DisplayLevel.ME_ONLY, this::permissions, GetUserResponse::setAcceptedPermissions)
                 .set(DisplayLevel.ME_ONLY, u -> u.getRoles().stream().map(Role::getName).collect(Collectors.toList()), GetUserResponse::setRoles)
+                .set(DisplayLevel.ME_ONLY, u -> currentRequestUriProvider.userAvatar(u.getId()), GetUserResponse::setAvatarUri)
                 .build();
     }
 
@@ -81,5 +88,7 @@ public class UserPresentationService {
     private boolean areFriends(long requestedUserId, long principalId) {
         return friendService.areFriends(requestedUserId, principalId);
     }
+
+
 
 }

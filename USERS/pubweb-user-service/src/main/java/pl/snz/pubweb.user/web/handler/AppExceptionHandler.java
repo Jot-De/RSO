@@ -39,7 +39,7 @@ public class AppExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<ApiError> handleNotFound(NotFoundException exception) {
-        return new ResponseEntity<>(ApiError.applicationError(exception.getMessage()), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(ApiError.applicationError(translateExceptionMessage(exception.getMessage())), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)

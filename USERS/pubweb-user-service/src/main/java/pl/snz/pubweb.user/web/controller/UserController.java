@@ -8,22 +8,27 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import pl.snz.pubweb.user.dto.common.Base64PictureDto;
 import pl.snz.pubweb.user.dto.user.*;
 import pl.snz.pubweb.user.dto.user.friend.FriendshipInfo;
 import pl.snz.pubweb.user.exception.BadRequestException;
 import pl.snz.pubweb.user.exception.NotFoundException;
 import pl.snz.pubweb.user.mapper.UserMapper;
+import pl.snz.pubweb.user.model.Avatar;
 import pl.snz.pubweb.user.model.User;
 import pl.snz.pubweb.user.presentation.FriendshipPresentationService;
 import pl.snz.pubweb.user.presentation.UserPresentationService;
 import pl.snz.pubweb.user.repo.UserRepository;
+import pl.snz.pubweb.user.service.AvatarService;
 import pl.snz.pubweb.user.service.SecurityService;
 import pl.snz.pubweb.user.service.user.FriendService;
 import pl.snz.pubweb.user.service.user.UserSoftDeleteService;
+import pl.snz.pubweb.user.web.controller.specs.AvatarManagement;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,7 +36,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class UserController {
+public class UserController implements AvatarManagement {
 
     private final UserRepository userRepository;
     private final UserPresentationService userPresentationService;
@@ -40,6 +45,7 @@ public class UserController {
     private final FriendService friendshipService;
     private final FriendshipPresentationService friendshipPresentationService;
     private final UserSoftDeleteService userSoftDeleteService;
+    private final AvatarService avatarService;
 
     @PostMapping
     public ResponseEntity<RegistrationResponse> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
@@ -52,7 +58,6 @@ public class UserController {
 
         User user = userMapper.fromSignUpRequest(signUpRequest);
         user = userRepository.save(user);
-
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/users/{id}")
@@ -104,4 +109,27 @@ public class UserController {
         return friendshipService.getForUser(id).stream().map(f -> friendshipPresentationService.friendshipDto(f, id)).collect(Collectors.toList());
     }
 
+
+    @GetMapping("{userId}/avatar")
+    public Base64PictureDto getAvatarForUser(@PathVariable Long userId) {
+        Avatar avatar = avatarService.getForUser(userId);
+        Base64PictureDto dto = new Base64PictureDto();
+        dto.setId(avatar.getId());
+        dto.setBase64Picture(Base64.getEncoder().encodeToString(avatar.getBytes()));
+        return dto;
+    }
+
+    @RequestMapping(method = {RequestMethod.PUT, RequestMethod.POST}, path = "{userId}/avatar")
+    public ResponseEntity<?> addAvatarForUser(@PathVariable Long userId, @RequestBody AddAvatarRequest addAvatarRequest) {
+        securityService.requireSelf(userId);
+        avatarService.addForUser(userId, addAvatarRequest.getBase64Avatar());
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("{userId}/avatar")
+    public ResponseEntity<?> deleteAvatar(@PathVariable Long userId) {
+        securityService.requireSelf(userId);
+        avatarService.deleteForUser(userId);
+        return ResponseEntity.noContent().build();
+    }
 }

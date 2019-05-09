@@ -117,7 +117,7 @@ public class UserController implements AvatarManagement {
         Avatar avatar = avatarService.getForUser(userId);
         Base64PictureDto dto = new Base64PictureDto();
         dto.setId(avatar.getId());
-        dto.setBase64Picture(Base64.getEncoder().encodeToString(avatar.getBytes()));
+        dto.setBase64Picture(Base64.getMimeEncoder().encodeToString(avatar.getBytes()));
         return dto;
     }
 

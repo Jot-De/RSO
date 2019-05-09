@@ -25,7 +25,7 @@ public class AvatarService {
 
     public final Avatar addForUser(Long userId, String base64Avatar) {
         User user = userRepository.findById(userId).orElseThrow(NotFoundException.userById(userId));
-        final byte[] bytes = Base64.getDecoder().decode(base64Avatar);
+        final byte[] bytes = Base64.getMimeDecoder().decode(base64Avatar);
         Avatar avatar = avatarRepository.findByUserId(userId).orElseGet(Avatar::new);
         avatar.setBytes(bytes);
         avatar.setUser(user);

@@ -11,7 +11,7 @@ app = Flask(__name__)
 # app.config['SECRET_KEY'] = 'mysecretkey'
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:1234@localhost:5432/pubssql'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:postgres@localhost:5432/pub'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -67,14 +67,38 @@ class PubData(Resource):
 # you can add pub by giving it's name '/pubs'
 class AddPubs(Resource): 
     
-    def post(self):
+    def put(self):
 
         args = parser.parse_args() #add parsing regquest functionality , shown line below
         pub = pub_table(name=args['name']) 
-        db.session.add(pub)
-        db.session.commit()
+        self.name_  = args['name']
 
-        return pub.name_json()
+        #####
+        if self.name_:
+            db.session.add(pub)
+            db.session.commit()
+            print(pub.pub_id)
+            pub2 = pub_table.query.filter_by(pub_id=pub.pub_id).update(dict(city=args['city']))
+            db.session.commit()
+            pub3 = pub_table.query.filter_by(pub_id=pub.pub_id).first()
+
+            return pub3.name_json()
+        else:
+            return {'name':'empty'},404
+
+class AddFullPubs(Resource): 
+    def put(self,pub_id):
+        pub = pub_table.query.filter_by(pub_id=pub_id).first()
+        if pub:
+            args = parser.parse_args() #add parsing regquest functionality , shown line below
+            pub = pub_table.query.filter_by(pub_id=pub_id).update(dict(city=args['city']))
+            pub = pub_table.query.filter_by(pub_id=pub_id).update(dict(info=args['info']))
+            db.session.commit()
+            pub = pub_table.query.filter_by(pub_id=pub_id).first()
+
+            return pub.city_json()
+        else:
+            return {'name':'empty'},404
 
 #get info about city in which pub exists '/pubs/<int:pub_id>/city'
 class CityPubGet(Resource):
@@ -116,7 +140,6 @@ class InfoPubGet(Resource):
       
             return pub.info_json()
         else:
-      
             return {'id':'not found'}, 404            
 
 #insert short info about pub '/pubs/<int:pub_id>/info'
@@ -152,6 +175,7 @@ class TagPubPut(Resource):
         pub = pub_table.query.filter_by(pub_id=pub_id).first()
         if pub:
             args = parser.parse_args()
+            parser.add_argument('tag_desc',type =str,action = 'append')
             tag = PubMapTag(pub_id=pub_id, tag_desc=args['tag_desc'])
             desc = args['tag_desc']
             if desc:
@@ -261,7 +285,7 @@ api.add_resource(InfoPubGet, '/pubs/<int:pub_id>/info')
 
 api.add_resource(TagPubPut, '/pubs/<int:pub_id>/tag')
 api.add_resource(TagGet, '/pubs/<int:pub_id>/tag')
-
+api.add_resource(AddFullPubs, '/pubs/<int:pub_id>/add')
 
 if __name__ == '__main__':
     db.create_all()

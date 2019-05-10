@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+    <modules>
+        <module>pubweb-commons-all</module>
+        <module>pubweb-commons-rest</module>
+        <module>pubweb-commons-security-microservice</module>
+        <module>pubweb-commons-util</module>
+        <module>pubweb-commons-errors</module>
+    </modules>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.4.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <groupId>pl.snz</groupId>
+    <artifactId>pubweb-commons</artifactId>
+    <version>1.0.0</version>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>pl.snz</groupId>
+                <artifactId>pubweb-commons-util</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>pl.snz</groupId>
+                <artifactId>pubweb-commons-rest</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>pl.snz</groupId>
+                <artifactId>pubweb-commons-security-microservice</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>pl.snz</groupId>
+                <artifactId>pubweb-commons-errors</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+
+</project>

@@ -11,5 +11,6 @@ public class PictureDto {
     private Long id;
     private URI self;
     private String name;
+    private String format;
     private String description;
 }

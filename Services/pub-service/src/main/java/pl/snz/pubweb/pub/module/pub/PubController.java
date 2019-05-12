@@ -2,6 +2,7 @@ package pl.snz.pubweb.pub.module.pub;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -24,7 +25,7 @@ public class PubController {
     private final PubSearchSpecifications pubSearchSpecifications;
     private final PubMapper pubMapper;
     private final PubService pubService;
-
+    private final ApplicationContext context;
 
     /** Browse pubs */
     @GetMapping

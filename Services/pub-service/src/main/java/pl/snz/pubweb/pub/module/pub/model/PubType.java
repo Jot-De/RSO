@@ -1,6 +1,6 @@
 package pl.snz.pubweb.pub.module.pub.model;
 
-import pl.snz.pubweb.pub.module.common.data.IdentifiableEntity;
+import pl.snz.pubweb.commons.data.IdentifiableEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

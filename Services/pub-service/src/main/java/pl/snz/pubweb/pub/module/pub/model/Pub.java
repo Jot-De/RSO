@@ -1,8 +1,8 @@
 package pl.snz.pubweb.pub.module.pub.model;
 
 
+import pl.snz.pubweb.commons.data.IdentifiableEntity;
 import pl.snz.pubweb.pub.module.common.data.Address;
-import pl.snz.pubweb.pub.module.common.data.IdentifiableEntity;
 import pl.snz.pubweb.pub.module.common.data.Picture;
 import pl.snz.pubweb.pub.module.tag.model.Tag;
 
@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Table(name = "pub")
 @Entity
-public class Pub extends IdentifiableEntity {
+public class Pub extends IdentifiableEntity<Long> {
 
     @JoinColumn(name = "address_id")
     @OneToOne(cascade = CascadeType.MERGE)

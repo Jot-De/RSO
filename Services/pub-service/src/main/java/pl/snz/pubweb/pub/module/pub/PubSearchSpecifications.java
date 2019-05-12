@@ -3,8 +3,8 @@ package pl.snz.pubweb.pub.module.pub;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
+import pl.snz.pubweb.commons.data.JpaPredicates;
 import pl.snz.pubweb.pub.module.common.data.Address_;
-import pl.snz.pubweb.pub.module.common.data.JpaPredicates;
 import pl.snz.pubweb.pub.module.pub.model.Pub;
 import pl.snz.pubweb.pub.module.pub.model.Pub_;
 import pl.snz.pubweb.pub.module.tag.model.Tag;
@@ -25,7 +25,7 @@ public class PubSearchSpecifications {
 
           if(tags != null && !tags.isEmpty()) {
               final SetJoin<Pub, Tag> tagJoin = r.join(Pub_.tags);
-              result = cb.and(cb.in(tagJoin.get(Tag_.id).in(tags)));
+              result = cb.and(tagJoin.get(Tag_.id).in(tags));
           }
           return result;
         };

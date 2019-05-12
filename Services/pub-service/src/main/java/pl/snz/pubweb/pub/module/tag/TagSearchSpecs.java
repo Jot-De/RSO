@@ -3,7 +3,7 @@ package pl.snz.pubweb.pub.module.tag;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
-import pl.snz.pubweb.pub.module.common.data.JpaPredicates;
+import pl.snz.pubweb.commons.data.JpaPredicates;
 import pl.snz.pubweb.pub.module.tag.model.Tag;
 import pl.snz.pubweb.pub.module.tag.model.Tag_;
 

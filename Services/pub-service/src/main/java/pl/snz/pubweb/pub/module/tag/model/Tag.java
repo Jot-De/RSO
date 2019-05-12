@@ -1,6 +1,6 @@
 package pl.snz.pubweb.pub.module.tag.model;
 
-import pl.snz.pubweb.pub.module.common.data.IdentifiableEntity;
+import pl.snz.pubweb.commons.data.IdentifiableEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Table(name = "tag")
 @Entity
-public class Tag extends IdentifiableEntity {
+public class Tag extends IdentifiableEntity<Long> {
 
     @Column(unique = true, length = 50)
     private String name;

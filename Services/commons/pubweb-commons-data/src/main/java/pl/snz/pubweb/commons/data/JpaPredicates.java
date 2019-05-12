@@ -1,4 +1,4 @@
-package pl.snz.pubweb.pub.module.common.data;
+package pl.snz.pubweb.commons.data;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;

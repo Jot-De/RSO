@@ -1,7 +1,7 @@
 package pl.snz.pubweb.pub.module.request.model;
 
+import pl.snz.pubweb.commons.data.IdentifiableEntity;
 import pl.snz.pubweb.pub.module.common.data.Address;
-import pl.snz.pubweb.pub.module.common.data.IdentifiableEntity;
 import pl.snz.pubweb.pub.module.pub.model.Pub;
 
 import javax.persistence.*;
@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Table(name = "pub_registration_request")
 @Entity
-public class PubRegistrationRequest extends IdentifiableEntity {
+public class PubRegistrationRequest extends IdentifiableEntity<Long> {
 
     @Column
     private Long userId;
@@ -20,6 +20,9 @@ public class PubRegistrationRequest extends IdentifiableEntity {
 
     @Column
     private String name;
+
+    @Column(length = 4000)
+    private String description;
 
     @Column
     private LocalDate added;
@@ -89,5 +92,13 @@ public class PubRegistrationRequest extends IdentifiableEntity {
 
     public void setPub(Pub pub) {
         this.pub = pub;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

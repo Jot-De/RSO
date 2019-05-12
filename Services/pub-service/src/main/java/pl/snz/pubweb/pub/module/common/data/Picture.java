@@ -1,12 +1,13 @@
 package pl.snz.pubweb.pub.module.common.data;
 
+import pl.snz.pubweb.commons.data.IdentifiableEntity;
 import pl.snz.pubweb.pub.module.pub.model.Pub;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "picture")
-public class Picture extends IdentifiableEntity {
+public class Picture extends IdentifiableEntity<Long> {
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
@@ -18,6 +19,9 @@ public class Picture extends IdentifiableEntity {
 
     @Column
     private String description;
+
+    @Column
+    private String format;
 
     @ManyToOne
     @JoinColumn(name = "pub_id")

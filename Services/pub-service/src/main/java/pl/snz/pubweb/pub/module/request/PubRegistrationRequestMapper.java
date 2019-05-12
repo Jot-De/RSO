@@ -32,6 +32,7 @@ public class PubRegistrationRequestMapper {
 
     public PubRegistrationRequest toEntity(PubRegistrationRequestDto dto, Long userId) {
         PubRegistrationRequest request = new PubRegistrationRequest();
+
         request.setAdded(LocalDate.now());
         request.setAddress(addressMapper.toEntity(dto.getAddress()));
         request.setUserId(userId);

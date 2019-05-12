@@ -10,7 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import pl.snz.pubweb.commons.dto.UserAuthInfo;
-import pl.snz.pubweb.security.JwtSecurityException;
+import pl.snz.pubweb.commons.errors.exception.BadRequestException;
+import pl.snz.pubweb.commons.errors.exception.InternalServerErrorException;
 
 import java.io.IOException;
 
@@ -41,7 +42,7 @@ public class JwtTokenProvider {
         try {
             return objectMapper.writeValueAsString(userAuthInfo);
         } catch (JsonProcessingException e) {
-            throw JwtSecurityException.of("internal.json.error");
+            throw InternalServerErrorException.ofMessage("general.server.error");
         }
     }
 
@@ -49,7 +50,7 @@ public class JwtTokenProvider {
         try {
             return objectMapper.readValue(claims.getSubject(), UserAuthInfo.class);
         } catch (IOException e) {
-            throw JwtSecurityException.of("jwt.unparsable");
+            throw BadRequestException.general("jwt.unparsable");
         }
     }
 

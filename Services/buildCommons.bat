@@ -1,0 +1,1 @@
+call mvn clean install -f commons/pom.xml -DskipTests

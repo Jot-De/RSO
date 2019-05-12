@@ -12,15 +12,14 @@ import pl.snz.pubweb.commons.dto.Base64PictureDto;
 import pl.snz.pubweb.commons.errors.exception.BadRequestException;
 import pl.snz.pubweb.commons.errors.exception.NotFoundException;
 import pl.snz.pubweb.user.module.avatar.Avatar;
-import pl.snz.pubweb.user.module.avatar.dto.AddAvatarRequest;
+import pl.snz.pubweb.user.module.avatar.AvatarManagement;
+import pl.snz.pubweb.user.module.avatar.AvatarService;
+import pl.snz.pubweb.user.module.friend.FriendService;
 import pl.snz.pubweb.user.module.friend.FriendshipPresentationService;
 import pl.snz.pubweb.user.module.friend.model.FriendshipInfo;
 import pl.snz.pubweb.user.module.user.dto.*;
 import pl.snz.pubweb.user.module.user.model.User;
-import pl.snz.pubweb.user.module.avatar.AvatarService;
 import pl.snz.pubweb.user.security.SecurityService;
-import pl.snz.pubweb.user.module.friend.FriendService;
-import pl.snz.pubweb.user.module.avatar.AvatarManagement;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

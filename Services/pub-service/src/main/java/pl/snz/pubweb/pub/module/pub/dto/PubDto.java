@@ -15,6 +15,7 @@ public class PubDto {
     private Long id;
     private String name;
     private AddressDto address;
+    private String description;
     private List<PictureDto> pictures;
     private List<TagDto> tags;
     private LocalDate added;

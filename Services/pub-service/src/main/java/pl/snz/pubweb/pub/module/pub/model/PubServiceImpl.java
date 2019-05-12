@@ -21,6 +21,7 @@ public class PubServiceImpl implements PubService {
         pub.setAddress(request.getAddress());
         pub.setAdded(LocalDate.now());
         pub.setName(request.getName());
+        pub.setDescription(request.getDescription());
         return repository.save(pub);
     }
 

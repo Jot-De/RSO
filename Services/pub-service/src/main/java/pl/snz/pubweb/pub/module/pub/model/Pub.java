@@ -35,6 +35,9 @@ public class Pub extends IdentifiableEntity<Long> {
     @Column
     private LocalDate added;
 
+    @Column(length = 4000)
+    private String description;
+
     public String getName() {
         return name;
     }
@@ -81,6 +84,14 @@ public class Pub extends IdentifiableEntity<Long> {
 
     public void setTypes(Set<PubType> types) {
         this.types = types;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
 

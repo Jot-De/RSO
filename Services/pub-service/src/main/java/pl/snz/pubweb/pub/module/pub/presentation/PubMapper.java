@@ -25,6 +25,7 @@ public class PubMapper {
                 .id(pub.getId())
                 .name(pub.getName())
                 .address(addressMapper.toDto(pub.getAddress()))
+                .description(pub.getDescription())
                 .tags(Mappers.list(pub.getTags(), tagMapper::toDto))
                 .pictures(Mappers.list(pub.getPictures(), this::map))
                 .added(pub.getAdded())

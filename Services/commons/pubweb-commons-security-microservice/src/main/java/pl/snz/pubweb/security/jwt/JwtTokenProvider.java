@@ -8,16 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
-import pl.snz.pubweb.commons.util.Mappers;
+import pl.snz.pubweb.commons.dto.UserAuthInfo;
 import pl.snz.pubweb.security.JwtSecurityException;
-import pl.snz.pubweb.security.subject.UserAuthInfo;
-import pl.snz.pubweb.security.user.UserPrincipal;
 
 import java.io.IOException;
-import java.util.Date;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))

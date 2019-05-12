@@ -30,6 +30,10 @@
             <artifactId>pubweb-commons-errors</artifactId>
         </dependency>
         <dependency>
+            <groupId>pl.snz</groupId>
+            <artifactId>pubweb-commons-rest</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>0.9.1</version>

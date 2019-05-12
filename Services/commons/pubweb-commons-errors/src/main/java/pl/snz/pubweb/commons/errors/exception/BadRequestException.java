@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,6 +26,27 @@ public class BadRequestException extends RuntimeException  {
     public static BadRequestException fields(List<RequestFieldError> errors) {
         return new BadRequestException("bad.request.fields.validation", errors);
     }
+
+    public static BadRequestExceptionBuilder builder(String messageKey) {
+        return BadRequestExceptionBuilder.ofMessageKey(messageKey);
+    }
+
+    @RequiredArgsConstructor(staticName = "ofMessageKey")
+    public static class BadRequestExceptionBuilder {
+        private final String messageKey;
+        private final List<RequestFieldError> errors = new ArrayList<>();
+
+        public BadRequestExceptionBuilder error(String field, String messageKey) {
+            errors.add(RequestFieldError.of(field, messageKey));
+            return this;
+        }
+
+        public BadRequestException build() {
+            return new BadRequestException(messageKey, errors);
+        }
+
+    }
+
 
     @Accessors(fluent = true) @Getter
     @RequiredArgsConstructor(staticName = "of")

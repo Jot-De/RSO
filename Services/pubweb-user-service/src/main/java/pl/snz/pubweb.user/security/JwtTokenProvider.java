@@ -11,16 +11,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
-import pl.snz.pubweb.user.dto.user.UserAuthInfo;
-import pl.snz.pubweb.user.exception.AuthorizationException;
-import pl.snz.pubweb.user.exception.BadRequestException;
-import pl.snz.pubweb.user.exception.InternalServerErrorException;
-import pl.snz.pubweb.user.model.Role;
-import pl.snz.pubweb.user.util.Mappers;
+import pl.snz.pubweb.commons.dto.UserAuthInfo;
+import pl.snz.pubweb.commons.errors.exception.InternalServerErrorException;
+import pl.snz.pubweb.commons.util.Mappers;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -47,6 +43,7 @@ public class JwtTokenProvider {
                 .userId(userPrincipal.getId())
                 .login(userPrincipal.getUsername())
                 .roles(Mappers.list(GrantedAuthority::getAuthority, userPrincipal.getAuthorities()))
+                .permissions(Mappers.list(userPrincipal.getAcceptedPermissions(), p -> p.getPermission().getPermissionKey()))
                 .build();
 
         final String subject = serializeSubject(userAuthInfo);

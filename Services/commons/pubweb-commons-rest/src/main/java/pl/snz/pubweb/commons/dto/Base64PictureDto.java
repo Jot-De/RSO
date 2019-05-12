@@ -8,4 +8,5 @@ import lombok.Data;
 public class Base64PictureDto {
     private Long id;
     private String base64Picture;
+    private String dataFormat;
 }

@@ -10,6 +10,7 @@
         <module>pubweb-commons-security-microservice</module>
         <module>pubweb-commons-util</module>
         <module>pubweb-commons-errors</module>
+        <module>pubweb-commons-data</module>
     </modules>
 
     <parent>
@@ -43,6 +44,11 @@
             <dependency>
                 <groupId>pl.snz</groupId>
                 <artifactId>pubweb-commons-errors</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>pl.snz</groupId>
+                <artifactId>pubweb-commons-data</artifactId>
                 <version>1.0.0</version>
             </dependency>
         </dependencies>

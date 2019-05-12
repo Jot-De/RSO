@@ -6,9 +6,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import pl.snz.pubweb.user.model.Role;
-import pl.snz.pubweb.user.model.User;
-import pl.snz.pubweb.user.model.permission.UserPermissionAcceptance;
+import pl.snz.pubweb.user.module.role.Role;
+import pl.snz.pubweb.user.module.user.model.User;
+import pl.snz.pubweb.user.module.permission_acceptance.UserPermissionAcceptance;
 
 import java.util.*;
 import java.util.stream.Collectors;

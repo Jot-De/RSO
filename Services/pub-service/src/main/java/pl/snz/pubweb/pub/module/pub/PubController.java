@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.snz.pubweb.commons.errors.exception.NotFoundException;
 import pl.snz.pubweb.pub.module.pub.dto.PubDto;
 import pl.snz.pubweb.pub.module.pub.model.Pub;
-import pl.snz.pubweb.pub.presentation.PubMapper;
+import pl.snz.pubweb.pub.module.pub.presentation.PubMapper;
 import pl.snz.pubweb.security.annotations.AdminApi;
 
 import java.util.List;
@@ -42,7 +42,6 @@ public class PubController {
         return pubRepository.findById(id).map(pubMapper::toGetResponse)
                 .orElseThrow(NotFoundException.ofMessage("pub.not.found", "id", id));
     }
-
 
 
     @DeleteMapping("{id}")

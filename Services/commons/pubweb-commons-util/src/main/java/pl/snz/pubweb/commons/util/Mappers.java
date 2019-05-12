@@ -19,6 +19,10 @@ public class Mappers {
     public static <T,R> List<R> list(Function<T,R> mapper, Collection<T> coll) {
         return list(mapper).apply(coll);
     }
+    public static <T,R> List<R> list(Collection<T> coll, Function<T,R> mapper) {
+        return list(mapper).apply(coll);
+    }
+
 
     public static <T,R> Set<R> set(Function<T,R> mapper, Collection<T> coll) {
         return set(mapper).apply(coll);

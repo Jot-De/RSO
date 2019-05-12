@@ -1,9 +1,12 @@
 package pl.snz.pubweb.commons.errors.exception;
 
-public class InternalServerErrorException extends RuntimeException {
-    private String message;
 
-    public InternalServerErrorException(String message) {
+public class InternalServerErrorException extends RuntimeException {
+    private InternalServerErrorException(String message) {
         super(message);
+    }
+
+    public static InternalServerErrorException ofMessage(String message) {
+        return new InternalServerErrorException(message);
     }
 }

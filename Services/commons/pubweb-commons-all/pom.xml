@@ -25,6 +25,14 @@
             <groupId>pl.snz</groupId>
             <artifactId>pubweb-commons-errors</artifactId>
         </dependency>
+        <dependency>
+            <groupId>pl.snz</groupId>
+            <artifactId>pubweb-commons-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>pl.snz</groupId>
+            <artifactId>pubweb-commons-data</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

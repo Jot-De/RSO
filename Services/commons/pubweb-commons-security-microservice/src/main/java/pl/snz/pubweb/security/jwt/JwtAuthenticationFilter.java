@@ -7,8 +7,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import pl.snz.pubweb.commons.dto.UserAuthInfo;
 import pl.snz.pubweb.commons.util.Mappers;
-import pl.snz.pubweb.security.subject.UserAuthInfo;
 import pl.snz.pubweb.security.user.CustomJwtUserDetailsService;
 import pl.snz.pubweb.security.user.UserPrincipal;
 

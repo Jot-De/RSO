@@ -1,0 +1,51 @@
+version: '3'
+services:
+  eureka-serviceregistry:
+    build:
+      context: ./Cloud/Eureka
+      dockerfile: dockerfile
+    ports:
+     - "8761:8761"
+    tty:
+      true
+    restart:
+      unless-stopped
+
+  zuul-edgeservice:
+    build:
+      context: ./Cloud/Zuul
+      dockerfile: dockerfile
+    ports:
+     - "8762:8762"
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+    tty:
+      true
+    restart:
+      unless-stopped
+
+  pub-service:
+    build:
+      context: ./Services
+      dockerfile: dockefile-pub-service
+    ports:
+      - "8095"
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+    tty:
+      true
+    restart:
+      unless-stopped
+
+  user-service:
+    build:
+      context: ./Services
+      dockerfile: dockefile-user-service
+    ports:
+      - "8096"
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+    tty:
+      true
+    restart:
+      unless-stopped

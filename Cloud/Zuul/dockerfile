@@ -1,0 +1,6 @@
+FROM openjdk:8-alpine
+FROM maven:3.6.1-jdk-8
+EXPOSE 8762
+ADD . .
+RUN mvn clean install -f pom.xml -DskipTests
+ENTRYPOINT ["java","-jar","target/pubweb-gateway-0.0.1-SNAPSHOT.jar"]

@@ -27,7 +27,6 @@ public class JpaConfig {
     Environment env;
 
     @Bean
-    @Profile("!docker")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
         emf.setDataSource(appDataSource());
@@ -41,7 +40,6 @@ public class JpaConfig {
     }
 
     @Bean
-    @Profile("!docker")
     public DataSource appDataSource() {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDefaultQueryTimeout(5);

@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Table(name = "avatar")
 @Data @NoArgsConstructor @Builder @AllArgsConstructor
 public class Avatar extends IdentifiableEntity<Long> {
-j
+
     @Lob @Basic(fetch = FetchType.LAZY)
     @Column(length = 100000)
     private byte[] bytes;

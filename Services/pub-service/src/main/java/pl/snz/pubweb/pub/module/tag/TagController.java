@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.snz.pubweb.commons.errors.exception.BadRequestException;
 import pl.snz.pubweb.commons.errors.exception.NotFoundException;
-import pl.snz.pubweb.pub.module.pub.dto.TagDto;
+import pl.snz.pubweb.pub.module.tag.dto.TagDto;
 import pl.snz.pubweb.pub.module.tag.dto.CreateUpdateTagRequest;
 import pl.snz.pubweb.pub.module.tag.model.Tag;
 import pl.snz.pubweb.security.annotations.AdminApi;

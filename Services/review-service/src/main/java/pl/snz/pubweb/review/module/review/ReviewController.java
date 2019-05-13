@@ -37,6 +37,7 @@ public class ReviewController {
     @PostMapping
     public ReviewDto add(@RequestBody @Valid ReviewDto dto) {
         reviewValidator.validateAddNew(dto);
+        securityService.requireSelf(dto.getUserId());
         return Just.of(dto).map(mapper::toEntity).map(repo::save).map(mapper::toDto).val();
     }
 

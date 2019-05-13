@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Table(name = "type")
 @Entity
-public class PubType extends IdentifiableEntity {
+public class PubType extends IdentifiableEntity<Long> {
 
     @Column
     private String name;

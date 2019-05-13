@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import pl.snz.pubweb.pub.module.common.dto.AddressDto;
 import pl.snz.pubweb.pub.module.common.dto.PictureDto;
+import pl.snz.pubweb.pub.module.tag.dto.TagDto;
 
 import java.time.LocalDate;
 import java.util.List;

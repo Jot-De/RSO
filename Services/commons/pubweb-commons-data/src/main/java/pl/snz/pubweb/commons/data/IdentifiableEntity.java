@@ -1,10 +1,7 @@
 package pl.snz.pubweb.commons.data;
 
-import lombok.Data;
-
 import javax.persistence.*;
 
-@Data
 @MappedSuperclass
 public class IdentifiableEntity<I> {
     @Id
@@ -12,4 +9,11 @@ public class IdentifiableEntity<I> {
     @Column
     protected I id;
 
+    public I getId() {
+        return id;
+    }
+
+    public void setId(I id) {
+        this.id = id;
+    }
 }

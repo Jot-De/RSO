@@ -6,8 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-@Table(name = "tag")
 @Entity
+@Table(name = "tag")
 public class Tag extends IdentifiableEntity<Long> {
 
     @Column(unique = true, length = 50)

@@ -1,10 +1,12 @@
 package pl.snz.pubweb.pub.module.common.data;
 
+import lombok.Data;
 import pl.snz.pubweb.commons.data.IdentifiableEntity;
 import pl.snz.pubweb.pub.module.pub.model.Pub;
 
 import javax.persistence.*;
 
+@Data
 @Entity
 @Table(name = "picture")
 public class Picture extends IdentifiableEntity<Long> {
@@ -27,35 +29,4 @@ public class Picture extends IdentifiableEntity<Long> {
     @JoinColumn(name = "pub_id")
     private Pub pub;
 
-    public byte[] getBytes() {
-        return bytes;
-    }
-
-    public void setBytes(byte[] bytes) {
-        this.bytes = bytes;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Pub getPub() {
-        return pub;
-    }
-
-    public void setPub(Pub pub) {
-        this.pub = pub;
-    }
 }

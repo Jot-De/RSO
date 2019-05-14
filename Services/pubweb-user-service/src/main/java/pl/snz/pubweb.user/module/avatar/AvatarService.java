@@ -3,6 +3,7 @@ package pl.snz.pubweb.user.module.avatar;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.snz.pubweb.commons.dto.Base64PictureDto;
 import pl.snz.pubweb.commons.errors.exception.NotFoundException;
 import pl.snz.pubweb.user.module.user.UserRepository;
@@ -17,11 +18,13 @@ public class AvatarService {
     private final AvatarRepository avatarRepository;
     private final UserRepository userRepository;
 
-    public final Avatar getForUser(Long userId) {
+    @Transactional
+    public Avatar getForUser(Long userId) {
         return avatarRepository.findByUserId(userId).orElseThrow(NotFoundException.ofMessage("avatar.not.found", "userId", userId));
     }
 
-    public final Avatar addForUser(Base64PictureDto dto, Long userId) {
+    @Transactional
+    public Avatar addForUser(Base64PictureDto dto, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(NotFoundException.userById(userId));
         final byte[] bytes = Base64.getMimeDecoder().decode(dto.getBase64Picture());
         Avatar avatar = avatarRepository.findByUserId(userId).orElseGet(Avatar::new);
@@ -31,6 +34,7 @@ public class AvatarService {
         return avatarRepository.save(avatar);
     }
 
+    @Transactional
     public final void deleteForUser(Long userId) {
         avatarRepository.findByUserId(userId).ifPresent(avatarRepository::delete);
     }

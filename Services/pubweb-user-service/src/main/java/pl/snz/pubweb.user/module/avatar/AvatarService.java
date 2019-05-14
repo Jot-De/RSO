@@ -35,7 +35,7 @@ public class AvatarService {
     }
 
     @Transactional
-    public final void deleteForUser(Long userId) {
+    public void deleteForUser(Long userId) {
         avatarRepository.findByUserId(userId).ifPresent(avatarRepository::delete);
     }
 }

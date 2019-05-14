@@ -5,4 +5,4 @@ ADD ./pub-service ./pub-service
 ADD ./commons ./commons
 RUN mvn clean install -f commons/pom.xml -DskipTests
 RUN mvn clean install -f pub-service/pom.xml -DskipTests
-ENTRYPOINT ["java","-jar", "-Dspring.profiles.active=docker","pub-service/target/pub-service-1.0.0.jar"]
+ENTRYPOINT ["java","-jar","pub-service/target/pub-service-1.0.0.jar"]

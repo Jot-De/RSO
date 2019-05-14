@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Builder @NoArgsConstructor @AllArgsConstructor @Getter @Setter
 @Entity
-@Table(name = "user")
+@Table(name = "user_data")
 public class User extends IdentifiableEntity<Long> {
     @Column(nullable = false)
     private String login;

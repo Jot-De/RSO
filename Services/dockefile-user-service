@@ -5,4 +5,4 @@ ADD ./pubweb-user-service ./pubweb-user-service
 ADD ./commons ./commons
 RUN mvn clean install -f commons/pom.xml -DskipTests
 RUN mvn clean install -f pubweb-user-service/pom.xml -DskipTests
-ENTRYPOINT ["java","-jar", "-Dspring.profiles.active=docker","pubweb-user-service/target/pubweb-user-service-0.0.1.jar"]
+ENTRYPOINT ["java","-jar","pubweb-user-service/target/pubweb-user-service-0.0.1.jar"]

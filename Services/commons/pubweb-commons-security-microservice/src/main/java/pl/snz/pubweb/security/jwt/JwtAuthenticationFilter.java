@@ -9,7 +9,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import pl.snz.pubweb.commons.dto.UserAuthInfo;
 import pl.snz.pubweb.commons.util.Mappers;
-import pl.snz.pubweb.security.user.CustomJwtUserDetailsService;
 import pl.snz.pubweb.security.user.UserPrincipal;
 
 import javax.servlet.FilterChain;
@@ -23,7 +22,6 @@ import java.util.function.Function;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired private JwtTokenProvider tokenProvider;
-    @Autowired private CustomJwtUserDetailsService customJwtUserDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

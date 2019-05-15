@@ -1,4 +1,4 @@
-package pl.snz.pubweb.user.container.config;
+package pl.snz.pubweb.review.container;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;

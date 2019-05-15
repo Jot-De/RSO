@@ -15,3 +15,6 @@ zuul:
   ribbon:
     eager-load:
       enabled: true
+  routes:
+    static:
+      url=http://host:port/staticresource

@@ -9,12 +9,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.snz.pubweb.commons.errors.exception.NotFoundException;
 import pl.snz.pubweb.commons.util.Just;
+import pl.snz.pubweb.commons.util.Mappers;
+import pl.snz.pubweb.review.module.history.ReviewHistoryMapper;
+import pl.snz.pubweb.review.module.history.dto.HistoryEntry;
 import pl.snz.pubweb.review.module.review.dto.ReviewDto;
 import pl.snz.pubweb.review.module.review.dto.ReviewUpdateDto;
 import pl.snz.pubweb.review.module.review.model.Review;
 import pl.snz.pubweb.security.SecurityService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -22,6 +26,7 @@ public class ReviewController {
 
     private final ReviewRepository repo;
     private final ReviewMapper mapper;
+    private final ReviewHistoryMapper historyMapper;
     private final ReviewValidator reviewValidator;
     private final ReviewUpdateService reviewUpdateService;
     private final SecurityService securityService;
@@ -32,6 +37,12 @@ public class ReviewController {
                                   @RequestParam(value = "user", required = false) Long userId,
                                   @RequestParam(value = "pub", required = false) Long pubId)  {
         return repo.search(userId, pubId, PageRequest.of(page, size)).map(mapper::toDto);
+    }
+
+    @GetMapping("{id}")
+    public ReviewDto getOne(@PathVariable Long id) {
+        final Review review = repo.findById(id).orElseThrow(NotFoundException.ofMessage("review.not.found", "id", id));
+        return Just.of(review).map(mapper::toDto).val();
     }
 
     @PostMapping
@@ -56,5 +67,13 @@ public class ReviewController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("{id}/history")
+    public List<HistoryEntry> getHistory(@PathVariable Long id) {
+        final Review review = repo.findById(id).orElseThrow(NotFoundException.ofMessage("review.not.found", "id", id));
+        return Just.of(review)
+                .map(Review::getReviewHistory)
+                .map(s -> Mappers.list(s, historyMapper::toEntry))
+                .val();
+    }
 
 }

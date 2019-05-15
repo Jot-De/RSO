@@ -1,0 +1,20 @@
+#hystrix:
+#  command:
+#    pubweb-user-service:
+#      execution:
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 5000
+
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 5000
+ribbon:
+  ConnectTimeout: 3000
+  ReadTimeout: 10000
+
+zuul:
+  ribbon:
+    eager-load:
+      enabled: true
+  routes:
+    static:
+      url=http://host:port/staticresource

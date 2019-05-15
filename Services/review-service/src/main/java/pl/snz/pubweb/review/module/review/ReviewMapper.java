@@ -8,6 +8,8 @@ import pl.snz.pubweb.review.module.history.ReviewHistoryMapper;
 import pl.snz.pubweb.review.module.review.dto.ReviewDto;
 import pl.snz.pubweb.review.module.review.model.Review;
 
+import java.time.LocalDate;
+
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ReviewMapper {
@@ -29,6 +31,7 @@ public class ReviewMapper {
         Review review = new Review();
         review.setStars(dto.getStars());
         review.setUserId(dto.getUserId());
+        review.setAdded(LocalDate.now());
         review.setPubId(dto.getPubId());
         review.setReviewText(dto.getDescription());
         return review;

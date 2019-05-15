@@ -823,7 +823,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{host}}pubweb-pub-service/pub?city=Białystok&name=",
+									"raw": "{{host}}pubweb-pub-service/pub?tags=1,2",
 									"host": [
 										"{{host}}pubweb-pub-service"
 									],
@@ -832,12 +832,8 @@
 									],
 									"query": [
 										{
-											"key": "city",
-											"value": "Białystok"
-										},
-										{
-											"key": "name",
-											"value": ""
+											"key": "tags",
+											"value": "1,2"
 										}
 									]
 								}
@@ -847,6 +843,16 @@
 						{
 							"name": "GetOnePub",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user1Token}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"body": {
@@ -854,7 +860,14 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": ""
+									"raw": "{{host}}pubweb-pub-service/pub/10",
+									"host": [
+										"{{host}}pubweb-pub-service"
+									],
+									"path": [
+										"pub",
+										"10"
+									]
 								}
 							},
 							"response": []
@@ -885,19 +898,13 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{host}}pubweb-pub-service/request/pending?userId=1",
+									"raw": "{{host}}pubweb-pub-service/request/accepted",
 									"host": [
 										"{{host}}pubweb-pub-service"
 									],
 									"path": [
 										"request",
-										"pending"
-									],
-									"query": [
-										{
-											"key": "userId",
-											"value": "1"
-										}
+										"accepted"
 									]
 								}
 							},
@@ -930,12 +937,12 @@
 									"raw": "{\n\t\"address\": {\n\t\t\t\"city\":\"Białystok\",\n    \t\t\"street\":\"Ulica\",\n    \t\t\"number\":\"numer\"\n\t},\n\t\"name\": \"Pod krzywym mordem\"\n}"
 								},
 								"url": {
-									"raw": "{{host}}pubweb-pub-service/",
+									"raw": "{{host}}pubweb-pub-service/request",
 									"host": [
 										"{{host}}pubweb-pub-service"
 									],
 									"path": [
-										""
+										"request"
 									]
 								}
 							},
@@ -1060,12 +1067,18 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{host}}pubweb-pub-service/tag",
+									"raw": "{{host}}pubweb-pub-service/tag?nameLike=harnas5zl",
 									"host": [
 										"{{host}}pubweb-pub-service"
 									],
 									"path": [
 										"tag"
+									],
+									"query": [
+										{
+											"key": "nameLike",
+											"value": "harnas5zl"
+										}
 									]
 								}
 							},
@@ -1127,7 +1140,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"name\": \"spk\",\n\t\"description\": \"Pub jest spoko\"\n}"
+									"raw": "{\n\t\"name\": \"szczyny\",\n\t\"description\": \"Pub student\"\n}"
 								},
 								"url": {
 									"raw": "{{host}}pubweb-pub-service/tag",
@@ -1165,7 +1178,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"name\": \"spk\",\n\t\"description\": \"Pub jest bardzo spoko\"\n}"
+									"raw": "{\n\t\"name\": \"spk\",\n\t\"description\": \"Pub jest na tyle spoko, ze bym szet\"\n}"
 								},
 								"url": {
 									"raw": "{{host}}pubweb-pub-service/tag/1",
@@ -1200,14 +1213,208 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{host}}pubweb-pub-service/tag/2",
+									"raw": "{{host}}pubweb-pub-service/tag/3",
 									"host": [
 										"{{host}}pubweb-pub-service"
 									],
 									"path": [
 										"tag",
-										"2"
+										"3"
 									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		},
+		{
+			"name": "REVIEW_API",
+			"item": [
+				{
+					"name": "review",
+					"item": [
+						{
+							"name": "BrowseReviews",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user1Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{host}}/reviews",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"reviews"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetReview",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{host}}/reviews/1",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"reviews",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "AddReview",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user1Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"userId\": 1,\n\t\"pubId\": 1,\n\t\"description\": \"hehe fajnie było\",\n\t\"stars\": 1\n}"
+								},
+								"url": {
+									"raw": "{{host}}/reviews",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"reviews"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateReview",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user1Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"description\": \"new descriptionw\",\n\t\"stars\": \"5\"\n}"
+								},
+								"url": {
+									"raw": "{{host}}/reviews/1",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"reviews",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "history",
+					"item": [
+						{
+							"name": "BrowseHistory",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{user1Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{host}}reviews/1/history",
+									"host": [
+										"{{host}}reviews"
+									],
+									"path": [
+										"1",
+										"history"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetHistory",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": ""
 								}
 							},
 							"response": []
@@ -1242,31 +1449,31 @@
 	],
 	"variable": [
 		{
-			"id": "d10e4930-f9cc-4eb6-b1a5-c5562a4c2afa",
+			"id": "e5b4412c-15e6-4829-9a03-297e573c13f7",
 			"key": "user1Token",
 			"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ7XCJ1c2VySWRcIjoxLFwibG9naW5cIjpcImx1a2dyZWJvMVwiLFwicm9sZXNcIjpbXCJBRE1JTlwiLFwiUk9MRV9BRE1JTlwiXSxcInBlcm1pc3Npb25zXCI6W1wicnVsZXNfYWNjZXB0YXRpb25cIixcImluZm9ybWF0aW9uX3Byb2Nlc3NpbmdcIl19IiwiaWF0IjoxNTU3NjQ5NDI4LCJleHAiOjE1NTgyNTQyMjh9.QQeSVxT9NxERVHPKb-QCV5aDXfFISOZqDE9EA5jD3fh9NHmBo-dpzyd-aJOuo5dYVzHPB0_VH-9YseRKmP6rLg",
 			"type": "string"
 		},
 		{
-			"id": "88b6be12-a46c-406e-ba6e-c79c9326d914",
+			"id": "843fc081-7e34-4056-8cb2-517d2dc08c89",
 			"key": "user2Token",
 			"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiaWF0IjoxNTU1NzgxODQwLCJleHAiOjE1NTYzODY2NDB9.haciu_1eJdvgMdAPlgaJWsak5uEDlZhkGr2azKggCgCpGoI7VpkqzP5VgNw7jRa9IJbb_FwdhKNIYJXKkZWEvw",
 			"type": "string"
 		},
 		{
-			"id": "ded6226a-7eb4-43a9-80f4-4c9dc619c5fe",
+			"id": "7075085e-103a-4875-95cc-f6c52f6620a2",
 			"key": "user3Token",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "ca0fafcd-ade9-4570-8dcb-2d0a0a2c87b2",
+			"id": "8466604b-efc3-49fa-a263-a0cb57cf0587",
 			"key": "adminToken",
 			"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiaWF0IjoxNTU1ODQ2ODU3LCJleHAiOjE1NTY0NTE2NTd9.WtB5if1RyJfFK_ev-U7lbeRLvajdJJZSm5daNSnz6ryCud9-hVILBFNaqMLoxKW2k5uu4ycUB3vD27MjYxxbTg",
 			"type": "string"
 		},
 		{
-			"id": "4414f4a7-a23d-43c7-b546-2ac5db14f71a",
+			"id": "754c6dac-86cc-4e14-a735-c54f60adaf78",
 			"key": "host",
 			"value": "http://localhost:8080/",
 			"type": "string"

@@ -1,6 +1,6 @@
 package pl.snz.pubweb.security.annotations;
 
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.lang.annotation.*;
 
@@ -8,5 +8,5 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Secured("ADMIN")
+@PreAuthorize("hasAuthority('ADMIN')")
 public @interface AdminApi {}

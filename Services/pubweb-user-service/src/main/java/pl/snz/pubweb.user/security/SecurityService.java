@@ -35,12 +35,4 @@ public class SecurityService {
         return friendshipService.areFriends(principalId, userId);
     }
 
-    private void requireAdmin() {
-        //TODO
-    }
-
-    public boolean isUserAdmin() {
-        return true; //TODO
-    }
-
 }

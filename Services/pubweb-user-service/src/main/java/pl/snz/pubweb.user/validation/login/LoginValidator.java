@@ -1,7 +1,7 @@
 package pl.snz.pubweb.user.validation.login;
 
 import lombok.RequiredArgsConstructor;
-import pl.snz.pubweb.user.validation.ValidationPredicatesProvider;
+import pl.snz.pubweb.commons.validations.ValidationPredicatesProvider;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

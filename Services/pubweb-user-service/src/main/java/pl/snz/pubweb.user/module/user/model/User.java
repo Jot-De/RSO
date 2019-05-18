@@ -15,6 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "user_data")
 public class User extends IdentifiableEntity<Long> {
+
     @Column(nullable = false)
     private String login;
 
@@ -45,10 +46,10 @@ public class User extends IdentifiableEntity<Long> {
     private Set<UserPermissionAcceptance> acceptedPermissions = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "target", fetch = FetchType.LAZY)
-    private Set<FriendshipRequest> receivedFriendshipRequests;
+    private Set<FriendshipRequest> receivedFriendshipRequests = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "requester", fetch = FetchType.LAZY)
-    private Set<FriendshipRequest> sentFriendshipRequests;
+    private Set<FriendshipRequest> sentFriendshipRequests = new HashSet<>();
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     private Avatar avatar;

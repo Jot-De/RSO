@@ -54,4 +54,12 @@
         </dependencies>
     </dependencyManagement>
 
+    <repositories>
+        <repository>
+            <id>gcloud</id>
+            <name>lukgrego gcloud repository</name>
+            <url>https://lgrebo-maven-repo.appspot.com/</url>
+        </repository>
+    </repositories>
+
 </project>

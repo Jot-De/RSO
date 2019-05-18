@@ -9,6 +9,10 @@ import pl.snz.pubweb.user.module.role.RoleRepository;
 import pl.snz.pubweb.user.module.role.Roles;
 import pl.snz.pubweb.user.module.user.UserRepository;
 import pl.snz.pubweb.user.module.user.model.User;
+import pl.snz.pubweb.user.module.user.model.UserDisplaySettings;
+import pl.snz.pubweb.user.module.user.model.UserPersonalInformation;
+
+import java.util.Collections;
 
 @Component
 @RequiredArgsConstructor
@@ -40,12 +44,15 @@ public class InitialConfiguration {
     }
 
     private void createAdminAccount(Role adminRole) {
-        User admin = new User();
-        admin.setEmail("admin@wielkaPolska.pl");
-        admin.setDisplayName("admin");
-        admin.setLogin("admin");
-        admin.setPassword(bCryptPasswordEncoder.encode("admin"));
-        admin.getRoles().add(adminRole);
+        User admin = User.builder()
+                .email("admin@wielkaPolska.pl")
+                .displayName("admin")
+                .login("admin")
+                .password(bCryptPasswordEncoder.encode("admin"))
+                .roles(Collections.singleton(adminRole))
+                .userDisplaySettings(UserDisplaySettings.allPrivate())
+                .userPersonalInformation(UserPersonalInformation.none())
+                .build();
         userRepository.save(admin);
     }
 }

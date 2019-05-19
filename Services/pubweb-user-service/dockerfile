@@ -1,0 +1,6 @@
+FROM openjdk:8-alpine
+FROM maven:3.6.1-jdk-8
+EXPOSE 8080
+ADD . .
+RUN mvn clean install -U -f pom.xml -DskipTests
+ENTRYPOINT ["java","-jar","target/pubweb-user-service-0.0.1.jar"]

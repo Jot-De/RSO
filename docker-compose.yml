@@ -39,10 +39,8 @@ services:
 
   pub-service:
     build:
-      context: ./Services
-      dockerfile: dockefile-pub-service
-    ports:
-      - "8095"
+      context: ./Services/pub-service
+      dockerfile: dockerfile
     environment:
       - REGISTRY_HOST=eureka-serviceregistry
       - DB_HOST=db
@@ -54,10 +52,8 @@ services:
 
   user-service:
     build:
-      context: ./Services
-      dockerfile: dockefile-user-service
-    ports:
-      - "8096"
+      context: ./Services/pubweb-user-service
+      dockerfile: dockerfile
     environment:
       - REGISTRY_HOST=eureka-serviceregistry
       - DB_HOST=db
@@ -67,3 +63,15 @@ services:
     restart:
       unless-stopped
 
+  review-service:
+    build:
+      context: ./Services/review-service
+      dockerfile: dockerfile
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+      - DB_HOST=db
+      - DB_PORT=5432
+    tty:
+      true
+    restart:
+      unless-stopped

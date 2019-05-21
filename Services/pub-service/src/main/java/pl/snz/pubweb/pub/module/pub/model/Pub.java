@@ -30,7 +30,7 @@ public class Pub extends IdentifiableEntity<Long> {
     @OneToMany(mappedBy = "pub", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Picture> pictures;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.MERGE)
     private Set<PubType> types = new HashSet<>();
 
     @Column

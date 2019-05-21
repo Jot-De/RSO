@@ -19,6 +19,7 @@ import pl.snz.pubweb.user.module.friend.FriendshipPresentationService;
 import pl.snz.pubweb.user.module.friend.model.FriendshipInfo;
 import pl.snz.pubweb.user.module.user.dto.*;
 import pl.snz.pubweb.user.module.user.model.User;
+import pl.snz.pubweb.user.security.AdminApi;
 import pl.snz.pubweb.user.security.SecurityService;
 
 import javax.validation.Valid;
@@ -74,9 +75,10 @@ public class UserController implements AvatarManagement {
                 .collect(Collectors.toList());
     }
 
+    @AdminApi
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteUser(@PathVariable @NonNull Long id) {
-            userSoftDeleteService.performSoftDelete(id);
+            userRepository.findById(id).ifPresent(userRepository::delete);
             return new ResponseEntity<>(HttpStatus.OK);
     }
 

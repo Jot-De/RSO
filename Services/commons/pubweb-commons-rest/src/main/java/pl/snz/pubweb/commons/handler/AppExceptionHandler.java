@@ -88,11 +88,11 @@ public class AppExceptionHandler {
     }
 
     private String getMessage(org.springframework.validation.FieldError fieldError) {
-        return env.getProperty(fieldError.getCode(), fieldError.getDefaultMessage());
+        return env.getProperty(fieldError.getCode(), translateExceptionMessage(fieldError.getDefaultMessage()));
     }
 
     private String getMessage(ObjectError objectError) {
-        return env.getProperty(objectError.getCode(), objectError.getDefaultMessage());
+        return env.getProperty(objectError.getCode(), translateExceptionMessage(objectError.getDefaultMessage()));
     }
 
     private List<FieldError> mapToErrors(ConstraintViolationException exception) {
@@ -100,7 +100,7 @@ public class AppExceptionHandler {
     }
 
     private FieldError mapToError(ConstraintViolation<?> violation) {
-        return new FieldError(violation.getPropertyPath().toString(), violation.getMessage());
+        return new FieldError(violation.getPropertyPath().toString(), translateExceptionMessage(violation.getMessage()));
     }
 
     private FieldError toFieldError(BadRequestException.RequestFieldError requestFieldError) {

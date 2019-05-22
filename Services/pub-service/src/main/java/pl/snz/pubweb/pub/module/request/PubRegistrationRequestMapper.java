@@ -22,6 +22,7 @@ public class PubRegistrationRequestMapper {
         return PubRegistrationRequestInfo.builder()
                 .address(addressMapper.toDto(request.getAddress()))
                 .added(request.getAdded())
+                .description(request.getDescription())
                 .id(request.getId())
                 .requesterId(request.getUserId())
                 .name(request.getName())

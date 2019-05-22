@@ -14,6 +14,7 @@ public class PubRegistrationRequestInfo {
     private String name;
     private AddressDto address;
     private PubRegistrationStatus status;
+    private String description;
     private LocalDate added;
     private Long requesterId;
     private Long pubId;

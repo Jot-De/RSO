@@ -13,7 +13,7 @@ public class PubRegistrationRequestDto {
     @NotNull
     private AddressDto address;
 
-    @NotBlank @Length(min = 5, max = 100)
+    @NotBlank @Length(min = 2, max = 100)
     private String name;
 
     @NotBlank @Length(min = 5, max = 4000)

@@ -94,3 +94,5 @@ services:
       unless-stopped
     networks:
       - webnet
+networks:
+  webnet:

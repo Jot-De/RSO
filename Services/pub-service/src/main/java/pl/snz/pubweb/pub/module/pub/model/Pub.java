@@ -3,7 +3,7 @@ package pl.snz.pubweb.pub.module.pub.model;
 import lombok.Data;
 import pl.snz.pubweb.commons.data.IdentifiableEntity;
 import pl.snz.pubweb.pub.module.common.data.Address;
-import pl.snz.pubweb.pub.module.common.data.Picture;
+import pl.snz.pubweb.pub.module.picture.model.Picture;
 import pl.snz.pubweb.pub.module.tag.model.Tag;
 
 import javax.persistence.*;
@@ -28,7 +28,7 @@ public class Pub extends IdentifiableEntity<Long> {
     private Set<Tag> tags = new HashSet<>();
 
     @OneToMany(mappedBy = "pub", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Picture> pictures;
+    private Set<Picture> pictures = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.MERGE)
     private Set<PubType> types = new HashSet<>();

@@ -1,16 +1,14 @@
 package pl.snz.pubweb.pub.module.picture.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import pl.snz.pubweb.commons.data.IdentifiableEntity;
 import pl.snz.pubweb.pub.module.pub.model.Pub;
 import pl.snz.pubweb.pub.module.request.model.PubRegistrationRequest;
 
 import javax.persistence.*;
 
-@Data @Builder @AllArgsConstructor @NoArgsConstructor
+@Getter @Setter
+@Builder @AllArgsConstructor @NoArgsConstructor
 @Entity
 @Table(name = "picture")
 public class Picture extends IdentifiableEntity<Long> {
@@ -37,4 +35,21 @@ public class Picture extends IdentifiableEntity<Long> {
     @JoinColumn(name = "request_id")
     private PubRegistrationRequest request;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Picture picture = (Picture) o;
+
+        if (name != null ? !name.equals(picture.name) : picture.name != null) return false;
+        return format != null ? format.equals(picture.format) : picture.format == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (format != null ? format.hashCode() : 0);
+        return result;
+    }
 }

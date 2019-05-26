@@ -1,15 +1,17 @@
 package pl.snz.pubweb.pub.module.request.model;
 
-import lombok.Data;
-import org.springframework.transaction.annotation.Transactional;
+import lombok.Getter;
+import lombok.Setter;
 import pl.snz.pubweb.commons.data.IdentifiableEntity;
 import pl.snz.pubweb.pub.module.common.data.Address;
+import pl.snz.pubweb.pub.module.picture.model.Picture;
 import pl.snz.pubweb.pub.module.pub.model.Pub;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "pub_registration_request")
 public class PubRegistrationRequest extends IdentifiableEntity<Long> {
@@ -41,5 +43,7 @@ public class PubRegistrationRequest extends IdentifiableEntity<Long> {
     @Enumerated(EnumType.STRING)
     private PubRegistrationStatus status;
 
+    @OneToOne(mappedBy = "request", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Picture picture;
 
 }

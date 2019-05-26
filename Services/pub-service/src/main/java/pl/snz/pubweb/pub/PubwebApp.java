@@ -6,10 +6,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@EnableDiscoveryClient
 @ComponentScan("pl.snz.pubweb")
-public class PubwebApp  {
-
+public class PubwebApp {
     public static void main(String[] args) {
         SpringApplication.run(PubwebApp.class);
     }

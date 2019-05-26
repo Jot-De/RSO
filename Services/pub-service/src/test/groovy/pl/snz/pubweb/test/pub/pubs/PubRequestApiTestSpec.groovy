@@ -97,7 +97,7 @@ class PubRequestApiTestSpec extends PubServiceIntegrationTest {
         new AddressDto('a', 'b', 'c') | 'desc' | Long.toHexString(new Random().nextLong())
     }
 
-    def 'Test request acceptance with pictrue'() {
+    def 'Test request acceptance with picture'() {
         given:
         adminSetup()
         final PubRegistrationRequestDto request = PubRegistrationRequestDto.builder()

@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.snz.pubweb.commons.util.Mappers;
 import pl.snz.pubweb.pub.module.common.PresentationUris;
-import pl.snz.pubweb.pub.module.common.data.Picture;
-import pl.snz.pubweb.pub.module.common.dto.PictureDto;
+import pl.snz.pubweb.pub.module.picture.model.Picture;
+import pl.snz.pubweb.pub.module.picture.dto.PictureDto;
 import pl.snz.pubweb.pub.module.common.mapper.AddressMapper;
 import pl.snz.pubweb.pub.module.pub.dto.PubDto;
 import pl.snz.pubweb.pub.module.pub.model.Pub;
@@ -35,8 +35,8 @@ public class PubMapper {
     private PictureDto map(Picture picture) {
         return PictureDto
                 .builder()
+                .id(picture.getId())
                 .name(picture.getName())
-                .self(presentationUris.pictureUri(picture.getId()))
                 .build();
     }
 

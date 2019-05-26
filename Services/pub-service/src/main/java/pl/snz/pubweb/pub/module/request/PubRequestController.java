@@ -7,11 +7,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 import pl.snz.pubweb.commons.errors.exception.NotFoundException;
+import pl.snz.pubweb.pub.module.picture.PictureMapper;
+import pl.snz.pubweb.pub.module.picture.PictureRepository;
+import pl.snz.pubweb.pub.module.picture.dto.PictureDto;
+import pl.snz.pubweb.pub.module.picture.dto.PictureDtoWithData;
+import pl.snz.pubweb.pub.module.picture.model.Picture;
 import pl.snz.pubweb.pub.module.pub.PubService;
 import pl.snz.pubweb.pub.module.pub.model.Pub;
 import pl.snz.pubweb.pub.module.request.dto.PubRegistrationRequestAcceptanceResponse;
 import pl.snz.pubweb.pub.module.request.dto.PubRegistrationRequestDto;
 import pl.snz.pubweb.pub.module.request.dto.PubRegistrationRequestInfo;
+import pl.snz.pubweb.pub.module.request.mapper.PubRegistrationRequestMapper;
 import pl.snz.pubweb.pub.module.request.model.PubRegistrationRequest;
 import pl.snz.pubweb.pub.module.request.validation.OpenRegistrationRequestsLimitValidator;
 import pl.snz.pubweb.security.RequestSecurityContextProvider;
@@ -32,6 +38,8 @@ public class PubRequestController {
     private final PubService pubService;
     private final PubRegistrationRequestService service;
     private final RequestSecurityContextProvider requestSecurityContextProvider;
+    private final PictureMapper pictureMapper;
+    private final PictureRepository pictureRepository;
 
     @GetMapping("/pending")
     public Page<PubRegistrationRequestInfo> getPending(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "20") int size, @RequestParam(required = false) Long userId) {
@@ -51,14 +59,44 @@ public class PubRequestController {
     private Page<PubRegistrationRequestInfo> searchWithSpec(int page, int size, Long userId, Specification<PubRegistrationRequest> spec) {
         if(userId != null)
             spec = spec.and(specs.forUser(userId));
+
         return repo.findAll(spec, PageRequest.of(page, size)).map(mapper::toDto);
     }
 
     @PostMapping
     public PubRegistrationRequestInfo add(@RequestBody @Valid PubRegistrationRequestDto request) {
         validator.validate(requestSecurityContextProvider.getPrincipal().getId(), request);
-        PubRegistrationRequest entity = mapper.toEntity(request, requestSecurityContextProvider.getPrincipal().getId());
+        final PubRegistrationRequest entity = mapper.toEntity(request, requestSecurityContextProvider.getPrincipal().getId());
+
         return Optional.of(entity).map(repo::save).map(mapper::toDto).get();
+    }
+
+    @PutMapping("picture/{id}")
+    public PictureDto addPicture(@PathVariable Long id, @RequestBody @Valid PictureDtoWithData dto) {
+        final PubRegistrationRequest request = repo.findOrThrow(id);
+        final Picture picture = pictureMapper.toEntity(dto);
+        if(request.getPicture() == null) {
+            request.setPicture(picture);
+            picture.setRequest(request);
+        } else {
+            request.getPicture().setBytes(picture.getBytes());
+            request.getPicture().setDescription(picture.getDescription());
+            request.getPicture().setFormat(picture.getFormat());
+            request.getPicture().setName(picture.getName());
+        }
+        repo.save(request);
+
+        return pictureMapper.toInfo(request.getPicture());
+    }
+
+    @AdminApi
+    @GetMapping("picture/{id}")
+    public PictureDtoWithData getPicture(@PathVariable  Long requestId) {
+        final PubRegistrationRequest request = repo.findOrThrow(requestId);
+
+        return Optional.ofNullable(request.getPicture())
+                .map(pictureMapper::toData)
+                .orElseThrow(NotFoundException.ofMessage("request.picture.not.bound", "id", requestId));
     }
 
     @PostMapping("{id}/accept")
@@ -67,6 +105,7 @@ public class PubRequestController {
         final PubRegistrationRequest request = repo.findOrThrow(id);
         final Pub pub = pubService.createFromRequest(request);
         service.setAccepted(request, pub);
+
         return new PubRegistrationRequestAcceptanceResponse(pub.getId());
     }
 

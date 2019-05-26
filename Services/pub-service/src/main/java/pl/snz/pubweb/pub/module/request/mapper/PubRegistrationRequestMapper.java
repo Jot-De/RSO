@@ -1,4 +1,4 @@
-package pl.snz.pubweb.pub.module.request;
+package pl.snz.pubweb.pub.module.request.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +36,11 @@ public class PubRegistrationRequestMapper {
 
         request.setAdded(LocalDate.now());
         request.setAddress(addressMapper.toEntity(dto.getAddress()));
+        request.setDescription(dto.getDescription());
         request.setUserId(userId);
         request.setName(dto.getName());
         request.setStatus(PubRegistrationStatus.PENDING);
+
         return request;
     }
 }

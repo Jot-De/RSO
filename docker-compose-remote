@@ -1,0 +1,98 @@
+version: '3'
+services:
+  eureka-serviceregistry:
+    image: gcr.io/oceanic-oxide-240620/rso/eureka:latest
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+    ports:
+     - "8761:8761"
+    tty:
+      true
+    restart:
+      unless-stopped
+    networks:
+      - webnet
+
+  zuul-edgeservice:
+    image: gcr.io/oceanic-oxide-240620/rso/zuul:latest
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+    ports:
+     - "8762:8762"
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+    tty:
+      true
+    restart:
+      unless-stopped
+    networks:
+      - webnet
+
+  db:
+    image: postgres
+    deploy:
+      replicas: 1
+    restart:
+      unless-stopped
+    environment:
+      - POSTGRES_DB=pubizr
+      - POSTGRES_USER=pubizr_user
+      - POSTGRES_PASSWORD=Bla123_user
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./Database/db-data:/var/lib/postgresql
+    networks:
+      - webnet
+
+
+  pub-service:
+    image: gcr.io/oceanic-oxide-240620/rso/pub-service:latest
+    deploy:
+      replicas: 3
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+      - DB_HOST=db
+      - DB_PORT=5432
+    tty:
+      true
+    restart:
+      unless-stopped
+    networks:
+      - webnet
+
+  user-service:
+    image: gcr.io/oceanic-oxide-240620/rso/user-service:latest
+    deploy:
+      replicas: 3
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+      - DB_HOST=db
+      - DB_PORT=5432
+    tty:
+      true
+    restart:
+      unless-stopped
+    networks:
+      - webnet
+
+  review-service:
+    image: gcr.io/oceanic-oxide-240620/rso/review-service:latest
+    deploy:
+      replicas: 3
+    environment:
+      - REGISTRY_HOST=eureka-serviceregistry
+      - DB_HOST=db
+      - DB_PORT=5432
+    tty:
+      true
+    restart:
+      unless-stopped
+    networks:
+      - webnet
+networks:
+  webnet:

@@ -41,7 +41,6 @@ public class UserController implements AvatarManagement {
     private final SecurityService securityService;
     private final FriendService friendshipService;
     private final FriendshipPresentationService friendshipPresentationService;
-    private final UserSoftDeleteService userSoftDeleteService;
     private final AvatarService avatarService;
 
     @PostMapping

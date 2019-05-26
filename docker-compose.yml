@@ -24,26 +24,13 @@ services:
     restart:
       unless-stopped
 
-  db:
-    image: postgres
-    restart: always
-    environment:
-      - POSTGRES_DB=pubizr
-      - POSTGRES_USER=pubizr_user
-      - POSTGRES_PASSWORD=Bla123_user
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./Database/db-data:/var/lib/postgresql
-
-
   pub-service:
     build:
       context: ./Services/pub-service
       dockerfile: dockerfile
     environment:
       - REGISTRY_HOST=eureka-serviceregistry
-      - DB_HOST=db
+      - DB_HOST=34.65.167.6
       - DB_PORT=5432
     tty:
       true
@@ -56,7 +43,7 @@ services:
       dockerfile: dockerfile
     environment:
       - REGISTRY_HOST=eureka-serviceregistry
-      - DB_HOST=db
+      - DB_HOST=34.65.167.6
       - DB_PORT=5432
     tty:
       true
@@ -69,7 +56,7 @@ services:
       dockerfile: dockerfile
     environment:
       - REGISTRY_HOST=eureka-serviceregistry
-      - DB_HOST=db
+      - DB_HOST=34.65.167.6
       - DB_PORT=5432
     tty:
       true

@@ -41,7 +41,7 @@ public class IssueController {
     }
 
     @AdminApi
-    @GetMapping
+    @GetMapping("{id}")
     public IssueDto getOneIssue(@PathVariable Long id) {
         return issueRepository.findById(id).map(issueMapper::toDto).orElseThrow(NotFoundException.ofMessage("issue.not.found", "id", id));
     }

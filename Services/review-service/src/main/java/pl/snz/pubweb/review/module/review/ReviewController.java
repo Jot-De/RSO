@@ -21,6 +21,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@RequestMapping("review")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ReviewController {
 

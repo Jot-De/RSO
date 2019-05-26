@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.snz.pubweb.commons.errors.exception.NotFoundException;
 import pl.snz.pubweb.pub.module.picture.PictureMapper;
@@ -63,6 +64,7 @@ public class PubRequestController {
         return repo.findAll(spec, PageRequest.of(page, size)).map(mapper::toDto);
     }
 
+    @Transactional
     @PostMapping
     public PubRegistrationRequestInfo add(@RequestBody @Valid PubRegistrationRequestDto request) {
         validator.validate(requestSecurityContextProvider.getPrincipal().getId(), request);
@@ -71,9 +73,10 @@ public class PubRequestController {
         return Optional.of(entity).map(repo::save).map(mapper::toDto).get();
     }
 
-    @PutMapping("picture/{id}")
-    public PictureDto addPicture(@PathVariable Long id, @RequestBody @Valid PictureDtoWithData dto) {
-        final PubRegistrationRequest request = repo.findOrThrow(id);
+    @PutMapping("{requestId}/picture/")
+    @Transactional
+    public PictureDto addPicture(@PathVariable Long requestId, @RequestBody @Valid PictureDtoWithData dto) {
+        final PubRegistrationRequest request = repo.findOrThrow(requestId);
         final Picture picture = pictureMapper.toEntity(dto);
         if(request.getPicture() == null) {
             request.setPicture(picture);
@@ -90,7 +93,7 @@ public class PubRequestController {
     }
 
     @AdminApi
-    @GetMapping("picture/{id}")
+    @GetMapping("picture/{requestId}")
     public PictureDtoWithData getPicture(@PathVariable  Long requestId) {
         final PubRegistrationRequest request = repo.findOrThrow(requestId);
 
@@ -99,21 +102,22 @@ public class PubRequestController {
                 .orElseThrow(NotFoundException.ofMessage("request.picture.not.bound", "id", requestId));
     }
 
-    @PostMapping("{id}/accept")
+    @Transactional
+    @PostMapping("{requestId}/accept")
     @AdminApi
-    public PubRegistrationRequestAcceptanceResponse accept(@PathVariable Long id) {
-        final PubRegistrationRequest request = repo.findOrThrow(id);
+    public PubRegistrationRequestAcceptanceResponse accept(@PathVariable Long requestId) {
+        final PubRegistrationRequest request = repo.findOrThrow(requestId);
         final Pub pub = pubService.createFromRequest(request);
         service.setAccepted(request, pub);
 
         return new PubRegistrationRequestAcceptanceResponse(pub.getId());
     }
 
-    @PostMapping("{id}/cancel")
+    @PostMapping("{requestId}/cancel")
     @AdminApi
-    public PubRegistrationRequestInfo cancel(@PathVariable Long id) {
-        return repo.findById(id).map(service::setCancelled).map(mapper::toDto)
-                .orElseThrow(NotFoundException.ofMessage("request.not.found", "id", id));
+    public PubRegistrationRequestInfo cancel(@PathVariable Long requestId) {
+        return repo.findById(requestId).map(service::setCancelled).map(mapper::toDto)
+                .orElseThrow(NotFoundException.ofMessage("request.not.found", "id", requestId));
     }
 
 }

@@ -1,6 +1,7 @@
 package pl.snz.pubweb.test.pub.pubs
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.ResourceUtils
 import pl.snz.pubweb.pub.module.common.dto.AddressDto
 import pl.snz.pubweb.pub.module.picture.dto.PictureDto
@@ -42,7 +43,7 @@ class PubRequestApiTestSpec extends PubServiceIntegrationTest {
 
         where:
         address                       | name | description | expectedStatus
-        new AddressDto('a', 'b', 'c') | 'ab' | 'descr'     | PubRegistrationStatus.PENDING
+        new AddressDto('a', 'b', 'c') | Long.toHexString(new Random().nextLong()) | 'descr'     | PubRegistrationStatus.PENDING
     }
 
     def 'Test add, get request picture'() {
@@ -97,6 +98,7 @@ class PubRequestApiTestSpec extends PubServiceIntegrationTest {
         new AddressDto('a', 'b', 'c') | 'desc' | Long.toHexString(new Random().nextLong())
     }
 
+    @Transactional
     def 'Test request acceptance with picture'() {
         given:
         adminSetup()

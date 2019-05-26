@@ -49,9 +49,9 @@ public class PubController {
         return pubRepository.findAll(searchSpec, PageRequest.of(page, size)).map(pubMapper::toGetResponse);
     }
 
-    @GetMapping("{id}")
-    public PubDto getOne(@PathVariable Long id) {
-        final Pub pub = pubRepository.findOrThrow(id);
+    @GetMapping("{pubId}")
+    public PubDto getOne(@PathVariable Long pubId) {
+        final Pub pub = pubRepository.findOrThrow(pubId);
 
         return pubMapper.toGetResponse(pub);
     }
@@ -68,43 +68,43 @@ public class PubController {
 
     }
 
-    @GetMapping("{id}/picture")
-    public List<PictureDtoWithData> getAllPictures(@PathVariable Long id) {
-        final Pub pub = pubRepository.findOrThrow(id);
+    @GetMapping("{pubId}/picture")
+    public List<PictureDtoWithData> getAllPictures(@PathVariable Long pubId) {
+        final Pub pub = pubRepository.findOrThrow(pubId);
 
         return Mappers.list(pub.getPictures(), pictureMapper::toData);
 
     }
 
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("{pubId}")
     @AdminApi
-    public ResponseEntity delete(@PathVariable Long id) {
-        pubRepository.findById(id).ifPresent(pubRepository::delete);
+    public ResponseEntity delete(@PathVariable Long pubId) {
+        pubRepository.findById(pubId).ifPresent(pubRepository::delete);
 
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("{id}/tags")
-    public List<TagDto> addTag(@PathVariable Long id, @RequestParam Long tagId) {
+    @PostMapping("{pubId}/tags")
+    public List<TagDto> addTag(@PathVariable Long id, @RequestParam Long pubId) {
         final Pub pub = pubRepository.findById(id).orElseThrow(NotFoundException.ofMessage("pub.not.found", "id", id));
-        pub.getTags().add(tagRepository.findById(tagId).orElseThrow(NotFoundException.ofMessage("tag.not.found", "id", tagId)));
+        pub.getTags().add(tagRepository.findById(pubId).orElseThrow(NotFoundException.ofMessage("tag.not.found", "id", pubId)));
 
         return Just.of(pubRepository.save(pub)).map(Pub::getTags).map(l -> Mappers.list(l, tagMapper::toDto)).val();
     }
 
-    @PutMapping("{id}/tags")
-    public List<TagDto> setTags(@PathVariable Long id, @RequestParam List<Long> ids) {
-        final Pub pub = pubRepository.findById(id).orElseThrow(NotFoundException.ofMessage("pub.not.found", "id", id));
+    @PutMapping("{pubId}/tags")
+    public List<TagDto> setTags(@PathVariable Long pubId, @RequestParam List<Long> ids) {
+        final Pub pub = pubRepository.findById(pubId).orElseThrow(NotFoundException.ofMessage("pub.not.found", "id", pubId));
         pub.setTags(tagRepository.findAllById(ids).stream().collect(Collectors.toSet()));
 
         return Just.of(pub).map(pubRepository::save).map(Pub::getTags).map(l -> Mappers.list(l, tagMapper::toDto)).val();
     }
 
-    @DeleteMapping("{id}/tags/{tagId}")
-    public List<TagDto> deleteTag(@PathVariable Long id, @PathVariable Long tagId) {
+    @DeleteMapping("{pubId}/tags/{tagId}")
+    public List<TagDto> deleteTag(@PathVariable Long id, @PathVariable Long pubId) {
         final Pub pub = pubRepository.findById(id).orElseThrow(NotFoundException.ofMessage("pub.not.found", "id", id));
-        pub.getTags().removeIf(t -> t.getId().equals(tagId));
+        pub.getTags().removeIf(t -> t.getId().equals(pubId));
 
         return Just.of(pub).map(pubRepository::save).map(Pub::getTags).map(l -> Mappers.list(l, tagMapper::toDto)).val();
     }

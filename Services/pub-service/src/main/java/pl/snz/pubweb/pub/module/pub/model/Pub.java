@@ -27,7 +27,7 @@ public class Pub extends IdentifiableEntity<Long> {
     @ManyToMany
     private Set<Tag> tags = new HashSet<>();
 
-    @OneToMany(mappedBy = "pub", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pub", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Set<Picture> pictures = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.MERGE)

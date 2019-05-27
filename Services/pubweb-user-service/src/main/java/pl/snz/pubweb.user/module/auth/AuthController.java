@@ -5,13 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import pl.snz.pubweb.commons.errors.exception.NotFoundException;
 import pl.snz.pubweb.commons.util.Mappers;
 import pl.snz.pubweb.user.module.auth.dto.CheckAuthResponse;
-import pl.snz.pubweb.user.module.role.Role;
 import pl.snz.pubweb.user.module.auth.dto.JwtAuthenticationResponse;
 import pl.snz.pubweb.user.module.auth.dto.LoginRequest;
+import pl.snz.pubweb.user.module.role.Role;
 import pl.snz.pubweb.user.module.user.UserRepository;
 import pl.snz.pubweb.user.module.user.model.User;
 import pl.snz.pubweb.user.security.JwtTokenProvider;
@@ -36,10 +37,12 @@ public class AuthController {
                         loginRequest.getPassword()
                 )
         );
+        final UserPrincipal principal = (UserPrincipal)authentication.getPrincipal();
         String jwt = jwtTokenProvider.generateToken(authentication);
         return JwtAuthenticationResponse.builder()
                 .accessToken(jwt)
-                .userId(((UserPrincipal)authentication.getPrincipal()).getId())
+                .userId(principal.getId())
+                .roles(Mappers.set(GrantedAuthority::getAuthority, principal.getAuthorities()))
                 .build();
     }
 

@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class IssueDto {
 
+    private Long id;
+
     private Long senderId;
 
     private String content;

@@ -9,6 +9,7 @@ public class IssueMapper {
 
     public IssueDto toDto(Issue issue) {
         return IssueDto.builder()
+                .id(issue.getId())
                 .content(issue.getContent())
                 .senderId(issue.getSender().getId())
                 .sent(issue.getSent())

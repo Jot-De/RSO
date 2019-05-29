@@ -10,6 +10,7 @@ import pl.snz.pubweb.review.module.history.dto.HistoryEntryBrief;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -30,6 +31,8 @@ public class ReviewDto {
 
     @Min(1) @Max(5)
     private int stars;
+
+    private LocalDate added;
 
     private List<HistoryEntryBrief> history;
 

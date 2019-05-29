@@ -12,6 +12,7 @@ import pl.snz.pubweb.commons.util.Just;
 import pl.snz.pubweb.commons.util.Mappers;
 import pl.snz.pubweb.review.module.history.ReviewHistoryMapper;
 import pl.snz.pubweb.review.module.history.dto.HistoryEntry;
+import pl.snz.pubweb.review.module.review.dto.GetPubAverageRatingResponse;
 import pl.snz.pubweb.review.module.review.dto.ReviewDto;
 import pl.snz.pubweb.review.module.review.dto.ReviewUpdateDto;
 import pl.snz.pubweb.review.module.review.model.Review;
@@ -38,6 +39,17 @@ public class ReviewController {
                                   @RequestParam(value = "user", required = false) Long userId,
                                   @RequestParam(value = "pub", required = false) Long pubId)  {
         return repo.search(userId, pubId, PageRequest.of(page, size)).map(mapper::toDto);
+    }
+
+    @GetMapping("top")
+    public Page<GetPubAverageRatingResponse> getTop(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                                        @RequestParam(value = "size", required = false, defaultValue = "20") Integer size) {
+        return repo.getTopAverageRatings(PageRequest.of(page, size)).map(mapper::toAverageResponse);
+    }
+
+    @GetMapping(path = "average")
+    public GetPubAverageRatingResponse getAverageForPub(@RequestParam(value = "pub") Long pubId) {
+        return mapper.toAverageResponse(repo.getAverageRatingForPub(pubId));
     }
 
     @GetMapping("{id}")

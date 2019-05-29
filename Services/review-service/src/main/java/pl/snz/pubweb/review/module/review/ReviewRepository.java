@@ -5,7 +5,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import pl.snz.pubweb.commons.data.JpaPredicates;
+import pl.snz.pubweb.review.module.review.model.AveragePubRating;
 import pl.snz.pubweb.review.module.review.model.Review;
 import pl.snz.pubweb.review.module.review.model.Review_;
 
@@ -25,4 +28,15 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, JpaSpecif
     }
 
     boolean existsByUserIdAndPubIdAndAddedAfter(Long userId, Long pubId, LocalDate addedAfter);
+
+    @Query("SELECT new pl.snz.pubweb.review.module.review.model.AveragePubRating(AVG(stars) as average, r.pubId as pubId, count(pubId) as ratingCount) from Review r where pubId =:pubId")
+    AveragePubRating getAverageRatingForPub(@Param("pubId") Long pubId);
+
+    @Query("SELECT new pl.snz.pubweb.review.module.review.model.AveragePubRating(AVG(stars) as average, r.pubId as pubId, count(pubId) as ratingCount)" +
+            " FROM Review r" +
+            " GROUP BY pubId" +
+            " ORDER BY AVG(stars) desc"
+    )
+    Page<AveragePubRating> getTopAverageRatings(Pageable p);
+
 }

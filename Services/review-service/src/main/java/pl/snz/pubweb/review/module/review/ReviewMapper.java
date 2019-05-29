@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.snz.pubweb.commons.util.Mappers;
 import pl.snz.pubweb.review.module.history.ReviewHistoryMapper;
+import pl.snz.pubweb.review.module.review.dto.GetPubAverageRatingResponse;
 import pl.snz.pubweb.review.module.review.dto.ReviewDto;
+import pl.snz.pubweb.review.module.review.model.AveragePubRating;
 import pl.snz.pubweb.review.module.review.model.Review;
 
 import java.time.LocalDate;
@@ -24,6 +26,7 @@ public class ReviewMapper {
                 .pubId(review.getPubId())
                 .stars(review.getStars())
                 .history(Mappers.list(review.getReviewHistory(), historyMapper::toBrief))
+                .added(review.getAdded())
                 .build();
     }
 
@@ -35,6 +38,14 @@ public class ReviewMapper {
         review.setPubId(dto.getPubId());
         review.setReviewText(dto.getDescription());
         return review;
+    }
+
+    public GetPubAverageRatingResponse toAverageResponse(AveragePubRating rating) {
+        return GetPubAverageRatingResponse.builder()
+                .average(rating.getAverage())
+                .pubId(rating.getPubId())
+                .ratingCount(rating.getRatingCount())
+                .build();
     }
 
 }

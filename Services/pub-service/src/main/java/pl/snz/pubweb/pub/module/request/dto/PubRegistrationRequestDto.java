@@ -9,6 +9,7 @@ import pl.snz.pubweb.pub.module.common.dto.AddressDto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 @Builder
@@ -24,5 +25,7 @@ public class PubRegistrationRequestDto {
 
     @NotBlank @Length(min = 5, max = 4000)
     private String description;
+
+    private List<Long> tags;
 
 }

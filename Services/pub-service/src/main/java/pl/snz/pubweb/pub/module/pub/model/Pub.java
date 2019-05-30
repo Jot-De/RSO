@@ -1,6 +1,9 @@
 package pl.snz.pubweb.pub.module.pub.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import pl.snz.pubweb.commons.data.IdentifiableEntity;
 import pl.snz.pubweb.pub.module.common.data.Address;
 import pl.snz.pubweb.pub.module.picture.model.Picture;
@@ -11,7 +14,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-
+@NoArgsConstructor @AllArgsConstructor @Builder
 @Data
 @Entity
 @Table(name = "pub")

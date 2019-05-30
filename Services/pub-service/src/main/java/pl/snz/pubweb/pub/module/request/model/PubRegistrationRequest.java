@@ -6,9 +6,12 @@ import pl.snz.pubweb.commons.data.IdentifiableEntity;
 import pl.snz.pubweb.pub.module.common.data.Address;
 import pl.snz.pubweb.pub.module.picture.model.Picture;
 import pl.snz.pubweb.pub.module.pub.model.Pub;
+import pl.snz.pubweb.pub.module.tag.model.Tag;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -45,5 +48,8 @@ public class PubRegistrationRequest extends IdentifiableEntity<Long> {
 
     @OneToOne(mappedBy = "request", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Picture picture;
+
+    @ManyToMany
+    private Set<Tag> tags = new HashSet<>();
 
 }

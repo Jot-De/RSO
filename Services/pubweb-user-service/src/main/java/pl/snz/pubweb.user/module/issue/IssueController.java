@@ -58,7 +58,7 @@ public class IssueController {
     }
 
     @AdminApi
-    @DeleteMapping("id")
+    @DeleteMapping("{id}")
     public ResponseEntity delete(@PathVariable Long id) {
         issueRepository.findById(id).ifPresent(issueRepository::delete);
         return ResponseEntity.ok().build();

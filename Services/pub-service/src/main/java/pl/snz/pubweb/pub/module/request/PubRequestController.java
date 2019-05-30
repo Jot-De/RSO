@@ -7,9 +7,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import pl.snz.pubweb.commons.errors.exception.BadRequestException;
 import pl.snz.pubweb.commons.errors.exception.NotFoundException;
 import pl.snz.pubweb.pub.module.picture.PictureMapper;
-import pl.snz.pubweb.pub.module.picture.PictureRepository;
 import pl.snz.pubweb.pub.module.picture.dto.PictureDto;
 import pl.snz.pubweb.pub.module.picture.dto.PictureDtoWithData;
 import pl.snz.pubweb.pub.module.picture.model.Picture;
@@ -40,7 +40,6 @@ public class PubRequestController {
     private final PubRegistrationRequestService service;
     private final RequestSecurityContextProvider requestSecurityContextProvider;
     private final PictureMapper pictureMapper;
-    private final PictureRepository pictureRepository;
 
     @GetMapping("/pending")
     public Page<PubRegistrationRequestInfo> getPending(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "20") int size, @RequestParam(required = false) Long userId) {
@@ -77,6 +76,9 @@ public class PubRequestController {
     @Transactional
     public PictureDto addPicture(@PathVariable Long requestId, @RequestBody @Valid PictureDtoWithData dto) {
         final PubRegistrationRequest request = repo.findOrThrow(requestId);
+        if(!requestSecurityContextProvider.getPrincipal().getId().equals(request.getUserId())) {
+            throw BadRequestException.general("add.picutre.not.user.context");
+        }
         final Picture picture = pictureMapper.toEntity(dto);
         if(request.getPicture() == null) {
             request.setPicture(picture);

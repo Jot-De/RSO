@@ -76,7 +76,6 @@ public class PubController {
 
     }
 
-
     @DeleteMapping("{pubId}")
     @AdminApi
     public ResponseEntity delete(@PathVariable Long pubId) {

@@ -3,6 +3,7 @@ package pl.snz.pubweb.user.module.user;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,10 +69,11 @@ public class UserController implements AvatarManagement {
     }
 
     @GetMapping
-    public List<GetUserResponse> getUsers(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "20") int size) {
-        return userRepository.findAll(PageRequest.of(page, size)).stream()
-                .map(userPresentationService::toGetUserResponse)
-                .collect(Collectors.toList());
+    public Page<GetUserResponse> getUsers(@RequestParam(name = "page", defaultValue = "0") int page,
+                                          @RequestParam(name = "size", defaultValue = "20") int size,
+                                          @RequestParam(name = "name", required = false) String name) {
+        return userRepository.search(name, PageRequest.of(page, size))
+                .map(userPresentationService::toGetUserResponse);
     }
 
     @AdminApi

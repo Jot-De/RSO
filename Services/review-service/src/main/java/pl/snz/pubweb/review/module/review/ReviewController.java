@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.snz.pubweb.commons.errors.exception.NotFoundException;
@@ -16,9 +17,11 @@ import pl.snz.pubweb.review.module.review.dto.GetPubAverageRatingResponse;
 import pl.snz.pubweb.review.module.review.dto.ReviewDto;
 import pl.snz.pubweb.review.module.review.dto.ReviewUpdateDto;
 import pl.snz.pubweb.review.module.review.model.Review;
+import pl.snz.pubweb.review.module.review.model.Review_;
 import pl.snz.pubweb.security.SecurityService;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -37,13 +40,15 @@ public class ReviewController {
     public Page<ReviewDto> search(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
                                   @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
                                   @RequestParam(value = "user", required = false) Long userId,
-                                  @RequestParam(value = "pub", required = false) Long pubId)  {
-        return repo.search(userId, pubId, PageRequest.of(page, size)).map(mapper::toDto);
+                                  @RequestParam(value = "pub", required = false) Long pubId,
+                                  @RequestParam(value = "dateFrom", required = false) LocalDate dateFrom,
+                                  @RequestParam(value = "dateTo", required = false) LocalDate dateTo) {
+        return repo.search(userId, pubId, dateFrom, dateTo, PageRequest.of(page, size, Sort.by(Review_.ADDED).descending())).map(mapper::toDto);
     }
 
     @GetMapping("top")
     public Page<GetPubAverageRatingResponse> getTop(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-                                                        @RequestParam(value = "size", required = false, defaultValue = "20") Integer size) {
+                                                    @RequestParam(value = "size", required = false, defaultValue = "20") Integer size) {
         return repo.getTopAverageRatings(PageRequest.of(page, size)).map(mapper::toAverageResponse);
     }
 

@@ -10,6 +10,7 @@ import pl.snz.pubweb.pub.module.request.dto.PubRegistrationRequestDto;
 import pl.snz.pubweb.pub.module.request.dto.PubRegistrationRequestInfo;
 import pl.snz.pubweb.pub.module.request.model.PubRegistrationRequest;
 import pl.snz.pubweb.pub.module.request.model.PubRegistrationStatus;
+import pl.snz.pubweb.pub.module.tag.TagMapper;
 import pl.snz.pubweb.pub.module.tag.TagRepository;
 
 import java.time.LocalDate;
@@ -21,6 +22,7 @@ public class PubRegistrationRequestMapper {
 
     private final AddressMapper addressMapper;
     private final TagRepository tagRepository;
+    private final TagMapper tagMapper;
 
     public PubRegistrationRequestInfo toDto(PubRegistrationRequest request) {
         return PubRegistrationRequestInfo.builder()
@@ -32,6 +34,7 @@ public class PubRegistrationRequestMapper {
                 .name(request.getName())
                 .status(request.getStatus())
                 .pubId(Nulls.npeToNull((r) -> r.getPub().getId(), request))
+                .tags(Mappers.list(request.getTags(), tagMapper::toDto))
                 .build();
     }
 

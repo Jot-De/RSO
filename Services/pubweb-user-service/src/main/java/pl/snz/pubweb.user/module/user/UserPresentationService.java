@@ -8,7 +8,7 @@ import pl.snz.pubweb.user.module.permission_acceptance.dto.AcceptedPermission;
 import pl.snz.pubweb.user.module.role.Role;
 import pl.snz.pubweb.user.module.common.DisplayLevelAwareBuilder;
 import pl.snz.pubweb.user.module.common.web.CurrentRequestUriProvider;
-import pl.snz.pubweb.user.module.permission.PermissionPresentationService;
+import pl.snz.pubweb.user.module.permission.service.PermissionPresentationService;
 import pl.snz.pubweb.user.module.user.dto.GetUserResponse;
 import pl.snz.pubweb.user.module.user.dto.RegistrationResponse;
 import pl.snz.pubweb.user.module.user.dto.UDisplaySettings;

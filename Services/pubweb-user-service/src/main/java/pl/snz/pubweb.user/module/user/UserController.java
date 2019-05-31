@@ -7,17 +7,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.snz.pubweb.commons.dto.Base64PictureDto;
 import pl.snz.pubweb.commons.errors.exception.BadRequestException;
 import pl.snz.pubweb.commons.errors.exception.NotFoundException;
+import pl.snz.pubweb.user.container.aop.RequiresPermission;
 import pl.snz.pubweb.user.module.avatar.Avatar;
 import pl.snz.pubweb.user.module.avatar.AvatarManagement;
 import pl.snz.pubweb.user.module.avatar.AvatarService;
 import pl.snz.pubweb.user.module.friend.FriendService;
 import pl.snz.pubweb.user.module.friend.FriendshipPresentationService;
 import pl.snz.pubweb.user.module.friend.model.FriendshipInfo;
+import pl.snz.pubweb.user.module.permission.PermissionKeys;
 import pl.snz.pubweb.user.module.user.dto.*;
 import pl.snz.pubweb.user.module.user.model.User;
 import pl.snz.pubweb.user.security.AdminApi;
@@ -83,7 +86,9 @@ public class UserController implements AvatarManagement {
             return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Transactional
     @PutMapping("{id}/personalInformation")
+    @RequiresPermission(permissionKeys = PermissionKeys.INFORMATION_PROCESSING)
     public GetUserResponse addUserPersonalInformation(@PathVariable Long id, @RequestBody @Valid UserPersonalInfoDto userPersonalInfoDto) {
         securityService.requireSelf(id);
         final User user = userRepository.findById(id).orElseThrow(NotFoundException.userById(id));
@@ -94,6 +99,7 @@ public class UserController implements AvatarManagement {
         return userPresentationService.toGetUserResponse(userRepository.save(user));
     }
 
+    @Transactional
     @PutMapping("{id}/displaySettings")
     public GetUserResponse updateDisplaySettings(@PathVariable Long id, @RequestBody @Valid UDisplaySettings uDisplaySettings) {
         securityService.requireSelf(id);

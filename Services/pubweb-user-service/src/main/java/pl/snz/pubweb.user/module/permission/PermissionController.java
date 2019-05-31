@@ -9,6 +9,8 @@ import pl.snz.pubweb.commons.errors.exception.NotFoundException;
 import pl.snz.pubweb.commons.util.Mappers;
 import pl.snz.pubweb.user.module.permission.dto.PermissionSummary;
 import pl.snz.pubweb.user.module.permission.model.Permission;
+import pl.snz.pubweb.user.module.permission.service.PermissionPresentationService;
+import pl.snz.pubweb.user.module.permission.service.PermissionRevocationHandler;
 import pl.snz.pubweb.user.module.permission_acceptance.dto.AcceptedPermission;
 import pl.snz.pubweb.user.module.permission_acceptance.PermissionAcceptanceRepository;
 import pl.snz.pubweb.user.module.permission_acceptance.UserPermissionAcceptance;
@@ -30,6 +32,7 @@ public class PermissionController {
     private final PermissionPresentationService permissionPresentationService;
     private final RequestSecurityContextProvider requestSecurityContextProvider;
     private final UserRepository userRepository;
+    private final PermissionRevocationHandler permissionRevocationHandler;
 
     @GetMapping
     public Page<PermissionSummary> getAll(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = "20") int size) {
@@ -46,6 +49,7 @@ public class PermissionController {
     @GetMapping("/accepted")
     public List<AcceptedPermission> getAccepted() {
         final Long userId = requestSecurityContextProvider.getPrincipal().getId();
+
         return Mappers.list(permissionPresentationService::acceptedPermission).apply(permissionAcceptanceRepository.findByUser(userId));
     }
 
@@ -59,6 +63,7 @@ public class PermissionController {
             User user = userRepository.findById(userId).orElseThrow(NotFoundException.userById(userId));
             permissionAcceptanceRepository.save(new UserPermissionAcceptance(user, perm, LocalDate.now().plusYears(10)));
         }
+
         return Mappers.list(permissionPresentationService::acceptedPermission).apply(permissionAcceptanceRepository.findByUser(userId));
 
     }
@@ -66,7 +71,13 @@ public class PermissionController {
     @PostMapping("{id}/revoke")
     public List<AcceptedPermission> revokePermission(@PathVariable Long id) {
         final Long userId = requestSecurityContextProvider.getPrincipal().getId();
-        permissionAcceptanceRepository.findByUserAndPerm(userId, id).ifPresent(permissionAcceptanceRepository::delete);
+        final Optional<UserPermissionAcceptance> opt = permissionAcceptanceRepository.findByUserAndPerm(userId, id);
+        if(opt.isPresent()) {
+            final UserPermissionAcceptance userPermissionAcceptance = opt.get();
+            permissionRevocationHandler.handleRevoke(userPermissionAcceptance);
+            permissionAcceptanceRepository.delete(userPermissionAcceptance);
+        }
+
         return Mappers.list(permissionPresentationService::acceptedPermission).apply(permissionAcceptanceRepository.findByUser(userId));
     }
 }

@@ -1,4 +1,4 @@
-package pl.snz.pubweb.user.module.permission;
+package pl.snz.pubweb.user.module.permission.service;
 
 import org.springframework.stereotype.Service;
 import pl.snz.pubweb.user.module.permission.dto.PermissionSummary;

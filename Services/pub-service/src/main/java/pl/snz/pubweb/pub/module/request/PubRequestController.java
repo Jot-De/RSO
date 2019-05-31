@@ -56,6 +56,12 @@ public class PubRequestController {
         return searchWithSpec(page, size, userId, specs.rejected());
     }
 
+    @GetMapping("{id}")
+    public PubRegistrationRequestInfo getOne(@PathVariable Long id) {
+        return repo.findById(id).map(mapper::toDto)
+                .orElseThrow(NotFoundException.ofMessage("request.not.found", "id", id));
+    }
+
     private Page<PubRegistrationRequestInfo> searchWithSpec(int page, int size, Long userId, Specification<PubRegistrationRequest> spec) {
         if(userId != null)
             spec = spec.and(specs.forUser(userId));

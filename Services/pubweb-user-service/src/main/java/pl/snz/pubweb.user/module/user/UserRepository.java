@@ -18,7 +18,7 @@ public interface UserRepository extends JpaRepository<User,Long>, JpaSpecificati
     boolean existsByLogin(String login);
     boolean existsByDisplayName(String displayName);
     default Page<User> search(@Nullable String name, Pageable p) {
-        Specification<User> spec = (r,q,cb) -> name == null ? JpaPredicates.truth(cb) : cb.equal(r.get(User_.displayName), name);
+        Specification<User> spec = (r,q,cb) -> name == null ? JpaPredicates.truth(cb) : cb.like(r.get(User_.displayName), "%" + name + "%");
         return this.findAll(spec, p);
     }
 }

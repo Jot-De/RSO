@@ -1,12 +1,15 @@
 package pl.snz.pubweb.pub.module.common.data;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import pl.snz.pubweb.commons.data.IdentifiableEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+@NoArgsConstructor @AllArgsConstructor
 @Data
 @Table(name = "address")
 @Entity

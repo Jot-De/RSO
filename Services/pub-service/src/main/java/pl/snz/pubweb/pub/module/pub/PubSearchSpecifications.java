@@ -14,14 +14,16 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.SetJoin;
 import java.util.List;
 
+import static pl.snz.pubweb.commons.data.JpaPredicates.likeIgnoreCase;
+
 @Component
 public class PubSearchSpecifications {
 
     public Specification<Pub> getSearchSpec(@Nullable String name, @Nullable String city, @Nullable List<Long> tags) {
         return (r,q,cb) -> {
           Predicate result = JpaPredicates.truth(cb);
-          result = name == null ? result : cb.and(cb.like(cb.upper(r.get(Pub_.name)), "%" + name.toUpperCase() + "%" ));
-          result = city == null ? result : cb.and(cb.equal(r.get(Pub_.address).get(Address_.city), city));
+          result = name == null ? result : cb.and(likeIgnoreCase(cb, r.get(Pub_.name), name));
+          result = city == null ? result : cb.and(likeIgnoreCase(cb, r.get(Pub_.address).get(Address_.city), city));
 
           if(tags != null && !tags.isEmpty()) {
               final SetJoin<Pub, Tag> tagJoin = r.join(Pub_.tags);
@@ -30,6 +32,5 @@ public class PubSearchSpecifications {
           return result;
         };
     }
-
 
 }

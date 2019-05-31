@@ -31,7 +31,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, JpaSpecif
 
     boolean existsByUserIdAndPubIdAndAddedAfter(Long userId, Long pubId, LocalDate addedAfter);
 
-    @Query("SELECT new pl.snz.pubweb.review.module.review.model.AveragePubRating(AVG(stars) as average, r.pubId as pubId, count(pubId) as ratingCount) from Review r where pubId =:pubId")
+    @Query("SELECT new pl.snz.pubweb.review.module.review.model.AveragePubRating(AVG(stars) as average, r.pubId as pubId, count(pubId) as ratingCount) from Review r where pubId =:pubId group by pubId")
     AveragePubRating getAverageRatingForPub(@Param("pubId") Long pubId);
 
     @Query("SELECT new pl.snz.pubweb.review.module.review.model.AveragePubRating(AVG(stars) as average, r.pubId as pubId, count(pubId) as ratingCount)" +

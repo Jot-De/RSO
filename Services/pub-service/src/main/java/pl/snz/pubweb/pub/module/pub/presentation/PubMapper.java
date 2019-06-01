@@ -8,6 +8,7 @@ import pl.snz.pubweb.pub.module.common.PresentationUris;
 import pl.snz.pubweb.pub.module.picture.model.Picture;
 import pl.snz.pubweb.pub.module.picture.dto.PictureDto;
 import pl.snz.pubweb.pub.module.common.mapper.AddressMapper;
+import pl.snz.pubweb.pub.module.pub.dto.PubBriefDto;
 import pl.snz.pubweb.pub.module.pub.dto.PubDto;
 import pl.snz.pubweb.pub.module.pub.model.Pub;
 import pl.snz.pubweb.pub.module.tag.TagMapper;
@@ -29,6 +30,14 @@ public class PubMapper {
                 .tags(Mappers.list(pub.getTags(), tagMapper::toDto))
                 .pictures(Mappers.list(pub.getPictures(), this::map))
                 .added(pub.getAdded())
+                .build();
+    }
+
+    public PubBriefDto toBrief(Pub pub) {
+        return PubBriefDto.builder()
+                .id(pub.getId())
+                .name(pub.getName())
+                .address(addressMapper.toDto(pub.getAddress()))
                 .build();
     }
 

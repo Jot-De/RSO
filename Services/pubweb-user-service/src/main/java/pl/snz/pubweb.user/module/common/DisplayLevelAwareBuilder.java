@@ -17,7 +17,7 @@ public class DisplayLevelAwareBuilder<T,R> {
     private final T mappedObject;
     private final R response;
 
-    public static <T,R> DisplayLevelAwareBuilder<T,R> of(DisplayLevel provided, T mappedObject, Supplier<R> supplier ) {
+    public static <T,R> DisplayLevelAwareBuilder<T,R> of(DisplayLevel provided, T mappedObject, Supplier<R> supplier) {
         return new DisplayLevelAwareBuilder<>(provided, mappedObject, supplier.get());
     }
 

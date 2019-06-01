@@ -15,11 +15,4 @@ import spock.lang.Specification
 @ContextConfiguration(classes = [PubwebUserServiceApplication.class, JacksonConfig.class, JpaConfig.class])
 @ActiveProfiles("it")
 @TestPropertySource("classpath:local.properties")
-class UserServiceIntegrationTest extends Specification {
-
-    def 'Context loads'() {
-        expect:
-        true
-    }
-
-}
+class UserServiceIntegrationTest extends Specification {}

@@ -23,7 +23,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, JpaSpecif
             result = userId == null ? result : cb.and(result, cb.equal(r.get(Review_.userId), userId));
             result = pubId == null ? result : cb.and(result, cb.equal(r.get(Review_.pubId), pubId));
             result = from == null ? result : cb.and(result, cb.greaterThanOrEqualTo(r.get(Review_.added), from));
-            result = to == null ? result : cb.and(result, cb.lessThan(r.get(Review_.added), to.plusDays(1))); ///TODO strange workaround for jpa error
+            result = to == null ? result : cb.and(result, cb.lessThan(r.get(Review_.added), to));
             return result;
         };
         return this.findAll(spec,p);

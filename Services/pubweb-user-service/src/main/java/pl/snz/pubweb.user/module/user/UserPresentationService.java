@@ -39,7 +39,7 @@ public class UserPresentationService {
     }
 
     public GetUserResponse toGetUserResponse(User user) {
-        DisplayLevel provided = getDisplayLevelForRequest(user);
+        DisplayLevel provided = determineRequestIssuerDisplayLevel(user);
 
         return DisplayLevelAwareBuilder.of(provided, user, GetUserResponse::new)
                 .set(DisplayLevel.ALL, User::getId, GetUserResponse::setId)
@@ -65,7 +65,7 @@ public class UserPresentationService {
                 .build();
     }
 
-    private DisplayLevel getDisplayLevelForRequest(User requestedUserData) {
+    private DisplayLevel determineRequestIssuerDisplayLevel(User requestedUserData) {
         final long requestedUserId = requestedUserData.getId();
         final long principalId = requestSecurityContextProvider.getPrincipal().getId();
         if(requestedUserId == principalId)

@@ -16,6 +16,8 @@ public class RequestSecurityContextProvider {
                 .orElseThrow(() -> new RuntimeException("unexpected.security.error"));
     }
 
+
+
     public long principalId() {
         return getPrincipal().getId();
     }

@@ -9,6 +9,8 @@ import pl.snz.pubweb.user.module.user.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 @Entity
@@ -24,4 +26,14 @@ public class Issue extends IdentifiableEntity<Long> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id", nullable = false)
     private User sender;
+
+    @Column
+    private String solutionComment;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private IssueStatus status;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "issue", cascade = CascadeType.ALL)
+    private Set<Comment> comments = new HashSet<>();
 }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +15,14 @@ import pl.snz.pubweb.pub.module.picture.PictureMapper;
 import pl.snz.pubweb.pub.module.picture.dto.PictureDtoWithData;
 import pl.snz.pubweb.pub.module.pub.dto.PubDto;
 import pl.snz.pubweb.pub.module.pub.model.Pub;
+import pl.snz.pubweb.pub.module.pub.model.Pub_;
 import pl.snz.pubweb.pub.module.pub.presentation.PubMapper;
 import pl.snz.pubweb.pub.module.tag.TagMapper;
 import pl.snz.pubweb.pub.module.tag.TagRepository;
 import pl.snz.pubweb.pub.module.tag.dto.TagDto;
 import pl.snz.pubweb.security.annotations.AdminApi;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,10 +46,13 @@ public class PubController {
                                @RequestParam(required = false, defaultValue = "20") int size,
                                @RequestParam(required = false) String name,
                                @RequestParam(required = false) String city,
+                               @RequestParam(required = false) LocalDate addedAfter,
+                               @RequestParam(required = false) LocalDate addedBefore,
                                @RequestParam(required = false) List<Long> tags) {
-        Specification<Pub> searchSpec = pubSearchSpecifications.getSearchSpec(name, city, tags);
+        Specification<Pub> searchSpec = pubSearchSpecifications.getSearchSpec(name, city, addedAfter, addedBefore, tags);
 
-        return pubRepository.findAll(searchSpec, PageRequest.of(page, size)).map(pubMapper::toGetResponse);
+        return pubRepository.findAll(searchSpec, PageRequest.of(page, size, Sort.by(Pub_.ADDED).descending()))
+                .map(pubMapper::toGetResponse);
     }
 
     @GetMapping("{pubId}")

@@ -50,8 +50,10 @@ public class VisitController {
     @PostMapping("/visited")
     public VisitedPubDto markVisited(@RequestParam(required = true) Long pubId) {
         final Long userId = requestSecurityContextProvider.getPrincipal().getId();
-        checkNotAddedYet(pubId, userId);
-        Visit visit = buildVisit(userId, pubId, LocalDate.now(), VisitStatus.VISITED);
+        final Optional<Visit> opt = repo.findByUserIdAndPubId(userId, pubId);
+
+        Visit visit = opt.isPresent() ? opt.get() : buildVisit(userId, pubId, LocalDate.now(), null);
+        visit.setVisitStatus(VisitStatus.VISITED);
 
         return Just.of(visit).map(repo::save).map(mapper::toVisitedDto).val();
     }
@@ -77,7 +79,8 @@ public class VisitController {
     }
 
     private void checkNotAddedYet(@RequestParam(required = true) Long pubId, Long userId) {
-        if(repo.findByUserIdAndPubId(userId, pubId).isPresent()) {
+        final Optional<Visit> opt = repo.findByUserIdAndPubId(userId, pubId);
+        if(opt.isPresent()) {
             throw BadRequestException.general("pub.already.on.with.list.or.visited");
         }
     }

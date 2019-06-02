@@ -15,4 +15,8 @@ public class SecurityService {
         if(!contextProvider.getPrincipal().getId().equals(requesterId))
             throw AuthorizationException.ownContextRequired();
     }
+
+    public void requireSelfOrAdmin(Long requesterId) {
+
+    }
 }

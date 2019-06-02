@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import pl.snz.pubweb.user.module.role.Role;
+import pl.snz.pubweb.user.module.role.Roles;
 import pl.snz.pubweb.user.module.user.model.User;
 import pl.snz.pubweb.user.module.permission_acceptance.UserPermissionAcceptance;
 
@@ -77,6 +78,10 @@ public class UserPrincipal implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public boolean isAdmin() {
+        return authorities.stream().map(GrantedAuthority::getAuthority).anyMatch(s -> s.equals(Roles.ADMIN));
     }
 
     @Override

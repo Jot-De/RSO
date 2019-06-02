@@ -4,19 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.snz.pubweb.user.module.issue.model.IssueStatus;
 
 import java.time.LocalDateTime;
 
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class IssueDto {
-
+@NoArgsConstructor @AllArgsConstructor
+public class CommentDto {
     private Long id;
-    private Long senderId;
     private String content;
-    private LocalDateTime sent;
-    private IssueStatus status;
+    private LocalDateTime added;
+    private Long authorId;
+    private Long issueId;
 }

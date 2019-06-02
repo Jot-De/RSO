@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Length;
 import pl.snz.pubweb.user.validation.login.Login;
 import pl.snz.pubweb.user.validation.password.Password;
 
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
@@ -18,10 +19,16 @@ public class SignUpRequest {
     @NotNull @Length(min = 4, max = 25) @Login
     private String login;
 
+    @NotNull
+    private Boolean rulesAcceptance;
+    @NotNull
+    private Boolean profilingAcceptance;
+    @NotNull
+    private Boolean informationProcessingAcceptance;
+    @NotNull @AssertTrue(message = "age.confirmation.required")
+    private Boolean ageConfirmation;
 
-   /* private boolean zgoda1Acceptance;
-    private boolean zgoda2Acceptance; TODO */
-
+    @NotNull
     @Email
     private String email;
 

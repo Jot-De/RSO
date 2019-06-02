@@ -1,4 +1,4 @@
-package pl.snz.pubweb.user.module.issue;
+package pl.snz.pubweb.user.module.issue.mapper;
 
 import org.springframework.stereotype.Service;
 import pl.snz.pubweb.user.module.issue.dto.IssueDto;

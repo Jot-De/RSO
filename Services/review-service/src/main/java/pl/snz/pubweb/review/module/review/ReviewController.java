@@ -23,6 +23,7 @@ import pl.snz.pubweb.security.SecurityService;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("review")
@@ -54,7 +55,7 @@ public class ReviewController {
 
     @GetMapping(path = "average")
     public GetPubAverageRatingResponse getAverageForPub(@RequestParam(value = "pub") Long pubId) {
-        return mapper.toAverageResponse(repo.getAverageRatingForPub(pubId));
+        return Optional.ofNullable(repo.getAverageRatingForPub(pubId)).map(mapper::toAverageResponse).orElseGet(() -> GetPubAverageRatingResponse.noResult(pubId));
     }
 
     @GetMapping("{id}")

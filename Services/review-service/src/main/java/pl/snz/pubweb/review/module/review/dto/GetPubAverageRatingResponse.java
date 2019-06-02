@@ -12,4 +12,7 @@ public class GetPubAverageRatingResponse {
     private Double average;
     private Long pubId;
     private Long ratingCount;
+
+    public static GetPubAverageRatingResponse noResult(Long pubId) {return new GetPubAverageRatingResponse(0d, pubId, 0l); }
+
 }

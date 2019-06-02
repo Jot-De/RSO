@@ -41,6 +41,7 @@ public class ReviewMapper {
     }
 
     public GetPubAverageRatingResponse toAverageResponse(AveragePubRating rating) {
+
         return GetPubAverageRatingResponse.builder()
                 .average(rating.getAverage())
                 .pubId(rating.getPubId())

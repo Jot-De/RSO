@@ -14,8 +14,10 @@ public class TagSearchSpecs {
 
     public Specification<Tag> searchSpec(@Nullable String name) {
         return (r,q,cb) -> {
-            final Predicate result = JpaPredicates.truth(cb);
-            return name == null ? result : cb.and(result, cb.like(r.get(Tag_.name), name));
+            Predicate result = JpaPredicates.truth(cb);
+            result = name == null ? result : cb.and(result, cb.like(r.get(Tag_.name), name));
+
+            return result;
         };
     }
 }

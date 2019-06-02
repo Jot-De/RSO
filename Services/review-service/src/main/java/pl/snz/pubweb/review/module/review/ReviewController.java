@@ -80,7 +80,7 @@ public class ReviewController {
     @DeleteMapping
     public ResponseEntity delete(@PathVariable Long id) {
         final Review review = repo.findById(id).orElseThrow(NotFoundException.ofMessage("review.not.found", "id", id));
-        securityService.requireSelf(review.getUserId());
+        securityService.requireSelfOrAdmin(review.getUserId());
         repo.delete(review);
         return ResponseEntity.ok().build();
     }

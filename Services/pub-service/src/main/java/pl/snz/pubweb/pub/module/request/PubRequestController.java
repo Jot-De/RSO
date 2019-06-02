@@ -78,7 +78,7 @@ public class PubRequestController {
         return Optional.of(entity).map(repo::save).map(mapper::toDto).get();
     }
 
-    @PutMapping("{requestId}/picture/")
+    @PutMapping("{requestId}/picture")
     @Transactional
     public PictureDto addPicture(@PathVariable Long requestId, @RequestBody @Valid PictureDtoWithData dto) {
         final PubRegistrationRequest request = repo.findOrThrow(requestId);

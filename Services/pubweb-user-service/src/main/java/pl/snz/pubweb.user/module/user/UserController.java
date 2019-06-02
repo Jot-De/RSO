@@ -26,7 +26,6 @@ import pl.snz.pubweb.user.module.permission.model.Permission;
 import pl.snz.pubweb.user.module.permission_acceptance.UserPermissionAcceptance;
 import pl.snz.pubweb.user.module.user.dto.*;
 import pl.snz.pubweb.user.module.user.model.User;
-import pl.snz.pubweb.user.security.AdminApi;
 import pl.snz.pubweb.user.security.SecurityService;
 
 import javax.validation.Valid;
@@ -54,22 +53,22 @@ public class UserController implements AvatarManagement {
 
     @PostMapping
     public ResponseEntity<RegistrationResponse> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
-        if(userRepository.existsByLogin(signUpRequest.getLogin()))
+        if (userRepository.existsByLogin(signUpRequest.getLogin()))
             throw BadRequestException.field("login", "login.in.use");
-        if(userRepository.existsByEmail(signUpRequest.getEmail()))
+        if (userRepository.existsByEmail(signUpRequest.getEmail()))
             throw BadRequestException.field("email", "email.in.use");
-        if(userRepository.existsByDisplayName(signUpRequest.getDisplayName()))
+        if (userRepository.existsByDisplayName(signUpRequest.getDisplayName()))
             throw BadRequestException.field("displayName", "display.name.in.use");
 
         User user = userMapper.fromSignUpRequest(signUpRequest);
         user = userRepository.save(user);
 
-        if(signUpRequest.getInformationProcessingAcceptance()) {
+        if (signUpRequest.getInformationProcessingAcceptance()) {
             final Permission perm = permissionRepository.findByKeyOrThrow(PermissionKeys.INFORMATION_PROCESSING);
             user.getAcceptedPermissions().add(new UserPermissionAcceptance(user, perm, LocalDate.now().plusYears(10)));
         }
 
-        if(signUpRequest.getProfilingAcceptance()) {
+        if (signUpRequest.getProfilingAcceptance()) {
             final Permission perm = permissionRepository.findByKeyOrThrow(PermissionKeys.PROFILING_ACCEPTANCE);
             user.getAcceptedPermissions().add(new UserPermissionAcceptance(user, perm, LocalDate.now().plusYears(10)));
         }
@@ -96,11 +95,11 @@ public class UserController implements AvatarManagement {
                 .map(userPresentationService::toGetUserResponse);
     }
 
-    @AdminApi
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteUser(@PathVariable @NonNull Long id) {
-            userRepository.findById(id).ifPresent(userRepository::delete);
-            return new ResponseEntity<>(HttpStatus.OK);
+        securityService.requireSelfOdAdmin(id);
+        userRepository.findById(id).ifPresent(userRepository::delete);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Transactional

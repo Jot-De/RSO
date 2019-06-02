@@ -21,6 +21,9 @@ import pl.snz.pubweb.user.module.friend.FriendService;
 import pl.snz.pubweb.user.module.friend.FriendshipPresentationService;
 import pl.snz.pubweb.user.module.friend.model.FriendshipInfo;
 import pl.snz.pubweb.user.module.permission.PermissionKeys;
+import pl.snz.pubweb.user.module.permission.PermissionRepository;
+import pl.snz.pubweb.user.module.permission.model.Permission;
+import pl.snz.pubweb.user.module.permission_acceptance.UserPermissionAcceptance;
 import pl.snz.pubweb.user.module.user.dto.*;
 import pl.snz.pubweb.user.module.user.model.User;
 import pl.snz.pubweb.user.security.AdminApi;
@@ -29,6 +32,7 @@ import pl.snz.pubweb.user.security.SecurityService;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +50,7 @@ public class UserController implements AvatarManagement {
     private final FriendService friendshipService;
     private final FriendshipPresentationService friendshipPresentationService;
     private final AvatarService avatarService;
+    private final PermissionRepository permissionRepository;
 
     @PostMapping
     public ResponseEntity<RegistrationResponse> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
@@ -57,6 +62,18 @@ public class UserController implements AvatarManagement {
             throw BadRequestException.field("displayName", "display.name.in.use");
 
         User user = userMapper.fromSignUpRequest(signUpRequest);
+        user = userRepository.save(user);
+
+        if(signUpRequest.getInformationProcessingAcceptance()) {
+            final Permission perm = permissionRepository.findByKeyOrThrow(PermissionKeys.INFORMATION_PROCESSING);
+            user.getAcceptedPermissions().add(new UserPermissionAcceptance(user, perm, LocalDate.now().plusYears(10)));
+        }
+
+        if(signUpRequest.getProfilingAcceptance()) {
+            final Permission perm = permissionRepository.findByKeyOrThrow(PermissionKeys.PROFILING_ACCEPTANCE);
+            user.getAcceptedPermissions().add(new UserPermissionAcceptance(user, perm, LocalDate.now().plusYears(10)));
+        }
+
         user = userRepository.save(user);
 
         URI location = ServletUriComponentsBuilder

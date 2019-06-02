@@ -6,8 +6,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.snz.pubweb.user.module.user.dto.SignUpRequest;
 import pl.snz.pubweb.user.module.user.model.User;
-import pl.snz.pubweb.user.module.user.model.UserPersonalInformation;
 import pl.snz.pubweb.user.module.user.model.UserDisplaySettings;
+import pl.snz.pubweb.user.module.user.model.UserPersonalInformation;
+
+import java.util.HashSet;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -22,6 +24,7 @@ public class UserMapper {
                 .email(signUpRequest.getEmail())
                 .userDisplaySettings(UserDisplaySettings.allPrivate())
                 .userPersonalInformation(UserPersonalInformation.none())
+                .acceptedPermissions(new HashSet<>())
                 .build();
     }
 

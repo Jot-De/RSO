@@ -27,10 +27,10 @@ public class PubSearchSpecifications {
                                             @Nullable List<Long> tags) {
         return (r,q,cb) -> {
           Predicate result = JpaPredicates.truth(cb);
-          result = name == null ? result : cb.and(likeIgnoreCase(cb, r.get(Pub_.name), name));
-          result = city == null ? result : cb.and(likeIgnoreCase(cb, r.get(Pub_.address).get(Address_.city), city));
-          result = addedAfter == null ? result : cb.and(cb.greaterThanOrEqualTo(r.get(Pub_.added), addedAfter));
-          result = addedBefore == null ? result : cb.and(cb.lessThanOrEqualTo(r.get(Pub_.added), addedBefore));
+          result = name == null ? result : cb.and(result, likeIgnoreCase(cb, r.get(Pub_.name), name));
+          result = city == null ? result : cb.and(result, likeIgnoreCase(cb, r.get(Pub_.address).get(Address_.city), city));
+          result = addedAfter == null ? result : cb.and(result, cb.greaterThanOrEqualTo(r.get(Pub_.added), addedAfter));
+          result = addedBefore == null ? result : cb.and(result, cb.lessThanOrEqualTo(r.get(Pub_.added), addedBefore));
 
           if(tags != null && !tags.isEmpty()) {
               final SetJoin<Pub, Tag> tagJoin = r.join(Pub_.tags);

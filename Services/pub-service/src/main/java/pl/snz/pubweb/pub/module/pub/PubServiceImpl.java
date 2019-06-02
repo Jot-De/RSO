@@ -23,7 +23,7 @@ public class PubServiceImpl implements PubService {
         pub.setName(request.getName());
         pub.setDescription(request.getDescription());
         Optional.ofNullable(request.getPicture()).ifPresent(pub.getPictures()::add);
-        pub.setTags(request.getTags());
+        pub.getTags().addAll(request.getTags());
         return repository.save(pub);
     }
 

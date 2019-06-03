@@ -22,7 +22,7 @@ public class PubRegistrationRequest extends IdentifiableEntity<Long> {
     @Column
     private Long userId;
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "address_id")
     private Address address;
 

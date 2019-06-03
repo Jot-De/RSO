@@ -20,6 +20,7 @@ import pl.snz.pubweb.pub.module.request.dto.PubRegistrationRequestDto;
 import pl.snz.pubweb.pub.module.request.dto.PubRegistrationRequestInfo;
 import pl.snz.pubweb.pub.module.request.mapper.PubRegistrationRequestMapper;
 import pl.snz.pubweb.pub.module.request.model.PubRegistrationRequest;
+import pl.snz.pubweb.pub.module.request.model.PubRegistrationStatus;
 import pl.snz.pubweb.pub.module.request.validation.OpenRegistrationRequestsLimitValidator;
 import pl.snz.pubweb.security.RequestSecurityContextProvider;
 import pl.snz.pubweb.security.annotations.AdminApi;
@@ -69,8 +70,8 @@ public class PubRequestController {
         return repo.findAll(spec, PageRequest.of(page, size)).map(mapper::toDto);
     }
 
-    @Transactional
     @PostMapping
+    @Transactional
     public PubRegistrationRequestInfo add(@RequestBody @Valid PubRegistrationRequestDto request) {
         validator.validate(requestSecurityContextProvider.getPrincipal().getId(), request);
         final PubRegistrationRequest entity = mapper.toEntity(request, requestSecurityContextProvider.getPrincipal().getId());
@@ -101,7 +102,7 @@ public class PubRequestController {
     }
 
     @AdminApi
-    @GetMapping("picture/{requestId}")
+    @GetMapping("{requestId}/picture")
     public PictureDtoWithData getPicture(@PathVariable  Long requestId) {
         final PubRegistrationRequest request = repo.findOrThrow(requestId);
 
@@ -115,6 +116,11 @@ public class PubRequestController {
     @AdminApi
     public PubRegistrationRequestAcceptanceResponse accept(@PathVariable Long requestId) {
         final PubRegistrationRequest request = repo.findOrThrow(requestId);
+        if(!request.getStatus().equals(PubRegistrationStatus.REGISTERED)) {
+            return new PubRegistrationRequestAcceptanceResponse(request.getPub().getId());
+        } else if(request.getStatus().equals(PubRegistrationStatus.REJECTED)) {
+            throw BadRequestException.general("pub.already.rejected");
+        }
         final Pub pub = pubService.createFromRequest(request);
         service.setAccepted(request, pub);
 

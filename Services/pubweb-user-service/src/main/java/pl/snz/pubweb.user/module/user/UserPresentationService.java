@@ -51,6 +51,7 @@ public class UserPresentationService {
                 .set(DisplayLevel.ME_ONLY, this::permissions, GetUserResponse::setAcceptedPermissions)
                 .set(DisplayLevel.ME_ONLY, u -> u.getRoles().stream().map(Role::getName).collect(Collectors.toList()), GetUserResponse::setRoles)
                 .set(DisplayLevel.ME_ONLY, u -> currentRequestUriProvider.userAvatar(u.getId()), GetUserResponse::setAvatarUri)
+                .set(DisplayLevel.ALL,() -> provided.equals(DisplayLevel.FRIENDS), GetUserResponse::setFriend)
                 .build();
     }
 

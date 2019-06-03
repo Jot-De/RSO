@@ -11,6 +11,7 @@ import pl.snz.pubweb.user.module.user.model.User;
 import pl.snz.pubweb.user.module.user.model.User_;
 
 import javax.persistence.criteria.Predicate;
+import java.util.List;
 import java.util.Optional;
 
 import static pl.snz.pubweb.commons.data.JpaPredicates.likeIgnoreCase;
@@ -20,17 +21,18 @@ public interface UserRepository extends JpaRepository<User,Long>, JpaSpecificati
     boolean existsByEmail(String email);
     boolean existsByLogin(String login);
     boolean existsByDisplayName(String displayName);
-    default Page<User> search(@Nullable String name, Pageable p) {
-        Specification<User> spec = buildSearchSpec(name);
+    default Page<User> search(@Nullable String name, @Nullable List<Long> ids, Pageable p) {
+        Specification<User> spec = buildSearchSpec(name,  ids);
         return this.findAll(spec, p);
     }
 
-    default Specification<User> buildSearchSpec(@Nullable String name) {
+    default Specification<User> buildSearchSpec(@Nullable String name, @Nullable List<Long> ids) {
         return (r,q,cb) -> {
             Predicate result = JpaPredicates.truth(cb);
             result = name == null ? result : likeIgnoreCase(cb, r.get(User_.displayName), name);
-//            result = firstName == null ? result : likeIgnoreCase(cb, r.get(User_.userPersonalInformation).get(UserPersonalInformation_.firstName), firstName);
-//            result = surname == null ? result : likeIgnoreCase(cb, r.get(User_.userPersonalInformation).get(UserPersonalInformation_.surname), surname);
+            if(ids != null && !ids.isEmpty()) {
+                result = cb.and(result, r.get(User_.id).in(ids));
+            }
             return result;
         };
     }

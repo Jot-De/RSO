@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ import pl.snz.pubweb.user.module.permission.model.Permission;
 import pl.snz.pubweb.user.module.permission_acceptance.UserPermissionAcceptance;
 import pl.snz.pubweb.user.module.user.dto.*;
 import pl.snz.pubweb.user.module.user.model.User;
+import pl.snz.pubweb.user.module.user.model.User_;
 import pl.snz.pubweb.user.security.SecurityService;
 
 import javax.validation.Valid;
@@ -90,8 +92,10 @@ public class UserController implements AvatarManagement {
     @GetMapping
     public Page<GetUserResponse> getUsers(@RequestParam(name = "page", defaultValue = "0") int page,
                                           @RequestParam(name = "size", defaultValue = "20") int size,
-                                          @RequestParam(name = "name", required = false) String name) {
-        return userRepository.search(name, PageRequest.of(page, size))
+                                          @RequestParam(name = "name", required = false) String name,
+                                          @RequestParam(name = "ids", required = false) List<Long> ids) {
+
+        return userRepository.search(name, ids, PageRequest.of(page, size, Sort.by(User_.ID).descending()))
                 .map(userPresentationService::toGetUserResponse);
     }
 

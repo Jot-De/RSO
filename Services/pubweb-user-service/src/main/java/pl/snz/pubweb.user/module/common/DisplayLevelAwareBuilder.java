@@ -27,6 +27,12 @@ public class DisplayLevelAwareBuilder<T,R> {
         return this;
     }
 
+    public <V> DisplayLevelAwareBuilder<T,R> set(DisplayLevel required, Supplier<V> supplier, BiConsumer<R, V> setter) {
+        if (provided.getConfidenceLevel() >= required.getConfidenceLevel())
+            setter.accept(response, supplier.get());
+        return this;
+    }
+
     public <V> DisplayLevelAwareBuilder<T,R> set(DisplayLevel required, BiFunction<T, DisplayLevel, V> mapper, BiConsumer<R, V> setter) {
         if (provided.getConfidenceLevel() >= required.getConfidenceLevel())
             setter.accept(response, mapper.apply(mappedObject, provided));

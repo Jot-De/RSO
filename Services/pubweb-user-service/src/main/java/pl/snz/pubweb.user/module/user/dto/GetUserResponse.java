@@ -23,4 +23,5 @@ public class GetUserResponse {
     private List<AcceptedPermission> acceptedPermissions;
     private List<String> roles;
     private URI avatarUri;
+    private boolean friend;
 }

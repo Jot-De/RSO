@@ -50,8 +50,9 @@ public class PubController {
                                @RequestParam(required = false) LocalDate addedBefore,
                                @RequestParam(required = false) List<Long> tags) {
         Specification<Pub> searchSpec = pubSearchSpecifications.getSearchSpec(name, city, addedAfter, addedBefore, tags);
+        Sort sort = Sort.by(Pub_.ADDED).descending().and(Sort.by(Pub_.ID).descending());
 
-        return pubRepository.findAll(searchSpec, PageRequest.of(page, size, Sort.by(Pub_.ADDED).descending()))
+        return pubRepository.findAll(searchSpec, PageRequest.of(page, size, sort))
                 .map(pubMapper::toGetResponse);
     }
 

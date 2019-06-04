@@ -101,6 +101,7 @@ public class PubRequestController {
         return pictureMapper.toInfo(request.getPicture());
     }
 
+    @Transactional
     @AdminApi
     @GetMapping("{requestId}/picture")
     public PictureDtoWithData getPicture(@PathVariable  Long requestId) {
@@ -116,7 +117,7 @@ public class PubRequestController {
     @AdminApi
     public PubRegistrationRequestAcceptanceResponse accept(@PathVariable Long requestId) {
         final PubRegistrationRequest request = repo.findOrThrow(requestId);
-        if(!request.getStatus().equals(PubRegistrationStatus.REGISTERED)) {
+        if(request.getStatus().equals(PubRegistrationStatus.REGISTERED)) {
             return new PubRegistrationRequestAcceptanceResponse(request.getPub().getId());
         } else if(request.getStatus().equals(PubRegistrationStatus.REJECTED)) {
             throw BadRequestException.general("pub.already.rejected");

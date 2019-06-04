@@ -67,6 +67,7 @@ public class IssueController {
                 .content(request.getContent())
                 .sender(userRepository.getOne(requestSecurityContextProvider.principalId()))
                 .sent(LocalDateTime.now())
+                .status(IssueStatus.PENDING)
                 .build();
 
         return Just.of(issue).map(issueRepository::save).map(issueMapper::toDto).val();
@@ -98,6 +99,7 @@ public class IssueController {
 
         issue.getComments().add(comment);
         issueRepository.save(issue);
+
         return commentMapper.toDto(comment);
     }
 

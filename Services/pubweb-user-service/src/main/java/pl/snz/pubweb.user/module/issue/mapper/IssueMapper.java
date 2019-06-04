@@ -13,6 +13,7 @@ public class IssueMapper {
                 .content(issue.getContent())
                 .senderId(issue.getSender().getId())
                 .sent(issue.getSent())
+                .status(issue.getStatus())
                 .build();
     }
 

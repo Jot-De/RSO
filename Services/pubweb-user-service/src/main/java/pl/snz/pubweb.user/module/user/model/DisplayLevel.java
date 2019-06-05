@@ -7,7 +7,8 @@ import java.util.Arrays;
 
 @AllArgsConstructor
 public enum DisplayLevel{
-    ME_ONLY(2),
+    ME_ONLY(3),
+    ADMIN(2),
     FRIENDS(1),
     ALL(0);
     @Getter private int confidenceLevel;

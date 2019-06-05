@@ -7,7 +7,6 @@ import pl.snz.pubweb.user.module.issue.model.IssueStatus;
 
 @Component
 public class IssueStatusRequestParamConverter implements Converter<String, IssueStatus> {
-
     @Override
     public IssueStatus convert(String source) {
         return IssueStatus.fromValue(source.toLowerCase());

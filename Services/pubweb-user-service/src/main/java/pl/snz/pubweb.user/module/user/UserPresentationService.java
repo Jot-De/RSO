@@ -19,6 +19,7 @@ import pl.snz.pubweb.user.module.user.model.UserDisplaySettings;
 import pl.snz.pubweb.user.module.user.model.UserPersonalInformation;
 import pl.snz.pubweb.user.security.RequestSecurityContextProvider;
 import pl.snz.pubweb.user.module.friend.FriendService;
+import pl.snz.pubweb.user.security.UserPrincipal;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ public class UserPresentationService {
         return DisplayLevelAwareBuilder.of(provided, user, GetUserResponse::new)
                 .set(DisplayLevel.ALL, User::getId, GetUserResponse::setId)
                 .set(DisplayLevel.ALL, User::getDisplayName, GetUserResponse::setDisplayName)
-                .set(DisplayLevel.ME_ONLY, User::getEmail, GetUserResponse::setEmail)
+                .set(DisplayLevel.ADMIN, User::getEmail, GetUserResponse::setEmail)
                 .set(DisplayLevel.ME_ONLY, User::getLogin, GetUserResponse::setLogin)
                 .set(user.getUserDisplaySettings().getLowest(), this::personalInfo, GetUserResponse::setPersonalInformation)
                 .set(DisplayLevel.ME_ONLY, u -> userDisplaySettingsDto(user.getUserDisplaySettings()), GetUserResponse::setDisplaySettings)
@@ -68,9 +69,13 @@ public class UserPresentationService {
 
     private DisplayLevel determineRequestIssuerDisplayLevel(User requestedUserData) {
         final long requestedUserId = requestedUserData.getId();
-        final long principalId = requestSecurityContextProvider.getPrincipal().getId();
-        if(requestedUserId == principalId)
+        final UserPrincipal principal = requestSecurityContextProvider.getPrincipal();
+        final long principalId = principal.getId();
+
+        if(requestedUserId == principal.getId())
             return DisplayLevel.ME_ONLY;
+        else if(principal.isAdmin())
+            return DisplayLevel.ADMIN;
         else if(areFriends(requestedUserId, principalId))
             return DisplayLevel.FRIENDS;
         else

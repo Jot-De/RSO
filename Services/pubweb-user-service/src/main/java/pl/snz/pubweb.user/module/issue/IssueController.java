@@ -121,12 +121,4 @@ public class IssueController {
         return Just.of(issue).map(issueRepository::save).map(issueMapper::toDto).val();
     }
 
-
-//    @AdminApi
-//    @DeleteMapping("{id}")
-//    public ResponseEntity delete(@PathVariable Long id) {
-//        issueRepository.findById(id).ifPresent(issueRepository::delete);
-//        return ResponseEntity.ok().build();
-//    }
-
 }

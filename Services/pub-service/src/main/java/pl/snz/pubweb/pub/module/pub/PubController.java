@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.snz.pubweb.commons.errors.exception.NotFoundException;
 import pl.snz.pubweb.commons.util.Just;
@@ -63,6 +64,7 @@ public class PubController {
         return pubMapper.toGetResponse(pub);
     }
 
+    @Transactional
     @GetMapping("{pubId}/picture/{pictureId}")
     public PictureDtoWithData getOnePicture(@PathVariable Long pubId, @PathVariable Long pictureId) {
         final Pub pub = pubRepository.findOrThrow(pubId);
@@ -75,6 +77,7 @@ public class PubController {
 
     }
 
+    @Transactional
     @GetMapping("{pubId}/picture")
     public List<PictureDtoWithData> getAllPictures(@PathVariable Long pubId) {
         final Pub pub = pubRepository.findOrThrow(pubId);

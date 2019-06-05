@@ -19,7 +19,7 @@ public enum IssueStatus {
     private String value;
 
     @JsonCreator
-    public IssueStatus fromValue(String val) {
+    public static IssueStatus fromValue(String val) {
         return Enums.enumFromFieldValue(IssueStatus.class, IssueStatus::getValue, val).orElseThrow(() -> new EnumConstantNotPresentException(IssueStatus.class, val));
     }
 

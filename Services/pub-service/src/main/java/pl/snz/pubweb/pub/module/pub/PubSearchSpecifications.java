@@ -24,7 +24,7 @@ public class PubSearchSpecifications {
                                             @Nullable String city,
                                             @Nullable LocalDate addedAfter,
                                             @Nullable LocalDate addedBefore,
-                                            @Nullable List<Long> tags) {
+                                            @Nullable List<Long> tags, List<Long> ids) {
         return (r,q,cb) -> {
           Predicate result = JpaPredicates.truth(cb);
           result = name == null ? result : cb.and(result, likeIgnoreCase(cb, r.get(Pub_.name), name));
@@ -36,6 +36,11 @@ public class PubSearchSpecifications {
               final SetJoin<Pub, Tag> tagJoin = r.join(Pub_.tags);
               result = cb.and(tagJoin.get(Tag_.id).in(tags));
           }
+
+          if(ids != null && !ids.isEmpty()) {
+              result = cb.and(result, r.get(Pub_.id).in(ids));
+          }
+
           return result;
         };
     }

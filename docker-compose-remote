@@ -33,7 +33,7 @@ services:
       - webnet
 
   pub-service:
-    image: gcr.io/oceanic-oxide-240620/rso/pub-service:1.0.1
+    image: gcr.io/oceanic-oxide-240620/rso/pub-service:1.1.4
     deploy:
       replicas: 1
     environment:
@@ -48,7 +48,7 @@ services:
       - webnet
 
   user-service:
-    image: gcr.io/oceanic-oxide-240620/rso/user-service:1.0.1
+    image: gcr.io/oceanic-oxide-240620/rso/user-service:1.1.2
     deploy:
       replicas: 3
     environment:
@@ -63,7 +63,7 @@ services:
       - webnet
 
   review-service:
-    image: gcr.io/oceanic-oxide-240620/rso/review-service:1.0.2
+    image: gcr.io/oceanic-oxide-240620/rso/review-service:1.1.3
     deploy:
       replicas: 3
     environment:

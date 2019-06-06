@@ -37,3 +37,4 @@ release.properties
 *.iws
 out/
 .idea_modules/
+static/

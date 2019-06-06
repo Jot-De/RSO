@@ -78,7 +78,7 @@ public class ReviewController {
         return Just.of(review).map(r -> reviewUpdateService.update(r, dto)).map(mapper::toDto).val();
     }
 
-    @DeleteMapping
+    @DeleteMapping("{id}")
     public ResponseEntity delete(@PathVariable Long id) {
         final Review review = repo.findById(id).orElseThrow(NotFoundException.ofMessage("review.not.found", "id", id));
         securityService.requireSelfOrAdmin(review.getUserId());
@@ -89,6 +89,7 @@ public class ReviewController {
     @GetMapping("{id}/history")
     public List<HistoryEntry> getHistory(@PathVariable Long id) {
         final Review review = repo.findById(id).orElseThrow(NotFoundException.ofMessage("review.not.found", "id", id));
+
         return Just.of(review)
                 .map(Review::getReviewHistory)
                 .map(s -> Mappers.list(s, historyMapper::toEntry))

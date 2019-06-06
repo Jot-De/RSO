@@ -18,7 +18,7 @@ public class Review extends IdentifiableEntity<Long> {
     @Column
     private Long pubId;
 
-    @Column
+    @Column(length = 4000)
     private String reviewText;
 
     @Column

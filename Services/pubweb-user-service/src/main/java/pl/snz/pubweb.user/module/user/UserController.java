@@ -53,6 +53,7 @@ public class UserController implements AvatarManagement {
     private final AvatarService avatarService;
     private final PermissionRepository permissionRepository;
 
+    @Transactional
     @PostMapping
     public ResponseEntity<RegistrationResponse> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         if (userRepository.existsByLogin(signUpRequest.getLogin()))
@@ -99,6 +100,7 @@ public class UserController implements AvatarManagement {
                 .map(userPresentationService::toGetUserResponse);
     }
 
+    @Transactional
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteUser(@PathVariable @NonNull Long id) {
         securityService.requireSelfOdAdmin(id);
@@ -147,6 +149,7 @@ public class UserController implements AvatarManagement {
                 .build();
     }
 
+    @Transactional
     @RequestMapping(method = {RequestMethod.PUT, RequestMethod.POST}, path = "{userId}/avatar")
     public ResponseEntity<?> addAvatarForUser(@PathVariable Long userId, @RequestBody Base64PictureDto dto) {
         securityService.requireSelf(userId);
@@ -154,6 +157,7 @@ public class UserController implements AvatarManagement {
         return ResponseEntity.ok().build();
     }
 
+    @Transactional
     @DeleteMapping("{userId}/avatar")
     public ResponseEntity<?> deleteAvatar(@PathVariable Long userId) {
         securityService.requireSelf(userId);

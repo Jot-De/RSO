@@ -12,6 +12,6 @@ public class PasswordValidator implements ConstraintValidator<Password, String> 
 
     @Override
     public boolean isValid(String pass, ConstraintValidatorContext context) {
-        return vpr.containsLowerCase(pass) && vpr.containsUpperCase(pass) && vpr.containsSpecialChar(pass);
+        return vpr.containsLowerCase(pass) && vpr.containsUpperCase(pass) && vpr.containsSpecialChar(pass) && vpr.constainsNumber(pass);
     }
 }

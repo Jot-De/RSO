@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.snz.pubweb.commons.errors.exception.NotFoundException;
 import pl.snz.pubweb.commons.util.Mappers;
@@ -34,11 +35,13 @@ public class PermissionController {
     private final UserRepository userRepository;
     private final PermissionRevocationHandler permissionRevocationHandler;
 
+    @Transactional
     @GetMapping
     public Page<PermissionSummary> getAll(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = "20") int size) {
         return permissionRepository.findAll(PageRequest.of(page, size)).map(permissionPresentationService::toSummary);
     }
 
+    @Transactional
     @GetMapping("{id}")
     public PermissionSummary getOne(@PathVariable  Long id) {
         return permissionRepository.findById(id)
@@ -46,6 +49,7 @@ public class PermissionController {
                 .orElseThrow(NotFoundException.ofMessage("permission.not.found", "id", id));
     }
 
+    @Transactional
     @GetMapping("/accepted")
     public List<AcceptedPermission> getAccepted() {
         final Long userId = requestSecurityContextProvider.getPrincipal().getId();
@@ -53,6 +57,7 @@ public class PermissionController {
         return Mappers.list(permissionPresentationService::acceptedPermission).apply(permissionAcceptanceRepository.findByUser(userId));
     }
 
+    @Transactional
     @PostMapping("/{id}/accept")
     public List<AcceptedPermission> confirmPermission(@PathVariable Long id) {
         final Long userId = requestSecurityContextProvider.getPrincipal().getId();
@@ -68,6 +73,7 @@ public class PermissionController {
 
     }
 
+    @Transactional
     @PostMapping("{id}/revoke")
     public List<AcceptedPermission> revokePermission(@PathVariable Long id) {
         final Long userId = requestSecurityContextProvider.getPrincipal().getId();

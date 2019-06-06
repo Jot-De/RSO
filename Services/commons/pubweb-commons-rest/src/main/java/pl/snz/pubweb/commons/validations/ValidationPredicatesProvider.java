@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ValidationPredicatesProvider {
-    private final List<Character> lowerCase = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'u', 'w', 'y', 'x', 'z');
+    private final List<Character> lowerCase = Arrays.asList('a', 'ą', 'b', 'c', 'd', 'e', 'ę', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'ó', 'p', 'q', 'r', 's', 'ś', 't', 'u', 'w', 'y', 'x', 'z', 'ż', 'ź');
     private final List<Character> upperCase = lowerCase.stream().map(Character::toUpperCase).collect(Collectors.toList());
     private final List<Character> specialChars = Arrays.asList('!', '@', '#', '$', '%', '^', '&', '&', '*');
     private final List<Character> numbers = Arrays.asList('1', '2', '3', '4', '5', '6', '7', '8', '9', '0');

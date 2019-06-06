@@ -36,13 +36,13 @@ public class SuggestService {
     private final TagMapper tagMapper;
 
     @Transactional
-    public List<PubSuggestion> getForUser(Long userId) {
+    public List<PubSuggestion> getForUser(Long userId, int page, int size) {
         final List<Tag> subscriptions = subscriptionRepo.findForUser(userId);
 
-        return subscriptions.isEmpty() ? Collections.emptyList() : getForSubscriptionsAndUser(subscriptions, userId);
+        return subscriptions.isEmpty() ? Collections.emptyList() : getForSubscriptionsAndUser(subscriptions, userId, page, size);
     }
 
-    private List<PubSuggestion> getForSubscriptionsAndUser(List<Tag> subscriptions, Long userId) {
+    private List<PubSuggestion> getForSubscriptionsAndUser(List<Tag> subscriptions, Long userId, int page, int size) {
         final List<Visit> userVisits = visitRepository.findByUserId(userId);
         final Map<String, Long> visitsByCity = userVisits.stream()
                 .map(Visit::getPub)
@@ -57,6 +57,8 @@ public class SuggestService {
 
         return pubs.stream()
                 .sorted(compareByCity(visitsByCity))
+                .skip(page * size)
+                .limit(size)
                 .map(p -> mapToSuggestion(p, subscriptions))
                 .collect(Collectors.toList());
     }

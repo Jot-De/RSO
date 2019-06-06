@@ -6,8 +6,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.snz.pubweb.commons.errors.exception.BadRequestException;
+import pl.snz.pubweb.commons.errors.exception.NotFoundException;
 import pl.snz.pubweb.commons.util.Just;
 import pl.snz.pubweb.pub.module.pub.PubRepository;
+import pl.snz.pubweb.pub.module.visit.dto.VisitDto;
 import pl.snz.pubweb.pub.module.visit.dto.VisitWishDto;
 import pl.snz.pubweb.pub.module.visit.dto.VisitedPubDto;
 import pl.snz.pubweb.pub.module.visit.model.Visit;
@@ -32,8 +34,9 @@ public class VisitController {
     @GetMapping("/visited")
     public Page<VisitedPubDto> getVisited(@RequestParam(required = false, defaultValue = "0") int page,
                                           @RequestParam(required = false, defaultValue = "20") int size,
-                                          @RequestParam(required = false) Long pubId) {
-        final Long userId = requestSecurityContextProvider.getPrincipal().getId();
+                                          @RequestParam(required = false) Long pubId,
+                                          @RequestParam(required = false) Long userId) {
+        userId = userId != null ? userId :  requestSecurityContextProvider.getPrincipal().getId();
 
         return repo.findAll(specs.visited(userId, pubId), PageRequest.of(page, size)).map(mapper::toVisitedDto);
     }
@@ -41,11 +44,20 @@ public class VisitController {
     @GetMapping("/wish")
     public Page<VisitWishDto> getWishes(@RequestParam(required = false, defaultValue = "0") int page,
                                         @RequestParam(required = false, defaultValue = "20") int size,
-                                        @RequestParam(required = false) Long pubId) {
-        final Long userId = requestSecurityContextProvider.getPrincipal().getId();
+                                        @RequestParam(required = false) Long pubId,
+                                        @RequestParam(required = false) Long userId) {
+        userId = userId != null ? userId :  requestSecurityContextProvider.getPrincipal().getId();
 
         return repo.findAll(specs.wishes(userId, pubId), PageRequest.of(page, size)).map(mapper::toWishDto);
     }
+
+    @GetMapping("{id}")
+    public VisitDto getOne(@PathVariable Long id) {
+        final Visit visit = repo.findById(id).orElseThrow(NotFoundException.ofMessage("visit.not.found", "id", id));
+
+        return mapper.toVisitDto(visit);
+    }
+
 
     @PostMapping("/visited")
     public VisitedPubDto markVisited(@RequestParam(required = true) Long pubId) {

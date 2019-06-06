@@ -18,7 +18,9 @@ public class SuggestController {
     private final SuggestService suggestService;
 
     @GetMapping
-    public List<PubSuggestion> getSuggestions(@RequestParam Long userId) {
-        return suggestService.getForUser(userId);
+    public List<PubSuggestion> getSuggestions(@RequestParam Long userId,
+                                              @RequestParam(required = false, defaultValue = "100") int size,
+                                              @RequestParam(required = false, defaultValue = "0") int page) {
+        return suggestService.getForUser(userId, page, size);
     }
 }

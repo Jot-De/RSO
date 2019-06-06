@@ -9,7 +9,6 @@ import spock.lang.Unroll
 
 class SuggestServiceTest extends PubServiceIntegrationTest {
 
-
     @Autowired
     private SuggestService suggestService
 
@@ -17,15 +16,17 @@ class SuggestServiceTest extends PubServiceIntegrationTest {
     @Sql(scripts = ['/sql/pub-suggest-service-test.sql'])
     def 'Test suggestions'() {
         when:
-        final List<PubSuggestion> suggestions = suggestService.getForUser(userId)
+        final List<PubSuggestion> suggestions = suggestService.getForUser(userId, page, size)
 
         then:
         suggestions.size() == expectedSize
 
         where:
-        userId | expectedSize
-        1      | 3
-        2      | 2
+        userId | page | size | expectedSize
+        1      | 0    | 10   | 3
+        2      | 0    | 10   | 2
+        1      | 0    | 2    | 2
+        1      | 1    | 2    | 1
 
 
     }

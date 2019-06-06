@@ -3,9 +3,11 @@ package pl.snz.pubweb.pub.module.visit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.snz.pubweb.pub.module.pub.presentation.PubMapper;
+import pl.snz.pubweb.pub.module.visit.dto.VisitDto;
 import pl.snz.pubweb.pub.module.visit.dto.VisitWishDto;
 import pl.snz.pubweb.pub.module.visit.dto.VisitedPubDto;
 import pl.snz.pubweb.pub.module.visit.model.Visit;
+import pl.snz.pubweb.pub.module.visit.model.VisitStatus;
 
 @Service
 @RequiredArgsConstructor
@@ -25,5 +27,14 @@ public class VisitMapper {
                 .pub(pubMapper.toBrief(visit.getPub()))
                 .userId(visit.getUserId())
                 .build();
+    }
+
+    public VisitDto toVisitDto(Visit visit) {
+        VisitDto dto = new VisitDto();
+        dto.setVisited(visit.getVisitStatus() == VisitStatus.VISITED);
+        dto.setId(visit.getId());
+        dto.setPub(pubMapper.toBrief(visit.getPub()));
+        dto.setUserId(visit.getUserId());
+        return dto;
     }
 }

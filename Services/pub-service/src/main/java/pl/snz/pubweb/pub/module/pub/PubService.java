@@ -5,4 +5,5 @@ import pl.snz.pubweb.pub.module.request.model.PubRegistrationRequest;
 
 public interface PubService {
     Pub createFromRequest(PubRegistrationRequest request);
+    void delete(Pub pub);
 }

@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.snz.pubweb.pub.module.pub.model.Pub;
+import pl.snz.pubweb.pub.module.request.RegistrationRequestRepository;
 import pl.snz.pubweb.pub.module.request.model.PubRegistrationRequest;
+import pl.snz.pubweb.pub.module.request.model.PubRegistrationStatus;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -14,6 +16,7 @@ import java.util.Optional;
 public class PubServiceImpl implements PubService {
 
     private final PubRepository repository;
+    private final RegistrationRequestRepository requestRepository;
 
     @Override
     public Pub createFromRequest(PubRegistrationRequest request) {
@@ -29,6 +32,18 @@ public class PubServiceImpl implements PubService {
 
         pub.getTags().addAll(request.getTags());
         return repository.save(pub);
+    }
+
+    @Override
+    public void delete(Pub pub) {
+        final Optional<PubRegistrationRequest> rqOpt = requestRepository.findByPubId(pub.getId());
+        if(rqOpt.isPresent()) {
+            final PubRegistrationRequest request = rqOpt.get();
+            request.setPub(null);
+            request.setStatus(PubRegistrationStatus.PUB_DELETED);
+            requestRepository.save(request);
+        }
+        repository.delete(pub);
     }
 
 }

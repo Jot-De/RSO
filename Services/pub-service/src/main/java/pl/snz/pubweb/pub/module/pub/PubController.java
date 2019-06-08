@@ -38,6 +38,7 @@ public class PubController {
     private final TagRepository tagRepository;
     private final TagMapper tagMapper;
     private final PictureMapper pictureMapper;
+    private final PubService pubService;
 
     /**
      * Browse pubs
@@ -87,10 +88,11 @@ public class PubController {
 
     }
 
+    @Transactional
     @DeleteMapping("{pubId}")
     @AdminApi
     public ResponseEntity delete(@PathVariable Long pubId) {
-        pubRepository.findById(pubId).ifPresent(pubRepository::delete);
+        pubRepository.findById(pubId).ifPresent(pubService::delete);
 
         return ResponseEntity.ok().build();
     }
@@ -103,6 +105,7 @@ public class PubController {
         return Just.of(pubRepository.save(pub)).map(Pub::getTags).map(l -> Mappers.list(l, tagMapper::toDto)).val();
     }
 
+    @Transactional
     @PutMapping("{pubId}/tags")
     public List<TagDto> setTags(@PathVariable Long pubId, @RequestParam List<Long> ids) {
         final Pub pub = pubRepository.findById(pubId).orElseThrow(NotFoundException.ofMessage("pub.not.found", "id", pubId));
@@ -111,6 +114,7 @@ public class PubController {
         return Just.of(pub).map(pubRepository::save).map(Pub::getTags).map(l -> Mappers.list(l, tagMapper::toDto)).val();
     }
 
+    @Transactional
     @DeleteMapping("{pubId}/tags/{tagId}")
     public List<TagDto> deleteTag(@PathVariable Long id, @PathVariable Long pubId) {
         final Pub pub = pubRepository.findById(id).orElseThrow(NotFoundException.ofMessage("pub.not.found", "id", id));

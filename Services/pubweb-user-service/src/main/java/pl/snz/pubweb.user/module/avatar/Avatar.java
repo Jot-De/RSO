@@ -18,7 +18,6 @@ public class Avatar extends IdentifiableEntity<Long> {
     @Column(length = 100000)
     private byte[] bytes;
 
-
     @Column(length = 60)
     private String dataFormat;
 

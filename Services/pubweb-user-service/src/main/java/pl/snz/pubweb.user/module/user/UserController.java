@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@Transactional
 public class UserController implements AvatarManagement {
 
     private final UserRepository userRepository;
@@ -53,7 +54,6 @@ public class UserController implements AvatarManagement {
     private final AvatarService avatarService;
     private final PermissionRepository permissionRepository;
 
-    @Transactional
     @PostMapping
     public ResponseEntity<RegistrationResponse> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         if (userRepository.existsByLogin(signUpRequest.getLogin()))
@@ -100,7 +100,6 @@ public class UserController implements AvatarManagement {
                 .map(userPresentationService::toGetUserResponse);
     }
 
-    @Transactional
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteUser(@PathVariable @NonNull Long id) {
         securityService.requireSelfOdAdmin(id);
@@ -108,7 +107,6 @@ public class UserController implements AvatarManagement {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Transactional
     @PutMapping("{id}/personalInformation")
     @RequiresPermission(permissionKeys = PermissionKeys.INFORMATION_PROCESSING)
     public GetUserResponse addUserPersonalInformation(@PathVariable Long id, @RequestBody @Valid UserPersonalInfoDto userPersonalInfoDto) {
@@ -121,7 +119,6 @@ public class UserController implements AvatarManagement {
         return userPresentationService.toGetUserResponse(userRepository.save(user));
     }
 
-    @Transactional
     @PutMapping("{id}/displaySettings")
     public GetUserResponse updateDisplaySettings(@PathVariable Long id, @RequestBody @Valid UDisplaySettings uDisplaySettings) {
         securityService.requireSelf(id);
@@ -149,7 +146,6 @@ public class UserController implements AvatarManagement {
                 .build();
     }
 
-    @Transactional
     @RequestMapping(method = {RequestMethod.PUT, RequestMethod.POST}, path = "{userId}/avatar")
     public ResponseEntity<?> addAvatarForUser(@PathVariable Long userId, @RequestBody Base64PictureDto dto) {
         securityService.requireSelf(userId);
@@ -157,7 +153,6 @@ public class UserController implements AvatarManagement {
         return ResponseEntity.ok().build();
     }
 
-    @Transactional
     @DeleteMapping("{userId}/avatar")
     public ResponseEntity<?> deleteAvatar(@PathVariable Long userId) {
         securityService.requireSelf(userId);

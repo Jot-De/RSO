@@ -19,6 +19,7 @@ public class VisitMapper {
         return VisitedPubDto.builder()
                 .pub(pubMapper.toBrief(visit.getPub()))
                 .userId(visit.getUserId())
+                .visited(visit.getVisited())
                 .build();
     }
 

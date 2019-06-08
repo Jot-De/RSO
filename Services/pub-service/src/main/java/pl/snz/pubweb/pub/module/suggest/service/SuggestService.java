@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.snz.pubweb.commons.data.JpaPredicates;
 import pl.snz.pubweb.commons.util.Mappers;
 import pl.snz.pubweb.pub.module.common.data.Address;
 import pl.snz.pubweb.pub.module.pub.PubRepository;
@@ -81,7 +82,7 @@ public class SuggestService {
 
     private Specification<Pub> suggestionSpec(List<Long> visitedPubIds, List<Long> subscribedTagIds) {
         return (r,q,cb) -> {
-            Predicate pubNotVisited = cb.not(r.get(Pub_.id).in(visitedPubIds));
+            Predicate pubNotVisited = visitedPubIds.isEmpty() ? JpaPredicates.truth(cb) :  cb.not(r.get(Pub_.id).in(visitedPubIds));
             final SetJoin<Pub, Tag> tagJoin = r.join(Pub_.tags);
             Predicate tagMatch = cb.and(tagJoin.get(Tag_.id).in(subscribedTagIds));
             q.distinct(true);

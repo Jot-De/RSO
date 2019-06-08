@@ -23,9 +23,11 @@ public class CustomErrorController implements ErrorController {
             Integer statusCode = Integer.valueOf(status.toString());
 
             if(statusCode == HttpStatus.NOT_FOUND.value()) {
+                response.setStatus(200);
                 return "index.html";
             }
         }
+
         return "error.html";
     }
 

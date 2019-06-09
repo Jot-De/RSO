@@ -23,6 +23,7 @@ import pl.snz.pubweb.user.security.SecurityService;
 import pl.snz.pubweb.user.security.UserPrincipal;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RequestMapping("issue")
 @RestController
@@ -43,12 +44,12 @@ public class IssueController {
                              @RequestParam(required = false, defaultValue = "20") int size,
                              @RequestParam(required = false) LocalDateTime since,
                              @RequestParam(required = false) Long sender,
-                             @RequestParam(required = false) IssueStatus status) {
+                             @RequestParam(required = false) List<IssueStatus> statuses) {
 
         final UserPrincipal principal = requestSecurityContextProvider.getPrincipal();
         if(!principal.isAdmin()) sender = principal.getId();
 
-        return issueRepository.findAll(issueSpecifications.search(sender, since, status), PageRequest.of(page, size))
+        return issueRepository.findAll(issueSpecifications.search(sender, since, statuses), PageRequest.of(page, size))
                 .map(issueMapper::toDto);
     }
 

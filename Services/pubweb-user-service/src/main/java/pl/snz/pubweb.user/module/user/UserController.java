@@ -28,6 +28,7 @@ import pl.snz.pubweb.user.module.permission_acceptance.UserPermissionAcceptance;
 import pl.snz.pubweb.user.module.user.dto.*;
 import pl.snz.pubweb.user.module.user.model.User;
 import pl.snz.pubweb.user.module.user.model.User_;
+import pl.snz.pubweb.user.module.user.service.UserService;
 import pl.snz.pubweb.user.security.SecurityService;
 
 import javax.validation.Valid;
@@ -48,6 +49,7 @@ public class UserController implements AvatarManagement {
     private final UserRepository userRepository;
     private final UserPresentationService userPresentationService;
     private final UserMapper userMapper;
+    private final UserService userService;
     private final SecurityService securityService;
     private final FriendService friendshipService;
     private final FriendshipPresentationService friendshipPresentationService;
@@ -100,10 +102,11 @@ public class UserController implements AvatarManagement {
                 .map(userPresentationService::toGetUserResponse);
     }
 
+    @Transactional
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteUser(@PathVariable @NonNull Long id) {
         securityService.requireSelfOdAdmin(id);
-        userRepository.findById(id).ifPresent(userRepository::delete);
+        userRepository.findById(id).ifPresent(userService::delete);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

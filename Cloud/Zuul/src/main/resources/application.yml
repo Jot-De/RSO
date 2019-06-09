@@ -16,5 +16,13 @@ zuul:
     eager-load:
       enabled: true
   routes:
-    static:
-      url=http://host:port/staticresource
+    pubweb-pub-service:
+      path: /api/pubweb-pub-service/**
+
+server:
+  ssl:
+    enabled: true
+    key-alias: selfsigned
+    key-store-password: pubwebSecret123*
+    key-store: classpath:keystore.p12
+    key-store-type: PKCS12

@@ -3,6 +3,8 @@ delete from tag_subscription_tag where 1 = 1;
 delete from tag_subscription where 1 = 1;
 delete from pub_tag where 1 = 1;
 delete from tag where 1 = 1;
+delete from visit where 1 = 1;
+delete from pub_registration_request where 1 = 1;
 Delete from pub where 1 = 1;
 Delete from address where 1 = 1;
 
@@ -29,10 +31,14 @@ insert into pub_tag(Pub_id, tags_id) values (3,2);
 
 insert into tag_subscription(userId) values (1);
 insert into tag_subscription(userId) values (2);
+insert into tag_subscription(userId) values (3);
 
 insert into tag_subscription_tag(TagSubscription_userId, subscriptions_id) VALUES (1, 1);
 insert into tag_subscription_tag(TagSubscription_userId, subscriptions_id) VALUES (1, 2);
 insert into tag_subscription_tag(TagSubscription_userId, subscriptions_id) VALUES (2, 1);
+insert into tag_subscription_tag(TagSubscription_userId, subscriptions_id) VALUES (3, 1);
+
+insert into visit(id, userId, visitStatus, visited, pub_id) VALUES (1, 3, 'VISITED', '2019-05-02', 1);
 
 
 

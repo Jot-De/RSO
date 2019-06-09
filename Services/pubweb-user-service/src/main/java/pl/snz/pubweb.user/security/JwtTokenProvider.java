@@ -24,20 +24,14 @@ public class JwtTokenProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
 
-    @Value("${app.jwtSecret}")
-    private String jwtSecret;
-
     @Value("${app.jwtExpirationInMs}")
     private int jwtExpirationInMs;
-
+    private final KeyProvider keyProvider;
     private final ObjectMapper objectMapper;
 
     public String generateToken(Authentication authentication) {
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
         UserAuthInfo userAuthInfo = UserAuthInfo.builder()
                 .userId(userPrincipal.getId())
@@ -51,15 +45,15 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setSubject(subject/*Long.toString(userPrincipal.getId())*/)
                 .setIssuedAt(new Date())
-                .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .setExpiration(new Date(new Date().getTime() + jwtExpirationInMs))
+                .signWith(SignatureAlgorithm.RS512, keyProvider.getPrivateKey())
                 .compact();
     }
 
 
     public Long getUserIdFromJWT(String token) {
         Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
+                .setSigningKey(keyProvider.getPublicKey())
                 .parseClaimsJws(token)
                 .getBody();
 
@@ -86,7 +80,7 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(keyProvider.getPublicKey()).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException ex) {
             logger.error("Invalid JWT signature");

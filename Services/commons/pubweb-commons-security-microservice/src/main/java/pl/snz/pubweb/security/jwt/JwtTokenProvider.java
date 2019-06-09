@@ -21,17 +21,16 @@ public class JwtTokenProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
 
-    @Value("${app.jwtSecret}")
-    private String jwtSecret;
-
     @Value("${app.jwtExpirationInMs}")
     private int jwtExpirationInMs;
+
+    private final JwtPublicKeyProvider jwtPublicKeyProviderw;
 
     private final ObjectMapper objectMapper;
 
     public UserAuthInfo getUserFromJwt(String token) {
         Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
+                .setSigningKey(jwtPublicKeyProviderw.getKey())
                 .parseClaimsJws(token)
                 .getBody();
 
@@ -56,7 +55,7 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(jwtPublicKeyProviderw.getKey()).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException ex) {
             logger.error("Invalid JWT signature");

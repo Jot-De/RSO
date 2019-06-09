@@ -12,10 +12,7 @@ import pl.snz.pubweb.user.module.issue.dto.CommentDto;
 import pl.snz.pubweb.user.module.issue.dto.IssueDto;
 import pl.snz.pubweb.user.module.issue.mapper.CommentMapper;
 import pl.snz.pubweb.user.module.issue.mapper.IssueMapper;
-import pl.snz.pubweb.user.module.issue.model.Comment;
-import pl.snz.pubweb.user.module.issue.model.Comment_;
-import pl.snz.pubweb.user.module.issue.model.Issue;
-import pl.snz.pubweb.user.module.issue.model.IssueStatus;
+import pl.snz.pubweb.user.module.issue.model.*;
 import pl.snz.pubweb.user.module.user.UserRepository;
 import pl.snz.pubweb.user.security.AdminApi;
 import pl.snz.pubweb.user.security.RequestSecurityContextProvider;
@@ -49,7 +46,8 @@ public class IssueController {
         final UserPrincipal principal = requestSecurityContextProvider.getPrincipal();
         if(!principal.isAdmin()) sender = principal.getId();
 
-        return issueRepository.findAll(issueSpecifications.search(sender, since, statuses), PageRequest.of(page, size))
+        return issueRepository.findAll(issueSpecifications.search(sender, since, statuses),
+                PageRequest.of(page, size, Sort.by(Issue_.SENT).descending()))
                 .map(issueMapper::toDto);
     }
 

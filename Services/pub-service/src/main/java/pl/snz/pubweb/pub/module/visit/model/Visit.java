@@ -26,4 +26,18 @@ public class Visit extends IdentifiableEntity<Long> {
     @Enumerated(EnumType.STRING)
     private VisitStatus visitStatus;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Visit visit = (Visit) o;
+
+        return id != null ? id.equals(visit.id) : visit.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }

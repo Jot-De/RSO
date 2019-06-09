@@ -3,6 +3,7 @@ package pl.snz.pubweb.pub.module.pub;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.snz.pubweb.pub.module.picture.PictureRepository;
 import pl.snz.pubweb.pub.module.pub.model.Pub;
 import pl.snz.pubweb.pub.module.request.RegistrationRequestRepository;
 import pl.snz.pubweb.pub.module.request.model.PubRegistrationRequest;
@@ -17,6 +18,7 @@ public class PubServiceImpl implements PubService {
 
     private final PubRepository repository;
     private final RegistrationRequestRepository requestRepository;
+    private final PictureRepository pictureRepository;
 
     @Override
     public Pub createFromRequest(PubRegistrationRequest request) {
@@ -43,6 +45,7 @@ public class PubServiceImpl implements PubService {
             request.setStatus(PubRegistrationStatus.PUB_DELETED);
             requestRepository.save(request);
         }
+        pub.getPictures().forEach(pictureRepository::delete);
         repository.delete(pub);
     }
 

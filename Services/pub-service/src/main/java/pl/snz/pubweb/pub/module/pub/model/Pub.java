@@ -1,13 +1,11 @@
 package pl.snz.pubweb.pub.module.pub.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import pl.snz.pubweb.commons.data.IdentifiableEntity;
 import pl.snz.pubweb.pub.module.common.data.Address;
 import pl.snz.pubweb.pub.module.picture.model.Picture;
 import pl.snz.pubweb.pub.module.tag.model.Tag;
+import pl.snz.pubweb.pub.module.visit.model.Visit;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -15,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @NoArgsConstructor @AllArgsConstructor @Builder
-@Data
+@Getter @Setter
 @Entity
 @Table(name = "pub")
 public class Pub extends IdentifiableEntity<Long> {
@@ -41,6 +39,10 @@ public class Pub extends IdentifiableEntity<Long> {
 
     @Column(length = 4000)
     private String description;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "pub")
+    private Set<Visit> visits;
+
 
 }
 

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.snz.pubweb.pub.module.pub.presentation.PubMapper;
 import pl.snz.pubweb.pub.module.visit.dto.VisitDto;
+import pl.snz.pubweb.pub.module.visit.dto.VisitStatusDto;
 import pl.snz.pubweb.pub.module.visit.dto.VisitWishDto;
 import pl.snz.pubweb.pub.module.visit.dto.VisitedPubDto;
 import pl.snz.pubweb.pub.module.visit.model.Visit;
@@ -37,5 +38,14 @@ public class VisitMapper {
         dto.setPub(pubMapper.toBrief(visit.getPub()));
         dto.setUserId(visit.getUserId());
         return dto;
+    }
+
+    public VisitStatusDto toStatusDto(Visit visit) {
+        return VisitStatusDto.builder()
+                .visitId(visit.getId())
+                .pubId(visit.getPub().getId())
+                .userId(visit.getUserId())
+                .visitStatus(visit.getVisitStatus())
+                .build();
     }
 }

@@ -9,6 +9,7 @@ import pl.snz.pubweb.pub.module.visit.model.VisitStatus;
 import pl.snz.pubweb.pub.module.visit.model.Visit_;
 
 import javax.persistence.criteria.Predicate;
+import java.util.List;
 
 @Service
 public class VisitSpecifications {
@@ -19,6 +20,10 @@ public class VisitSpecifications {
 
     public Specification<Visit> wishes(Long userId, Long pubId) {
         return withStatus(VisitStatus.WANTS_TO_VISIT, userId, pubId);
+    }
+
+    public Specification<Visit> statuses(Long userId, List<Long> pubIds) {
+        return (r,q,cb) ->  cb.and(cb.equal(r.get(Visit_.userId), userId), r.get(Visit_.pub).get(Pub_.id).in(pubIds));
     }
 
     private Specification<Visit> withStatus(VisitStatus status, Long userId, Long pubId) {

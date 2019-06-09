@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import pl.snz.pubweb.commons.errors.exception.BadRequestException;
 import pl.snz.pubweb.commons.errors.exception.NotFoundException;
 import pl.snz.pubweb.commons.util.Just;
+import pl.snz.pubweb.commons.util.Mappers;
 import pl.snz.pubweb.pub.module.pub.PubRepository;
 import pl.snz.pubweb.pub.module.visit.dto.VisitDto;
+import pl.snz.pubweb.pub.module.visit.dto.VisitStatusDto;
 import pl.snz.pubweb.pub.module.visit.dto.VisitWishDto;
 import pl.snz.pubweb.pub.module.visit.dto.VisitedPubDto;
 import pl.snz.pubweb.pub.module.visit.model.Visit;
@@ -18,6 +20,8 @@ import pl.snz.pubweb.security.RequestSecurityContextProvider;
 import pl.snz.pubweb.security.SecurityService;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -50,6 +54,12 @@ public class VisitController {
 
         return repo.findAll(specs.wishes(userId, pubId), PageRequest.of(page, size)).map(mapper::toWishDto);
     }
+
+    @GetMapping("/status")
+    public List<VisitStatusDto> checkIfVisited(@RequestParam List<Long> pubIds,  @RequestParam Long userId) {
+        return pubIds.isEmpty() ? Collections.emptyList() : Mappers.list(repo.findAll(specs.statuses(userId, pubIds)), mapper::toStatusDto);
+    }
+
 
     @GetMapping("{id}")
     public VisitDto getOne(@PathVariable Long id) {

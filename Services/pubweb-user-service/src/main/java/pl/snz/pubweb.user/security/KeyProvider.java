@@ -17,21 +17,23 @@ import java.util.Base64;
 @Getter
 @Service
 public class KeyProvider {
+    private final static String pubKey = "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAt9FtviuVSKfALXmHKXWExlTKeY42lqMvkOQcXWuE9H7ZwU5UuTUPp37OtkW+ZiYrP6BaaP3pQfNDcNfjm+pWUtNWJPCI4TY2anvvpz724n+VUoXaEFdeY+nOAOI4U07a4W+/um3QOE/NMNNaQh2Nx3N3BJG9eaOYc8k2L7THHABZiJ0Xzuz0UQFC4bExKDmv9S6foRYqU4OnqVuC1ohoDPchOnaQEB+S0dyk3pm52ee+c8jd3PkEextN6ALaGlyKLl47wk41RlEoUnOTWVI6G26TfV0GGy9BYeH03mk3uDd4s6bkK0QMJci8cx398TKQ3w4N0zrG3+n+gUhGzp9YXgA9iiNsBsqkwxpwjiTBRhHiww2w904OrJjJsKs5VvFI7g04xkMu4jqWrmowIiyUpNNJ+mqs29pM/AIRIvrQYILqC3/MDSgDnPY1qVNhBMezJonZUJCyur8crIQq/+L+sG1X3LImPPZT2ow/6R3yoOsPx8uHJJJtDlevIMwZuUFX2lFVNsCeDJsYx6fs80kMrl28Q0rN4hJOvwJdn8//9L9EAtZ0aStCkWpfwC9OUtYZ7gwOkPBDccPcu8K+HKU8sg5ksGptL1lFO0K1qmX3fcawKZNewQFp/AlFHD39AH3fgrN6HSJO3NZWYNtQa3XcJU5z+ERrJzQx39t1j007AAcCAwEAAQ==";
 
     private final PublicKey publicKey;
     private final PrivateKey privateKey;
 
-    public KeyProvider(@Value("${public.key.path}") String publicKeyPath, @Value("${private.key.path}") String privateKeyPath) {
+    public KeyProvider(@Value("${private.key.path}") String privateKeyPath) {
         try {
-            this.publicKey = getPublicKey(publicKeyPath);
+            this.publicKey = createPublicKey();
             this.privateKey = getPrivateKey(privateKeyPath);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    private PublicKey getPublicKey(String publicKeyPath) throws Exception {
-        final X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(loadAndDecode(publicKeyPath));
+    private PublicKey createPublicKey() throws Exception {
+        final byte[] key = Base64.getDecoder().decode(pubKey);
+        final X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(key);
 
         return KeyFactory.getInstance("RSA").generatePublic(x509EncodedKeySpec);
     }
@@ -47,4 +49,5 @@ public class KeyProvider {
         final byte[] bytes = Files.readAllBytes(path);
         return Base64.getDecoder().decode(bytes);
     }
+
 }

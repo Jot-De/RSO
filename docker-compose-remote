@@ -14,7 +14,7 @@ services:
       - webnet
 
   zuul-edgeservice:
-    image: gcr.io/oceanic-oxide-240620/rso/zuul:1.0.8
+    image: gcr.io/oceanic-oxide-240620/rso/zuul:1.1.1
     deploy:
       replicas: 1
       placement:
@@ -29,7 +29,7 @@ services:
       - webnet
 
   pub-service:
-    image: gcr.io/oceanic-oxide-240620/rso/pub-service:1.1.8
+    image: gcr.io/oceanic-oxide-240620/rso/pub-service:1.2.1
     deploy:
       replicas: 1
     environment:
@@ -42,7 +42,7 @@ services:
       - webnet
 
   user-service:
-    image: gcr.io/oceanic-oxide-240620/rso/user-service:1.1.5
+    image: gcr.io/oceanic-oxide-240620/rso/user-service:1.1.8
     deploy:
       replicas: 1
     environment:
@@ -58,7 +58,7 @@ services:
       - webnet
 
   review-service:
-    image: gcr.io/oceanic-oxide-240620/rso/review-service:1.1.5
+    image: gcr.io/oceanic-oxide-240620/rso/review-service:1.1.6
     deploy:
       replicas: 1
     environment:

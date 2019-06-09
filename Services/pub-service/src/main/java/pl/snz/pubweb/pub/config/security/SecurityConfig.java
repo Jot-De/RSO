@@ -51,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/tag")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/pub/*", "/pub")
+                .antMatchers(HttpMethod.GET, "/pub/**", "/pub")
                 .permitAll()
                 .antMatchers("/",
                         "/favicon.ico",

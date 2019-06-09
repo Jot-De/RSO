@@ -4,8 +4,6 @@ services:
     build:
       context: ./Cloud/Eureka
       dockerfile: dockerfile
-    ports:
-     - "8761:8761"
     tty:
       true
     restart:
@@ -16,7 +14,7 @@ services:
       context: ./Cloud/Zuul
       dockerfile: dockerfile
     ports:
-     - "8762:8762"
+     - "443:8762"
     environment:
       - REGISTRY_HOST=eureka-serviceregistry
     tty:
